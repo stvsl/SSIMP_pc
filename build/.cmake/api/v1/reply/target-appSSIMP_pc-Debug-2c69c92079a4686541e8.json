@@ -1,0 +1,1136 @@
+{
+	"artifacts" : 
+	[
+		{
+			"path" : "appSSIMP_pc"
+		}
+	],
+	"backtrace" : 4,
+	"backtraceGraph" : 
+	{
+		"commands" : 
+		[
+			"add_executable",
+			"_qt_internal_create_executable",
+			"qt6_add_executable",
+			"qt_add_executable",
+			"target_link_libraries",
+			"set_target_properties",
+			"include",
+			"find_package",
+			"qt6_add_qml_module",
+			"qt_add_qml_module",
+			"find_dependency",
+			"_qt_internal_find_dependencies",
+			"set_property",
+			"add_dependencies",
+			"qt6_target_qml_sources",
+			"_qt_internal_scan_qml_imports",
+			"_qt_internal_generate_deploy_qml_imports_script",
+			"cmake_language",
+			"_qt_internal_finalize_executable",
+			"qt6_finalize_target",
+			"target_compile_definitions",
+			"target_include_directories",
+			"_qt_internal_qml_type_registration",
+			"target_sources",
+			"qt6_extract_metatypes",
+			"__qt_propagate_generated_resource",
+			"_qt_internal_process_resource",
+			"qt6_add_resources",
+			"_qt_internal_target_enable_qmlcachegen"
+		],
+		"files" : 
+		[
+			"/usr/lib64/cmake/Qt6Core/Qt6CoreMacros.cmake",
+			"CMakeLists.txt",
+			"/usr/lib64/cmake/Qt6Quick/Qt6QuickTargets.cmake",
+			"/usr/lib64/cmake/Qt6Quick/Qt6QuickConfig.cmake",
+			"/usr/lib64/cmake/Qt6/Qt6Config.cmake",
+			"/usr/lib64/cmake/Qt6Qml/Qt6QmlMacros.cmake",
+			"/usr/lib64/cmake/Qt6Network/Qt6NetworkVersionlessTargets.cmake",
+			"/usr/lib64/cmake/Qt6Network/Qt6NetworkConfig.cmake",
+			"/usr/share/cmake/Modules/CMakeFindDependencyMacro.cmake",
+			"/usr/lib64/cmake/Qt6/QtPublicDependencyHelpers.cmake",
+			"/usr/lib64/cmake/Qt6Qml/Qt6QmlDependencies.cmake",
+			"/usr/lib64/cmake/Qt6Qml/Qt6QmlConfig.cmake",
+			"/usr/lib64/cmake/Qt6Quick/Qt6QuickDependencies.cmake",
+			"/usr/lib64/cmake/Qt6OpenGL/Qt6OpenGLVersionlessTargets.cmake",
+			"/usr/lib64/cmake/Qt6OpenGL/Qt6OpenGLConfig.cmake",
+			"/usr/lib64/cmake/Qt6Widgets/Qt6WidgetsTargets.cmake",
+			"/usr/lib64/cmake/Qt6Widgets/Qt6WidgetsConfig.cmake",
+			"/usr/share/cmake/Modules/FindOpenGL.cmake",
+			"/usr/lib/cmake/Qt6/FindWrapOpenGL.cmake",
+			"/usr/lib64/cmake/Qt6Gui/Qt6GuiDependencies.cmake",
+			"/usr/lib64/cmake/Qt6Gui/Qt6GuiConfig.cmake",
+			"/usr/lib64/cmake/Qt6Core/Qt6CoreMacros.cmake:661:EVAL"
+		],
+		"nodes" : 
+		[
+			{
+				"file" : 1
+			},
+			{
+				"command" : 3,
+				"file" : 1,
+				"line" : 15,
+				"parent" : 0
+			},
+			{
+				"command" : 2,
+				"file" : 0,
+				"line" : 1125,
+				"parent" : 1
+			},
+			{
+				"command" : 1,
+				"file" : 0,
+				"line" : 525,
+				"parent" : 2
+			},
+			{
+				"command" : 0,
+				"file" : 0,
+				"line" : 561,
+				"parent" : 3
+			},
+			{
+				"command" : 4,
+				"file" : 1,
+				"line" : 63,
+				"parent" : 0
+			},
+			{
+				"command" : 4,
+				"file" : 1,
+				"line" : 65,
+				"parent" : 0
+			},
+			{
+				"command" : 7,
+				"file" : 1,
+				"line" : 11,
+				"parent" : 0
+			},
+			{
+				"file" : 4,
+				"parent" : 7
+			},
+			{
+				"command" : 7,
+				"file" : 4,
+				"line" : 223,
+				"parent" : 8
+			},
+			{
+				"file" : 3,
+				"parent" : 9
+			},
+			{
+				"command" : 6,
+				"file" : 3,
+				"line" : 60,
+				"parent" : 10
+			},
+			{
+				"file" : 2,
+				"parent" : 11
+			},
+			{
+				"command" : 5,
+				"file" : 2,
+				"line" : 65,
+				"parent" : 12
+			},
+			{
+				"command" : 9,
+				"file" : 1,
+				"line" : 20,
+				"parent" : 0
+			},
+			{
+				"command" : 8,
+				"file" : 5,
+				"line" : 626,
+				"parent" : 14
+			},
+			{
+				"command" : 4,
+				"file" : 5,
+				"line" : 368,
+				"parent" : 15
+			},
+			{
+				"command" : 6,
+				"file" : 3,
+				"line" : 50,
+				"parent" : 10
+			},
+			{
+				"file" : 12,
+				"parent" : 17
+			},
+			{
+				"command" : 11,
+				"file" : 12,
+				"line" : 96,
+				"parent" : 18
+			},
+			{
+				"command" : 10,
+				"file" : 9,
+				"line" : 14,
+				"parent" : 19
+			},
+			{
+				"command" : 7,
+				"file" : 8,
+				"line" : 47,
+				"parent" : 20
+			},
+			{
+				"file" : 11,
+				"parent" : 21
+			},
+			{
+				"command" : 6,
+				"file" : 11,
+				"line" : 50,
+				"parent" : 22
+			},
+			{
+				"file" : 10,
+				"parent" : 23
+			},
+			{
+				"command" : 11,
+				"file" : 10,
+				"line" : 96,
+				"parent" : 24
+			},
+			{
+				"command" : 10,
+				"file" : 9,
+				"line" : 14,
+				"parent" : 25
+			},
+			{
+				"command" : 7,
+				"file" : 8,
+				"line" : 47,
+				"parent" : 26
+			},
+			{
+				"file" : 7,
+				"parent" : 27
+			},
+			{
+				"command" : 6,
+				"file" : 7,
+				"line" : 63,
+				"parent" : 28
+			},
+			{
+				"file" : 6,
+				"parent" : 29
+			},
+			{
+				"command" : 5,
+				"file" : 6,
+				"line" : 65,
+				"parent" : 30
+			},
+			{
+				"command" : 10,
+				"file" : 9,
+				"line" : 14,
+				"parent" : 19
+			},
+			{
+				"command" : 7,
+				"file" : 8,
+				"line" : 47,
+				"parent" : 32
+			},
+			{
+				"file" : 14,
+				"parent" : 33
+			},
+			{
+				"command" : 6,
+				"file" : 14,
+				"line" : 63,
+				"parent" : 34
+			},
+			{
+				"file" : 13,
+				"parent" : 35
+			},
+			{
+				"command" : 5,
+				"file" : 13,
+				"line" : 65,
+				"parent" : 36
+			},
+			{
+				"command" : 7,
+				"file" : 1,
+				"line" : 12,
+				"parent" : 0
+			},
+			{
+				"file" : 4,
+				"parent" : 38
+			},
+			{
+				"command" : 7,
+				"file" : 4,
+				"line" : 223,
+				"parent" : 39
+			},
+			{
+				"file" : 16,
+				"parent" : 40
+			},
+			{
+				"command" : 6,
+				"file" : 16,
+				"line" : 60,
+				"parent" : 41
+			},
+			{
+				"file" : 15,
+				"parent" : 42
+			},
+			{
+				"command" : 5,
+				"file" : 15,
+				"line" : 65,
+				"parent" : 43
+			},
+			{
+				"command" : 4,
+				"file" : 0,
+				"line" : 526,
+				"parent" : 2
+			},
+			{
+				"command" : 10,
+				"file" : 9,
+				"line" : 14,
+				"parent" : 19
+			},
+			{
+				"command" : 7,
+				"file" : 8,
+				"line" : 47,
+				"parent" : 46
+			},
+			{
+				"file" : 20,
+				"parent" : 47
+			},
+			{
+				"command" : 6,
+				"file" : 20,
+				"line" : 50,
+				"parent" : 48
+			},
+			{
+				"file" : 19,
+				"parent" : 49
+			},
+			{
+				"command" : 10,
+				"file" : 19,
+				"line" : 48,
+				"parent" : 50
+			},
+			{
+				"command" : 7,
+				"file" : 8,
+				"line" : 47,
+				"parent" : 51
+			},
+			{
+				"file" : 18,
+				"parent" : 52
+			},
+			{
+				"command" : 7,
+				"file" : 18,
+				"line" : 10,
+				"parent" : 53
+			},
+			{
+				"file" : 17,
+				"parent" : 54
+			},
+			{
+				"command" : 12,
+				"file" : 17,
+				"line" : 512,
+				"parent" : 55
+			},
+			{
+				"command" : 5,
+				"file" : 17,
+				"line" : 510,
+				"parent" : 55
+			},
+			{
+				"command" : 14,
+				"file" : 5,
+				"line" : 575,
+				"parent" : 15
+			},
+			{
+				"command" : 13,
+				"file" : 5,
+				"line" : 2010,
+				"parent" : 58
+			},
+			{
+				"file" : 1,
+				"line" : -1,
+				"parent" : 0
+			},
+			{
+				"command" : 19,
+				"file" : 21,
+				"line" : 1,
+				"parent" : 60
+			},
+			{
+				"command" : 18,
+				"file" : 0,
+				"line" : 681,
+				"parent" : 61
+			},
+			{
+				"command" : 17,
+				"file" : 0,
+				"line" : 617,
+				"parent" : 62
+			},
+			{
+				"command" : 16,
+				"file" : 0,
+				"line" : 617,
+				"parent" : 63
+			},
+			{
+				"command" : 15,
+				"file" : 5,
+				"line" : 2639,
+				"parent" : 64
+			},
+			{
+				"command" : 13,
+				"file" : 5,
+				"line" : 2492,
+				"parent" : 65
+			},
+			{
+				"command" : 20,
+				"file" : 1,
+				"line" : 61,
+				"parent" : 0
+			},
+			{
+				"command" : 22,
+				"file" : 5,
+				"line" : 492,
+				"parent" : 15
+			},
+			{
+				"command" : 21,
+				"file" : 5,
+				"line" : 2319,
+				"parent" : 68
+			},
+			{
+				"command" : 21,
+				"file" : 5,
+				"line" : 2344,
+				"parent" : 68
+			},
+			{
+				"command" : 24,
+				"file" : 5,
+				"line" : 2140,
+				"parent" : 68
+			},
+			{
+				"command" : 23,
+				"file" : 0,
+				"line" : 1489,
+				"parent" : 71
+			},
+			{
+				"command" : 23,
+				"file" : 5,
+				"line" : 2310,
+				"parent" : 68
+			},
+			{
+				"command" : 27,
+				"file" : 5,
+				"line" : 536,
+				"parent" : 15
+			},
+			{
+				"command" : 26,
+				"file" : 0,
+				"line" : 340,
+				"parent" : 74
+			},
+			{
+				"command" : 25,
+				"file" : 0,
+				"line" : 2184,
+				"parent" : 75
+			},
+			{
+				"command" : 23,
+				"file" : 0,
+				"line" : 1985,
+				"parent" : 76
+			},
+			{
+				"command" : 23,
+				"file" : 5,
+				"line" : 1814,
+				"parent" : 58
+			},
+			{
+				"command" : 28,
+				"file" : 5,
+				"line" : 1907,
+				"parent" : 58
+			},
+			{
+				"command" : 23,
+				"file" : 5,
+				"line" : 907,
+				"parent" : 79
+			},
+			{
+				"command" : 23,
+				"file" : 5,
+				"line" : 1952,
+				"parent" : 58
+			},
+			{
+				"command" : 23,
+				"file" : 5,
+				"line" : 1814,
+				"parent" : 58
+			},
+			{
+				"command" : 23,
+				"file" : 5,
+				"line" : 1952,
+				"parent" : 58
+			},
+			{
+				"command" : 23,
+				"file" : 5,
+				"line" : 1814,
+				"parent" : 58
+			},
+			{
+				"command" : 23,
+				"file" : 5,
+				"line" : 1952,
+				"parent" : 58
+			},
+			{
+				"command" : 23,
+				"file" : 5,
+				"line" : 1814,
+				"parent" : 58
+			},
+			{
+				"command" : 23,
+				"file" : 5,
+				"line" : 1952,
+				"parent" : 58
+			},
+			{
+				"command" : 27,
+				"file" : 5,
+				"line" : 2028,
+				"parent" : 58
+			},
+			{
+				"command" : 26,
+				"file" : 0,
+				"line" : 340,
+				"parent" : 88
+			},
+			{
+				"command" : 25,
+				"file" : 0,
+				"line" : 2184,
+				"parent" : 89
+			},
+			{
+				"command" : 23,
+				"file" : 0,
+				"line" : 1985,
+				"parent" : 90
+			}
+		]
+	},
+	"compileGroups" : 
+	[
+		{
+			"compileCommandFragments" : 
+			[
+				{
+					"fragment" : "-g"
+				},
+				{
+					"backtrace" : 45,
+					"fragment" : "-fPIC"
+				},
+				{
+					"fragment" : "-std=gnu++17"
+				}
+			],
+			"defines" : 
+			[
+				{
+					"backtrace" : 45,
+					"define" : "QT_CORE_LIB"
+				},
+				{
+					"backtrace" : 5,
+					"define" : "QT_GUI_LIB"
+				},
+				{
+					"backtrace" : 16,
+					"define" : "QT_NETWORK_LIB"
+				},
+				{
+					"backtrace" : 5,
+					"define" : "QT_OPENGL_LIB"
+				},
+				{
+					"backtrace" : 16,
+					"define" : "QT_QMLINTEGRATION_LIB"
+				},
+				{
+					"backtrace" : 5,
+					"define" : "QT_QMLMODELS_LIB"
+				},
+				{
+					"backtrace" : 67,
+					"define" : "QT_QML_DEBUG"
+				},
+				{
+					"backtrace" : 16,
+					"define" : "QT_QML_LIB"
+				},
+				{
+					"backtrace" : 5,
+					"define" : "QT_QUICK_LIB"
+				},
+				{
+					"backtrace" : 6,
+					"define" : "QT_WIDGETS_LIB"
+				}
+			],
+			"includes" : 
+			[
+				{
+					"backtrace" : 0,
+					"path" : "/home/stvsl/Documents/\u4e2a\u4eba\u9879\u76ee/\u7ade\u8d5b\u9879\u76ee/\u5317\u9547\u95fe\u5c71\u666f\u533a\u5de1\u67e5\u76d1\u6d4b\u5e73\u53f0/SSIMP_pc/build/appSSIMP_pc_autogen/include"
+				},
+				{
+					"backtrace" : 69,
+					"path" : "/home/stvsl/Documents/\u4e2a\u4eba\u9879\u76ee/\u7ade\u8d5b\u9879\u76ee/\u5317\u9547\u95fe\u5c71\u666f\u533a\u5de1\u67e5\u76d1\u6d4b\u5e73\u53f0/SSIMP_pc"
+				},
+				{
+					"backtrace" : 70,
+					"isSystem" : true,
+					"path" : "/usr/include/qt6/QtQml/6.3.1"
+				},
+				{
+					"backtrace" : 70,
+					"isSystem" : true,
+					"path" : "/usr/include/qt6/QtQml/6.3.1/QtQml"
+				},
+				{
+					"backtrace" : 70,
+					"isSystem" : true,
+					"path" : "/usr/include/qt6/QtCore/6.3.1"
+				},
+				{
+					"backtrace" : 70,
+					"isSystem" : true,
+					"path" : "/usr/include/qt6/QtCore/6.3.1/QtCore"
+				},
+				{
+					"backtrace" : 70,
+					"isSystem" : true,
+					"path" : "/usr/include/qt6/QtCore"
+				},
+				{
+					"backtrace" : 70,
+					"isSystem" : true,
+					"path" : "/usr/include/qt6"
+				},
+				{
+					"backtrace" : 70,
+					"isSystem" : true,
+					"path" : "/usr/lib/qt6/mkspecs/linux-g++"
+				},
+				{
+					"backtrace" : 70,
+					"isSystem" : true,
+					"path" : "/usr/include/qt6/QtQml"
+				},
+				{
+					"backtrace" : 70,
+					"isSystem" : true,
+					"path" : "/usr/include/qt6/QtQmlIntegration"
+				},
+				{
+					"backtrace" : 70,
+					"isSystem" : true,
+					"path" : "/usr/include/qt6/QtNetwork"
+				},
+				{
+					"backtrace" : 5,
+					"isSystem" : true,
+					"path" : "/usr/include/qt6/QtQuick"
+				},
+				{
+					"backtrace" : 5,
+					"isSystem" : true,
+					"path" : "/usr/include/qt6/QtGui"
+				},
+				{
+					"backtrace" : 5,
+					"isSystem" : true,
+					"path" : "/usr/include/qt6/QtQmlModels"
+				},
+				{
+					"backtrace" : 5,
+					"isSystem" : true,
+					"path" : "/usr/include/qt6/QtOpenGL"
+				},
+				{
+					"backtrace" : 6,
+					"isSystem" : true,
+					"path" : "/usr/include/qt6/QtWidgets"
+				}
+			],
+			"language" : "CXX",
+			"languageStandard" : 
+			{
+				"backtraces" : 
+				[
+					45,
+					45
+				],
+				"standard" : "17"
+			},
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				4,
+				5,
+				7,
+				8,
+				10,
+				12,
+				14,
+				15,
+				17
+			]
+		}
+	],
+	"dependencies" : 
+	[
+		{
+			"backtrace" : 59,
+			"id" : "appSSIMP_pc_tooling::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 66,
+			"id" : "appSSIMP_pc_qmlimportscan::@6890427a1f51a3e7e1df"
+		},
+		{
+			"id" : "appSSIMP_pc_autogen_timestamp_deps::@6890427a1f51a3e7e1df"
+		},
+		{
+			"backtrace" : 0,
+			"id" : "appSSIMP_pc_autogen::@6890427a1f51a3e7e1df"
+		}
+	],
+	"id" : "appSSIMP_pc::@6890427a1f51a3e7e1df",
+	"link" : 
+	{
+		"commandFragments" : 
+		[
+			{
+				"fragment" : "-g",
+				"role" : "flags"
+			},
+			{
+				"fragment" : "",
+				"role" : "flags"
+			},
+			{
+				"backtrace" : 5,
+				"fragment" : "/usr/lib/libQt6Quick.so.6.3.1",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 6,
+				"fragment" : "/usr/lib/libQt6Widgets.so.6.3.1",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 13,
+				"fragment" : "/usr/lib/libQt6QmlModels.so.6.3.1",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 16,
+				"fragment" : "/usr/lib/libQt6Qml.so.6.3.1",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 31,
+				"fragment" : "/usr/lib/libQt6Network.so.6.3.1",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 37,
+				"fragment" : "/usr/lib/libQt6OpenGL.so.6.3.1",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 44,
+				"fragment" : "/usr/lib/libQt6Gui.so.6.3.1",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 45,
+				"fragment" : "/usr/lib/libQt6Core.so.6.3.1",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 56,
+				"fragment" : "/usr/lib/libGLX.so",
+				"role" : "libraries"
+			},
+			{
+				"backtrace" : 57,
+				"fragment" : "/usr/lib/libOpenGL.so",
+				"role" : "libraries"
+			}
+		],
+		"language" : "CXX"
+	},
+	"name" : "appSSIMP_pc",
+	"nameOnDisk" : "appSSIMP_pc",
+	"paths" : 
+	{
+		"build" : ".",
+		"source" : "."
+	},
+	"sourceGroups" : 
+	[
+		{
+			"name" : "Source Files",
+			"sourceIndexes" : 
+			[
+				0,
+				1,
+				4,
+				5,
+				7,
+				8,
+				10,
+				12,
+				14,
+				15,
+				17
+			]
+		},
+		{
+			"name" : "",
+			"sourceIndexes" : 
+			[
+				2,
+				3,
+				6,
+				9,
+				11,
+				13,
+				16,
+				30,
+				31,
+				32,
+				33,
+				34,
+				35,
+				36,
+				37
+			]
+		},
+		{
+			"name" : "CMake Rules",
+			"sourceIndexes" : 
+			[
+				18,
+				19,
+				20,
+				21,
+				22,
+				23,
+				24,
+				25,
+				26,
+				27,
+				28,
+				29
+			]
+		}
+	],
+	"sources" : 
+	[
+		{
+			"backtrace" : 0,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "build/appSSIMP_pc_autogen/mocs_compilation.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"compileGroupIndex" : 0,
+			"path" : "Daemon/main.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 4,
+			"path" : "resource/resource.qrc",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 72,
+			"isGenerated" : true,
+			"path" : "build/meta_types/qt6appssimp_pc_debug_metatypes.json.gen",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 73,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "build/appssimp_pc_qmltyperegistrations.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 77,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "build/.rcc/qrc_qmake_SSIMP_pc.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 78,
+			"path" : "Daemon/main.qml",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 80,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "build/.rcc/qmlcache/appSSIMP_pc_qmlcache_loader.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 81,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "build/.rcc/qmlcache/appSSIMP_pc_Daemon/main_qml.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 82,
+			"path" : "UIFlame/Menu.ui.qml",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 83,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "build/.rcc/qmlcache/appSSIMP_pc_UIFlame/Menu.ui_qml.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 84,
+			"path" : "UIFlame/MenuDelegate.ui.qml",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 85,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "build/.rcc/qmlcache/appSSIMP_pc_UIFlame/MenuDelegate.ui_qml.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 86,
+			"path" : "UIFlame/MenuModel.qml",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 87,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "build/.rcc/qmlcache/appSSIMP_pc_UIFlame/MenuModel_qml.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 91,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "build/.rcc/qrc_appSSIMP_pc_raw_qml_0.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/appSSIMP_pc_autogen/timestamp",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 0,
+			"compileGroupIndex" : 0,
+			"isGenerated" : true,
+			"path" : "build/appSSIMP_pc_autogen/6WJNPILU4A/qrc_resource.cpp",
+			"sourceGroupIndex" : 0
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/meta_types/qt6appssimp_pc_debug_metatypes.json.gen.rule",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/appssimp_pc_qmltyperegistrations.cpp.rule",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/.rcc/qrc_qmake_SSIMP_pc.cpp.rule",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/.rcc/qmlcache/appSSIMP_pc_qmlcache_loader.cpp.rule",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/.rcc/qmlcache/appSSIMP_pc_Daemon/main_qml.cpp.rule",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/.rcc/qmlcache/appSSIMP_pc_UIFlame/Menu.ui_qml.cpp.rule",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/.rcc/qmlcache/appSSIMP_pc_UIFlame/MenuDelegate.ui_qml.cpp.rule",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/.rcc/qmlcache/appSSIMP_pc_UIFlame/MenuModel_qml.cpp.rule",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/.rcc/qrc_appSSIMP_pc_raw_qml_0.cpp.rule",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/appSSIMP_pc_autogen/timestamp.rule",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/appSSIMP_pc_autogen/6WJNPILU4A/qrc_resource.cpp.rule",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 0,
+			"isGenerated" : true,
+			"path" : "build/meta_types/appSSIMP_pc_json_file_list.txt.rule",
+			"sourceGroupIndex" : 2
+		},
+		{
+			"backtrace" : 45,
+			"path" : "/usr/lib/metatypes/qt6core_relwithdebinfo_metatypes.json",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 16,
+			"path" : "/usr/lib/metatypes/qt6qml_relwithdebinfo_metatypes.json",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 16,
+			"path" : "/usr/lib/metatypes/qt6network_relwithdebinfo_metatypes.json",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 5,
+			"path" : "/usr/lib/metatypes/qt6quick_relwithdebinfo_metatypes.json",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 5,
+			"path" : "/usr/lib/metatypes/qt6gui_relwithdebinfo_metatypes.json",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 5,
+			"path" : "/usr/lib/metatypes/qt6qmlmodels_relwithdebinfo_metatypes.json",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 5,
+			"path" : "/usr/lib/metatypes/qt6opengl_relwithdebinfo_metatypes.json",
+			"sourceGroupIndex" : 1
+		},
+		{
+			"backtrace" : 6,
+			"path" : "/usr/lib/metatypes/qt6widgets_relwithdebinfo_metatypes.json",
+			"sourceGroupIndex" : 1
+		}
+	],
+	"type" : "EXECUTABLE"
+}

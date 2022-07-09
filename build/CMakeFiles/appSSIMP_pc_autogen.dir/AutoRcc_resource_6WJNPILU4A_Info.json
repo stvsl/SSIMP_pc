@@ -1,0 +1,22 @@
+{
+	"BUILD_DIR" : "/home/stvsl/Documents/\u4e2a\u4eba\u9879\u76ee/\u7ade\u8d5b\u9879\u76ee/\u5317\u9547\u95fe\u5c71\u666f\u533a\u5de1\u67e5\u76d1\u6d4b\u5e73\u53f0/SSIMP_pc/build/appSSIMP_pc_autogen",
+	"CMAKE_BINARY_DIR" : "/home/stvsl/Documents/\u4e2a\u4eba\u9879\u76ee/\u7ade\u8d5b\u9879\u76ee/\u5317\u9547\u95fe\u5c71\u666f\u533a\u5de1\u67e5\u76d1\u6d4b\u5e73\u53f0/SSIMP_pc/build",
+	"CMAKE_CURRENT_BINARY_DIR" : "/home/stvsl/Documents/\u4e2a\u4eba\u9879\u76ee/\u7ade\u8d5b\u9879\u76ee/\u5317\u9547\u95fe\u5c71\u666f\u533a\u5de1\u67e5\u76d1\u6d4b\u5e73\u53f0/SSIMP_pc/build",
+	"CMAKE_CURRENT_SOURCE_DIR" : "/home/stvsl/Documents/\u4e2a\u4eba\u9879\u76ee/\u7ade\u8d5b\u9879\u76ee/\u5317\u9547\u95fe\u5c71\u666f\u533a\u5de1\u67e5\u76d1\u6d4b\u5e73\u53f0/SSIMP_pc",
+	"CMAKE_SOURCE_DIR" : "/home/stvsl/Documents/\u4e2a\u4eba\u9879\u76ee/\u7ade\u8d5b\u9879\u76ee/\u5317\u9547\u95fe\u5c71\u666f\u533a\u5de1\u67e5\u76d1\u6d4b\u5e73\u53f0/SSIMP_pc",
+	"INCLUDE_DIR" : "/home/stvsl/Documents/\u4e2a\u4eba\u9879\u76ee/\u7ade\u8d5b\u9879\u76ee/\u5317\u9547\u95fe\u5c71\u666f\u533a\u5de1\u67e5\u76d1\u6d4b\u5e73\u53f0/SSIMP_pc/build/appSSIMP_pc_autogen/include",
+	"INPUTS" : 
+	[
+		"/home/stvsl/Documents/\u4e2a\u4eba\u9879\u76ee/\u7ade\u8d5b\u9879\u76ee/\u5317\u9547\u95fe\u5c71\u666f\u533a\u5de1\u67e5\u76d1\u6d4b\u5e73\u53f0/SSIMP_pc/resource/daemon/background.jpg"
+	],
+	"LOCK_FILE" : "/home/stvsl/Documents/\u4e2a\u4eba\u9879\u76ee/\u7ade\u8d5b\u9879\u76ee/\u5317\u9547\u95fe\u5c71\u666f\u533a\u5de1\u67e5\u76d1\u6d4b\u5e73\u53f0/SSIMP_pc/build/CMakeFiles/appSSIMP_pc_autogen.dir/AutoRcc_resource_6WJNPILU4A_Lock.lock",
+	"MULTI_CONFIG" : false,
+	"OPTIONS" : [ "-name", "resource" ],
+	"OUTPUT_CHECKSUM" : "6WJNPILU4A",
+	"OUTPUT_NAME" : "qrc_resource.cpp",
+	"RCC_EXECUTABLE" : "/usr/lib/qt6/rcc",
+	"RCC_LIST_OPTIONS" : [ "--list" ],
+	"SETTINGS_FILE" : "/home/stvsl/Documents/\u4e2a\u4eba\u9879\u76ee/\u7ade\u8d5b\u9879\u76ee/\u5317\u9547\u95fe\u5c71\u666f\u533a\u5de1\u67e5\u76d1\u6d4b\u5e73\u53f0/SSIMP_pc/build/CMakeFiles/appSSIMP_pc_autogen.dir/AutoRcc_resource_6WJNPILU4A_Used.txt",
+	"SOURCE" : "/home/stvsl/Documents/\u4e2a\u4eba\u9879\u76ee/\u7ade\u8d5b\u9879\u76ee/\u5317\u9547\u95fe\u5c71\u666f\u533a\u5de1\u67e5\u76d1\u6d4b\u5e73\u53f0/SSIMP_pc/resource/resource.qrc",
+	"VERBOSITY" : 0
+}

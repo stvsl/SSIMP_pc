@@ -1,0 +1,9 @@
+<RCC>
+  <qresource prefix="/SSIMP_pc/">
+    <file alias="Daemon/main.qml">/home/stvsl/Documents/个人项目/竞赛项目/北镇闾山景区巡查监测平台/SSIMP_pc/Daemon/main.qml</file>
+    <file alias="UIFlame/Menu.ui.qml">/home/stvsl/Documents/个人项目/竞赛项目/北镇闾山景区巡查监测平台/SSIMP_pc/UIFlame/Menu.ui.qml</file>
+    <file alias="UIFlame/MenuDelegate.ui.qml">/home/stvsl/Documents/个人项目/竞赛项目/北镇闾山景区巡查监测平台/SSIMP_pc/UIFlame/MenuDelegate.ui.qml</file>
+    <file alias="UIFlame/MenuModel.qml">/home/stvsl/Documents/个人项目/竞赛项目/北镇闾山景区巡查监测平台/SSIMP_pc/UIFlame/MenuModel.qml</file>
+  </qresource>
+</RCC>
+

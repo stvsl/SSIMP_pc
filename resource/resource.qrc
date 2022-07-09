@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/daemon">
+        <file>daemon/background.jpg</file>
+    </qresource>
+</RCC>

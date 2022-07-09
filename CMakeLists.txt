@@ -1,0 +1,65 @@
+cmake_minimum_required(VERSION 3.5)
+
+project(SSIMP_pc VERSION 0.1 LANGUAGES CXX)
+
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTORCC ON)
+set(CMAKE_AUTOUIC ON)
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+find_package(Qt6 6.2 COMPONENTS Quick REQUIRED)
+find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
+
+
+qt_add_executable(appSSIMP_pc
+    Daemon/main.cpp
+    resource/resource.qrc
+)
+
+qt_add_qml_module(appSSIMP_pc
+    URI SSIMP_pc
+    VERSION 1.0
+    QML_FILES Daemon/main.qml
+    QML_FILES UIFlame/Menu.ui.qml
+    QML_FILES UIFlame/MenuDelegate.ui.qml
+    QML_FILES UIFlame/MenuModel.qml
+)
+
+#qt_add_resources(appSSIMP_pc imageresources
+#    PREFIX "/resource"
+#    FILES daemon/background.png
+#)
+
+#qt_add_translations(appSSIMP_pc
+#    TS_FILES SSIMP_pc_zh_CN.ts
+#    RESOURCE_PREFIX "/translations"
+#)
+
+file(GLOB TS_FILES "${PROJECT_SOURCE_DIR}/*.ts")
+
+qt_create_translation(QM_FILES
+    ${PROJECT_SOURCE_DIR}
+    ${TS_FILES}
+    OPTIONS -source-language zh_CN -no-obsolete
+    OPTIONS -source-language en_US -no-obsolete
+
+)
+
+add_executable(${PROJECT_NAME} ${OS_BUNDLE} ${SOURCES} ${RESOURCES} ${QM_FILES})
+
+set_target_properties(appSSIMP_pc PROPERTIES
+    MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
+    MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
+    MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+    MACOSX_BUNDLE TRUE
+    WIN32_EXECUTABLE TRUE
+)
+
+set_property(SOURCE file.h PROPERTY SKIP_AUTOGEN ON)
+
+target_compile_definitions(appSSIMP_pc
+    PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
+target_link_libraries(appSSIMP_pc
+    PRIVATE Qt6::Quick)
+target_link_libraries(appSSIMP_pc PRIVATE Qt6::Widgets)

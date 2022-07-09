@@ -1,0 +1,168 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"jsonFile" : "directory-.-Debug-f5ebdc15457944623624.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "SSIMP_pc",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2,
+						3,
+						4,
+						5,
+						6,
+						7,
+						8,
+						9,
+						10,
+						11,
+						12
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "SSIMP_pc::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-SSIMP_pc-Debug-13d9198261ab58e838a5.json",
+					"name" : "SSIMP_pc",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "SSIMP_pc_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-SSIMP_pc_autogen-Debug-76709535d7efa47b48fa.json",
+					"name" : "SSIMP_pc_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "SSIMP_pc_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-SSIMP_pc_autogen_timestamp_deps-Debug-6a178b8f45a8f59a1a7a.json",
+					"name" : "SSIMP_pc_autogen_timestamp_deps",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "all_qmllint::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_qmllint-Debug-c2a0cdffd895f4e3ed4b.json",
+					"name" : "all_qmllint",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "all_qmltyperegistrations::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-all_qmltyperegistrations-Debug-df0f9c6813bb7bb39f9a.json",
+					"name" : "all_qmltyperegistrations",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appSSIMP_pc::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appSSIMP_pc-Debug-2c69c92079a4686541e8.json",
+					"name" : "appSSIMP_pc",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appSSIMP_pc_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appSSIMP_pc_autogen-Debug-0797c738605b135170e1.json",
+					"name" : "appSSIMP_pc_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appSSIMP_pc_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appSSIMP_pc_autogen_timestamp_deps-Debug-df55fd01bf73aad4671d.json",
+					"name" : "appSSIMP_pc_autogen_timestamp_deps",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appSSIMP_pc_other_files::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appSSIMP_pc_other_files-Debug-622c1655633189ce995e.json",
+					"name" : "appSSIMP_pc_other_files",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appSSIMP_pc_qmlimportscan::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appSSIMP_pc_qmlimportscan-Debug-82542128e16616d6a4f9.json",
+					"name" : "appSSIMP_pc_qmlimportscan",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appSSIMP_pc_qmllint::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appSSIMP_pc_qmllint-Debug-78317d0ec9d6640ac6f8.json",
+					"name" : "appSSIMP_pc_qmllint",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appSSIMP_pc_qmltyperegistration::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appSSIMP_pc_qmltyperegistration-Debug-b92f7b1585be194f775f.json",
+					"name" : "appSSIMP_pc_qmltyperegistration",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "appSSIMP_pc_tooling::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-appSSIMP_pc_tooling-Debug-36189e33aa29e1b8a301.json",
+					"name" : "appSSIMP_pc_tooling",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/stvsl/Documents/\u4e2a\u4eba\u9879\u76ee/\u7ade\u8d5b\u9879\u76ee/\u5317\u9547\u95fe\u5c71\u666f\u533a\u5de1\u67e5\u76d1\u6d4b\u5e73\u53f0/SSIMP_pc/build",
+		"source" : "/home/stvsl/Documents/\u4e2a\u4eba\u9879\u76ee/\u7ade\u8d5b\u9879\u76ee/\u5317\u9547\u95fe\u5c71\u666f\u533a\u5de1\u67e5\u76d1\u6d4b\u5e73\u53f0/SSIMP_pc"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}

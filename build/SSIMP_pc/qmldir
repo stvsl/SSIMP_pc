@@ -1,0 +1,7 @@
+module SSIMP_pc
+typeinfo appSSIMP_pc.qmltypes
+prefer :/SSIMP_pc/
+Menu 1.0 UIFlame/Menu.ui.qml
+MenuDelegate 1.0 UIFlame/MenuDelegate.ui.qml
+MenuModel 1.0 UIFlame/MenuModel.qml
+
