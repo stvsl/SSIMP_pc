@@ -5,10 +5,10 @@ project(SSIMP_pc VERSION 0.1 LANGUAGES CXX)
 set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTORCC ON)
 set(CMAKE_AUTOUIC ON)
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.2 COMPONENTS Quick REQUIRED)
+find_package(Qt6 6.3 COMPONENTS Quick REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
 
 
@@ -20,21 +20,13 @@ qt_add_executable(appSSIMP_pc
 qt_add_qml_module(appSSIMP_pc
     URI SSIMP_pc
     VERSION 1.0
-    QML_FILES Daemon/main.qml
-    QML_FILES UIFlame/Menu.ui.qml
-    QML_FILES UIFlame/MenuDelegate.ui.qml
-    QML_FILES UIFlame/MenuModel.qml
+    QML_FILES Daemon/daemon.qml
+    QML_FILES UIFlame/Menu/Menu.ui.qml
+    QML_FILES UIFlame/Menu/MenuDelegate.ui.qml
+    QML_FILES UIFlame/Menu/MenuModel.qml
+    QML_FILES UIFlame/LoadPage/LoadPage.qml
+    QML_FILES UIFlame/MainPage/MainPage.qml
 )
-
-#qt_add_resources(appSSIMP_pc imageresources
-#    PREFIX "/resource"
-#    FILES daemon/background.png
-#)
-
-#qt_add_translations(appSSIMP_pc
-#    TS_FILES SSIMP_pc_zh_CN.ts
-#    RESOURCE_PREFIX "/translations"
-#)
 
 file(GLOB TS_FILES "${PROJECT_SOURCE_DIR}/*.ts")
 

@@ -1,4 +1,4 @@
-﻿import QtQuick
+import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
 
@@ -6,13 +6,9 @@ Window {
     visible: true
     width: 640
     height: 380
-    id: root
+    id: loadpage
     title: qsTr("北镇闾山景区巡查监测平台守护程序")
     flags: Qt.FramelessWindowHint
-
-    function switchtoFullWindow() {}
-
-    function switchtoNormal() {}
 
     Image {
         id: image
@@ -32,7 +28,7 @@ Window {
             Rectangle {
                 property real radius1: 25
                 property real dx: 45 //圆心坐标
-                property real dy: root.height - 50
+                property real dy: loadpage.height - 50
                 property real cx: radius1 * Math.sin(
                                       percent * 6.283185307179) + dx //各个圆点的实时坐标
                 property real cy: radius1 * Math.cos(
@@ -196,7 +192,7 @@ Window {
         Label {
             id: process
             x: 38
-            y: root.height - 54
+            y: loadpage.height - 54
             // 定义全局变量，用于记录当前进度
             property int progress: 0
             text: qsTr(progress + "%")
@@ -214,8 +210,8 @@ Window {
                     }
                     if (process.progress == 100) {
                         process.x = 31
-                        repeater.destroy()
                         timer.stop()
+                        daemon.switchtoMain()
                     }
                 }
             }
@@ -225,7 +221,7 @@ Window {
             id: status
             text: qsTr("正在加载中...")
             x: process.x + process.width + 370
-            y: root.height - 54
+            y: loadpage.height - 54
             color: Qt.rgba(1, 1, 1, 0.5)
         }
         Label {
@@ -278,7 +274,7 @@ Window {
             checkable: true
             flat: true
             onClicked: {
-                root.close()
+                loadpage.close()
             }
         }
     }
