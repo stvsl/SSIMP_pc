@@ -7,6 +7,7 @@ this file manually, you might introduce QML code that is not supported by Qt Des
 Check out https://doc.qt.io/qtcreator/creator-quick-ui-forms.html for details on .ui.qml files.
 */
 import QtQuick
+import QtQuick.Shapes
 
 Item {
     id: delegate
@@ -15,17 +16,29 @@ Item {
 
     Rectangle {
         id: rectangle
-        color: "#EEEEEE"
+        color: "#FFFFFF"
         anchors.fill: parent
         anchors.margins: 2
         visible: true
-        radius: 4
+        Shape {
+            anchors.fill: parent
+            ShapePath {
+                strokeWidth: 0
+                strokeColor: "black"
+                strokeStyle: ShapePath.SolidLine
+                startX: 15
+                startY: 0
+                PathLine {
+                    x: parent.width - 15
+                    y: 0
+                }
+            }
+        }
     }
 
     Text {
         id: label
         color: "#343434"
-        font.family: Constants.largeFont.family
         text: name
         anchors.verticalCenter: parent.verticalCenter
         anchors.margins: 2

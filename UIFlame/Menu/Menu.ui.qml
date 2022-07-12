@@ -10,7 +10,7 @@ import QtQuick
 
 ListView {
     id: view
-    width: 300
+    width: 290
     height: 600
 
     highlightMoveDuration: 0

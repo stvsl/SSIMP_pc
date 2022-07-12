@@ -19,6 +19,7 @@ Window {
         id: daemonloader
         anchors.centerIn: parent // 弹出的界面都居中显示
     }
+
     Component.onCompleted: daemonloader.sourceComponent = loadpage
 
     Component {

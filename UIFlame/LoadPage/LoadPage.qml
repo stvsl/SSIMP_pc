@@ -243,10 +243,10 @@ Window {
         }
         Label {
             id: info
-            x: label.x + label.width - 60
-            y: label.y + 45
+            x: label.x + label.width - 180
+            y: label.y + 50
             color: "#be000000"
-            text: qsTr("V 0.0.1 Develop")
+            text: qsTr("V 0.0.1 Develop, powered by stvsl&jl")
             horizontalAlignment: Text.AlignLeft
             clip: true
             font.italic: true

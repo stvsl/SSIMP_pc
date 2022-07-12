@@ -30,7 +30,7 @@ qt_add_qml_module(appSSIMP_pc
 
 file(GLOB TS_FILES "${PROJECT_SOURCE_DIR}/*.ts")
 
-qt_create_translation(QM_FILES
+qt_create_translation(appQM_FILES
     ${PROJECT_SOURCE_DIR}
     ${TS_FILES}
     OPTIONS -source-language zh_CN -no-obsolete
@@ -38,10 +38,8 @@ qt_create_translation(QM_FILES
 
 )
 
-add_executable(${PROJECT_NAME} ${OS_BUNDLE} ${SOURCES} ${RESOURCES} ${QM_FILES})
-
 set_target_properties(appSSIMP_pc PROPERTIES
-    MACOSX_BUNDLE_GUI_IDENTIFIER my.example.com
+    MACOSX_BUNDLE_GUI_IDENTIFIER stvsljl.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
     MACOSX_BUNDLE_SHORT_VERSION_STRING ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
     MACOSX_BUNDLE TRUE
@@ -53,5 +51,5 @@ set_property(SOURCE file.h PROPERTY SKIP_AUTOGEN ON)
 target_compile_definitions(appSSIMP_pc
     PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 target_link_libraries(appSSIMP_pc
-    PRIVATE Qt6::Quick)
-target_link_libraries(appSSIMP_pc PRIVATE Qt6::Widgets)
+    PRIVATE Qt6::Quick
+    PRIVATE Qt6::Widgets)
