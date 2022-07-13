@@ -21,11 +21,12 @@ qt_add_qml_module(appSSIMP_pc
     URI SSIMP_pc
     VERSION 1.0
     QML_FILES Daemon/daemon.qml
-    QML_FILES UIFlame/Menu/Menu.ui.qml
-    QML_FILES UIFlame/Menu/MenuDelegate.ui.qml
+    QML_FILES UIFlame/Menu/Menu.qml
+    QML_FILES UIFlame/Menu/MenuDelegate.qml
     QML_FILES UIFlame/Menu/MenuModel.qml
     QML_FILES UIFlame/LoadPage/LoadPage.qml
     QML_FILES UIFlame/MainPage/MainPage.qml
+    QML_FILES UIFlame/AboutPage/AboutPage.qml
 )
 
 file(GLOB TS_FILES "${PROJECT_SOURCE_DIR}/*.ts")

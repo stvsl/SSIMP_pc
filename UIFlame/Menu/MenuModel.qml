@@ -3,6 +3,7 @@ import QtQuick 2.15
 ListModel {
     ListElement {
         name: qsTr("全局概要")
+        on: true
     }
     ListElement {
         name: qsTr("数据监控")
@@ -26,6 +27,6 @@ ListModel {
         name: qsTr("软件设置")
     }
     ListElement {
-        name: qsTr("关于")
+        name: qsTr("关         于")
     }
 }
