@@ -165,28 +165,37 @@ Window {
             width: root.width - x - 10
             height: root.height - y - 10
             initialItem: globaloverview
-            replaceEnter: Transition {
+
+            pushEnter: Transition {
                 PropertyAnimation {
-                    target: mainstack
                     property: "opacity"
                     from: 0
                     to: 1
-                    duration: 700
-                    easing.type: Easing.InOutElastic
-                    easing.amplitude: 2.0
-                    easing.period: 1.5
+                    duration: 150
                 }
             }
-            replaceExit: Transition {
+            pushExit: Transition {
                 PropertyAnimation {
-                    target: mainstack
                     property: "opacity"
                     from: 1
                     to: 0
-                    duration: 500
-                    easing.type: Easing.InOutElastic
-                    easing.amplitude: 2.0
-                    easing.period: 1.5
+                    duration: 150
+                }
+            }
+            popEnter: Transition {
+                PropertyAnimation {
+                    property: "opacity"
+                    from: 0
+                    to: 1
+                    duration: 150
+                }
+            }
+            popExit: Transition {
+                PropertyAnimation {
+                    property: "opacity"
+                    from: 1
+                    to: 0
+                    duration: 150
                 }
             }
         }

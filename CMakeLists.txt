@@ -27,6 +27,7 @@ qt_add_qml_module(appSSIMP_pc
     QML_FILES UIFlame/LoadPage/LoadPage.qml
     QML_FILES UIFlame/MainPage/MainPage.qml
     QML_FILES UIFlame/AboutPage/AboutPage.qml
+    QML_FILES UIFlame/AboutPage/AboutQt.qml
 )
 
 file(GLOB TS_FILES "${PROJECT_SOURCE_DIR}/*.ts")

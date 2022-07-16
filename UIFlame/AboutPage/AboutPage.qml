@@ -5,6 +5,39 @@ import QtQuick.Window
 Item {
     id: aboutpage
     anchors.fill: parent
+
+    ListView {
+        id: title
+        anchors.left: parent.left
+        layer.enabled: false
+        focus: false
+        layer.smooth: true
+        spacing: 10
+        width: 120
+        anchors.verticalCenter: parent.verticalCenter
+        height: 800
+        model: ListModel {
+            ListElement {
+                name: qsTr("关于Qt")
+            }
+            ListElement {
+                name: qsTr("关于Qml")
+            }
+            ListElement {
+                name: qsTr("关于我们")
+            }
+        }
+        delegate: Button {
+            width: title.width
+            height: 150
+            text: name
+        }
+        highlight: Button {
+            width: title.width
+            height: 150
+            text: name
+        }
+    }
     Rectangle {
         anchors.fill: parent
         color: "white"
@@ -15,6 +48,7 @@ Item {
         anchors.bottomMargin: 10
         anchors.leftMargin: 140
         anchors.topMargin: 10
+
         Rectangle {
             anchors.fill: parent
             clip: true
@@ -25,19 +59,17 @@ Item {
                 layer.smooth: true
 
                 Item {
-                    id: first
-                    Text {
-                        text: qsTr("1dgdzsffgxcvsdfdfg")
-                    }
+                    id: aboutQt
+                    AboutQt {}
                 }
                 Item {
-                    id: second
+                    id: aboutQml
                     Text {
                         text: qsTr("2vxzvbdfxcvdfzxcgvdfzh")
                     }
                 }
                 Item {
-                    id: thired
+                    id: aboutUs
                     Text {
                         text: qsTr("3156445116451856456")
                     }
@@ -52,46 +84,11 @@ Item {
             }
         }
     }
-
-    Rectangle {
-        id: rectangle
-        x: 8
-        y: 104
-        width: 120
-        height: 150
-        color: "#ffffff"
-
-        Image {
-            id: image
-            width: 100
-            height: 100
-            source: "qrc:/qtquickplugin/images/template_image.png"
-            anchors.horizontalCenter: parent.horizontalCenter
-            fillMode: Image.PreserveAspectFit
-        }
-
-        Text {
-            y: 110
-            text: qsTr("Text")
-            font.pixelSize: 16
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
-            anchors.horizontalCenter: parent.horizontalCenter
-        }
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                view.currentIndex = 1
-            }
-        }
-    }
 }
 
 /*##^##
 Designer {
-    D{i:0;autoSize:true;formeditorColor:"#c0c0c0";formeditorZoom:0.5;height:1074;width:1600}
-D{i:12}D{i:13}
+    D{i:0;autoSize:true;formeditorColor:"#c0c0c0";formeditorZoom:0.66;height:1074;width:1600}
 }
 ##^##*/
 

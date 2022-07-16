@@ -46,40 +46,39 @@ Item {
         verticalAlignment: Text.AlignVCenter
         anchors.horizontalCenter: parent.horizontalCenter
     }
+    Timer {
+        id: menutimer
+        interval: 150
+        onTriggered: {
+            if (name === qsTr("全局概要")) {
+                mainstack.push(globaloverview, {})
+            } else if (name === qsTr("数据监控")) {
+                mainstack.push(datamonitoring, {})
+            } else if (name === qsTr("员工管理")) {
+                mainstack.push(staffmanagement, {})
+            } else if (name === qsTr("工作任务")) {
+                mainstack.push(worktask, {})
+            } else if (name === qsTr("内容管理")) {
+                mainstack.push(contentmanagement, {})
+            } else if (name === qsTr("超级管理")) {
+                mainstack.push(supermanagement, {})
+            } else if (name === qsTr("系统维护")) {
+                mainstack.push(systemmaintenance, {})
+            } else if (name === qsTr("软件设置")) {
+                mainstack.push(settings, {})
+            } else if (name === qsTr("关         于")) {
+                mainstack.push(about, {})
+            }
+        }
+    }
     property bool isHover: false
     MouseArea {
         anchors.fill: parent
         onClicked: {
             if (delegate.ListView.view.currentIndex !== index) {
                 delegate.ListView.view.currentIndex = index
-                if (name === qsTr("全局概要")) {
-                    mainstack.pop()
-                    mainstack.push(globaloverview, {})
-                } else if (name === qsTr("数据监控")) {
-                    mainstack.pop()
-                    mainstack.push(datamonitoring, {})
-                } else if (name === qsTr("员工管理")) {
-                    mainstack.pop()
-                    mainstack.push(staffmanagement, {})
-                } else if (name === qsTr("工作任务")) {
-                    mainstack.pop()
-                    mainstack.push(worktask, {})
-                } else if (name === qsTr("内容管理")) {
-                    mainstack.pop()
-                    mainstack.push(contentmanagement, {})
-                } else if (name === qsTr("超级管理")) {
-                    mainstack.pop()
-                    mainstack.push(supermanagement, {})
-                } else if (name === qsTr("系统维护")) {
-                    mainstack.pop()
-                    mainstack.push(systemmaintenance, {})
-                } else if (name === qsTr("软件设置")) {
-                    mainstack.pop()
-                    mainstack.push(settings, {})
-                } else if (name === qsTr("关         于")) {
-                    mainstack.pop()
-                    mainstack.push(about, {})
-                }
+                mainstack.pop()
+                menutimer.start()
             }
         }
         hoverEnabled: true
