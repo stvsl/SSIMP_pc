@@ -22,7 +22,7 @@ int main(int argc, char *argv[])
 
     qDebug() << "Qt version: " << QT_VERSION_STR;
     QQmlApplicationEngine engine;
-    const QUrl url(u"qrc:/SSIMP_pc/Daemon/main.qml"_qs);
+    const QUrl url(u"qrc:/SSIMP_pc/Daemon/daemon.qml"_qs);
     QObject::connect(
         &engine, &QQmlApplicationEngine::objectCreated,
         &app, [url](QObject *obj, const QUrl &objUrl)
