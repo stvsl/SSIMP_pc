@@ -2,4 +2,11 @@
     <qresource prefix="/daemon">
         <file>daemon/background.jpg</file>
     </qresource>
+    <qresource prefix="/icon/AboutPage">
+        <file>icon/AboutPage/qtlogo.png</file>
+        <file>icon/AboutPage/qmllogo.png</file>
+        <file>icon/AboutPage/关于我们.png</file>
+        <file>icon/AboutPage/其它开源组件.png</file>
+        <file>icon/AboutPage/关于软件.png</file>
+    </qresource>
 </RCC>

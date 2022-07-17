@@ -29,7 +29,6 @@ ListView {
                 GradientStop {
                     position: 0.010
                     color: "#ffffff"
-                   
                 }
                 GradientStop {
                     position: 0.011
