@@ -27,19 +27,19 @@ ListView {
             end: Qt.point(width, 0)
             gradient: Gradient {
                 GradientStop {
-                    position: 0.010
+                    position: 0.005
                     color: "#ffffff"
                 }
                 GradientStop {
-                    position: 0.011
+                    position: 0.0051
                     color: "#03b0f0"
                 }
                 GradientStop {
-                    position: 0.041
+                    position: 0.031
                     color: "#04befe"
                 }
                 GradientStop {
-                    position: 0.042
+                    position: 0.032
                     color: "#dfe9f3"
                 }
                 GradientStop {

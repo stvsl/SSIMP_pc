@@ -11,9 +11,15 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt6 6.3 COMPONENTS Quick REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
 
+ADD_DEFINITIONS(-DTORRENT_LIBRARY)
+ADD_DEFINITIONS(-DNO_FREETYPE)
+ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
+ADD_DEFINITIONS(-DHCPP_LEGACY_API)
 
 qt_add_executable(appSSIMP_pc
     Daemon/main.cpp
+    Utils/verificationcode.h
+    Utils/verificationcode.cpp
     resource/resource.qrc
 )
 
@@ -32,6 +38,7 @@ qt_add_qml_module(appSSIMP_pc
     QML_FILES UIFlame/AboutPage/AboutSoftware.qml
     QML_FILES UIFlame/AboutPage/AboutUS.qml
     QML_FILES UIFlame/AboutPage/OtherOpenSourceProjects.qml
+    QML_FILES UIFlame/LoginPage/LoginPage.qml
 )
 
 file(GLOB TS_FILES "${PROJECT_SOURCE_DIR}/*.ts")
