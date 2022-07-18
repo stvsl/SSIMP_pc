@@ -2,6 +2,7 @@
 import QtQuick.Window
 import "../UIFlame/LoadPage"
 import "../UIFlame/MainPage"
+import "../UIFlame/LoginPage"
 
 Window {
     visible: false
@@ -20,7 +21,7 @@ Window {
         anchors.centerIn: parent // 弹出的界面都居中显示
     }
 
-    Component.onCompleted: daemonloader.sourceComponent = loadpage
+    Component.onCompleted: daemonloader.sourceComponent = loginpage
 
     Component {
         id: loadpage
@@ -30,5 +31,9 @@ Window {
     Component {
         id: mainpage
         MainPage {}
+    }
+    Component {
+        id: loginpage
+        LoginPage {}
     }
 }

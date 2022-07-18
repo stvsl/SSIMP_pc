@@ -1,13 +1,17 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
-
 #include <QLocale>
 #include <QTranslator>
+#include <QFontDatabase>
+#include "Utils/verificationcode.h"
+
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
-
+    // js
+    qputenv("QML_XHR_ALLOW_FILE_READ", QByteArray("1"));
+    qmlRegisterType<VerificationCode>("Utils.Verify", 1, 0, "VerificationCode");
     QTranslator translator;
     const QStringList uiLanguages = QLocale::system().uiLanguages();
     for (const QString &locale : uiLanguages)
@@ -19,6 +23,16 @@ int main(int argc, char *argv[])
             break;
         }
     }
+
+    int fontId = QFontDatabase::addApplicationFont(QStringLiteral("qrc:/font/fonts/NotoSans-Regular.ttf"));
+       QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
+       qDebug()<<"fontfamilies:"<<fontFamilies;
+       if (fontFamilies.size() > 0)
+       {
+           QFont font;
+           font.setFamily(fontFamilies[0]);//设置全局字体
+           app.setFont(font);
+       }
 
     qDebug() << "Qt version: " << QT_VERSION_STR;
     QQmlApplicationEngine engine;

@@ -9,4 +9,22 @@
         <file>icon/AboutPage/其它开源组件.png</file>
         <file>icon/AboutPage/关于软件.png</file>
     </qresource>
+    <qresource prefix="/font">
+        <file>fonts/NotoSans-Regular.ttf</file>
+    </qresource>
+    <qresource prefix="/text">
+        <file>内嵌文档/aboutqt.md</file>
+        <file>内嵌文档/aboutqml.md</file>
+        <file>内嵌文档/其它开源组件.md</file>
+        <file>内嵌文档/关于我们.md</file>
+        <file>内嵌文档/关于此软件.md</file>
+        <file>内嵌文档/关于此软件.html</file>
+    </qresource>
+    <qresource prefix="/jsaddon">
+        <file>jsaddon/file.js</file>
+        <file>内嵌文档/关于此软件.html</file>
+    </qresource>
+    <qresource prefix="/login">
+        <file>Login/background.jpg</file>
+    </qresource>
 </RCC>

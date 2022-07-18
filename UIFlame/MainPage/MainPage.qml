@@ -169,33 +169,33 @@ Window {
             pushEnter: Transition {
                 PropertyAnimation {
                     property: "opacity"
-                    from: 0
+                    from: 0.3
                     to: 1
-                    duration: 150
+                    duration: 100
                 }
             }
             pushExit: Transition {
                 PropertyAnimation {
                     property: "opacity"
                     from: 1
-                    to: 0
-                    duration: 150
+                    to: 0.3
+                    duration: 100
                 }
             }
             popEnter: Transition {
                 PropertyAnimation {
                     property: "opacity"
-                    from: 0
+                    from: 0.3
                     to: 1
-                    duration: 150
+                    duration: 100
                 }
             }
             popExit: Transition {
                 PropertyAnimation {
                     property: "opacity"
                     from: 1
-                    to: 0
-                    duration: 150
+                    to: 0.3
+                    duration: 100
                 }
             }
         }

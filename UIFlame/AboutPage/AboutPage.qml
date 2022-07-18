@@ -14,12 +14,12 @@ Item {
         highlightMoveDuration: 0
         keyNavigationWraps: true
         anchors.topMargin: 20
-        anchors.leftMargin: 55
+        anchors.leftMargin: 60
         layer.enabled: false
         focus: false
         layer.smooth: true
         spacing: 15
-        width: 100
+        width: 90
         anchors.verticalCenter: parent.verticalCenter
         height: 800
         currentIndex: view.currentIndex
@@ -57,7 +57,7 @@ Item {
             Image {
                 y: 10
                 anchors.topMargin: 5
-                width: aboutitems.width - 20
+                width: aboutitems.width - 40
                 height: 50
                 source: img
                 autoTransform: true
