@@ -3,13 +3,16 @@
 #include <QLocale>
 #include <QTranslator>
 #include <QFontDatabase>
+#include <QQuickStyle>
 #include "Utils/verificationcode.h"
 
 
 int main(int argc, char *argv[])
 {
     QGuiApplication app(argc, argv);
+//    QQuickStyle::setStyle("Material");
     // js
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
     qputenv("QML_XHR_ALLOW_FILE_READ", QByteArray("1"));
     qmlRegisterType<VerificationCode>("Utils.Verify", 1, 0, "VerificationCode");
     QTranslator translator;

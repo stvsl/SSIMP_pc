@@ -1,6 +1,7 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Window
+import QtQuick.Controls.Material
 import Qt5Compat.GraphicalEffects
 import Utils.Verify
 
@@ -10,12 +11,16 @@ Window {
     visible: true
     flags: Qt.FramelessWindowHint
 
+    //    Material.theme: Material.Blue
     Image {
+        z: 1
         anchors.fill: parent
         source: "qrc:/login/Login/background.jpg"
         layer.smooth: true
     }
     Rectangle {
+        z: 10
+        opacity: 0.8
         id: rectangle
         anchors.fill: parent
         width: parent.width - 100
@@ -57,7 +62,7 @@ Window {
             color: Qt.rgba(1, 1, 1, 0.1)
             Rectangle {
                 id: verificationPainter
-                width: parent.width / 1.18
+                width: parent.width / 1.15
                 height: parent.height / 1.5
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -67,11 +72,68 @@ Window {
                 Text {
                     x: parent.width / 15
                     y: parent.height / 20
-                    text: qsTr("Text")
+                    text: qsTr("登录")
                     font.pixelSize: 20
-                    font.italic: true
+                    font.italic: false
                     font.bold: true
                     color: "white"
+                }
+
+                Item {
+                    anchors.fill: parent
+                    anchors.topMargin: parent.width / 6
+
+                    Text {
+                        x: parent.width / 10
+                        y: parent.height / 12
+                        text: qsTr("用户ID")
+                        font.pixelSize: 12
+                    }
+
+                    Text {
+                        x: parent.width / 10
+                        y: parent.height / 3.3
+                        text: qsTr("密码")
+                        font.pixelSize: 12
+                    }
+
+                    Text {
+                        x: parent.width / 10
+                        y: parent.height / 1.9
+                        id: text3
+                        text: qsTr("验证码")
+                        font.pixelSize: 12
+                    }
+
+                    TextField {
+                        id: userid
+                        x: parent.width / 4
+                        y: parent.height / 6.5
+                        width: parent.width / 1.5
+                        height: 40
+                        placeholderText: qsTr("请输入用户ID")
+                        font.pixelSize: 14
+                    }
+
+                    TextField {
+                        id: passwd
+                        x: parent.width / 4
+                        y: parent.height / 2.85
+                        width: parent.width / 1.5
+                        height: 40
+                        placeholderText: qsTr("请输入密码")
+                        font.pixelSize: 14
+                    }
+
+                    TextField {
+                        id: verify
+                        x: parent.width / 4
+                        y: parent.height / 1.8
+                        width: parent.width / 3
+                        height: 40
+                        placeholderText: qsTr("请输入验证码")
+                        font.pixelSize: 14
+                    }
                 }
 
                 //            VerificationCode {
@@ -99,5 +161,16 @@ Window {
             //            }
             //        }
         }
+    }
+
+    Button {
+        z: 10
+        id: button
+        x: 727
+        y: 0
+        width: 43
+        height: 35
+        text: qsTr("X")
+        color: Qt.rgba(1, 1, 1, 0)
     }
 }

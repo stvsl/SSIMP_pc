@@ -9,7 +9,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 6.3 COMPONENTS Quick REQUIRED)
-find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools)
+find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools QuickControls2)
 
 ADD_DEFINITIONS(-DTORRENT_LIBRARY)
 ADD_DEFINITIONS(-DNO_FREETYPE)
@@ -63,6 +63,9 @@ set_property(SOURCE file.h PROPERTY SKIP_AUTOGEN ON)
 
 target_compile_definitions(appSSIMP_pc
     PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
+
 target_link_libraries(appSSIMP_pc
     PRIVATE Qt6::Quick
-    PRIVATE Qt6::Widgets)
+    PRIVATE Qt6::Widgets
+    PRIVATE Qt6::QuickControls2
+)
