@@ -3,6 +3,7 @@ import QtQuick.Window
 import "../UIFlame/LoadPage"
 import "../UIFlame/MainPage"
 import "../UIFlame/LoginPage"
+import "../UIFlame/MessageBox"
 
 Window {
     visible: false
@@ -35,5 +36,10 @@ Window {
     Component {
         id: loginpage
         LoginPage {}
+    }
+
+    Component {
+        id: msgbox
+        MessageBox {}
     }
 }

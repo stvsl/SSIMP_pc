@@ -39,6 +39,8 @@ qt_add_qml_module(appSSIMP_pc
     QML_FILES UIFlame/AboutPage/AboutUS.qml
     QML_FILES UIFlame/AboutPage/OtherOpenSourceProjects.qml
     QML_FILES UIFlame/LoginPage/LoginPage.qml
+    QML_FILES UIFlame/MessageBox/MessageBox.qml
+    QML_FILES UIFlame/MessageBox/MsgButton.qml
 )
 
 file(GLOB TS_FILES "${PROJECT_SOURCE_DIR}/*.ts")
