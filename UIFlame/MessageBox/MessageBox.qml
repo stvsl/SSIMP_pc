@@ -3,32 +3,36 @@ import QtQuick.Controls 2.15
 
 Window {
     id: msgbox
-    width: 480
-    height: 200
+    width: 400
+    height: 150
     visible: true
     color: Qt.rgba(0, 0, 0, 0)
     flags: Qt.Window | Qt.FramelessWindowHint | Qt.WindowStaysOnTopHint
     // 消息弹窗类型：tips：提示窗口 | msg：消息窗口 | warn：警告窗口 | error：错误窗口
     property string type: "tips"
     // 消息弹窗标题
-    property string texts: "请设置消息弹窗标题"
+    property string texts: qsTr("请设置消息弹窗标题")
+    title: qsTr("")
     // 消息弹窗内容
-    property string helptext: "请设置消息弹窗内容"
+    property string helptext: qsTr("请设置消息弹窗内容")
     // 按钮类型 确定 | 取消
-    property bool conform: true
+    property bool conform: false
     // 按钮类型 是 | 否
-    property bool yesorno: true
+    property bool yesorno: false
+    property bool justconform: false
+
+    signal btnClicked(int x)
     Rectangle {
         anchors.fill: parent
-        color: "white"
+        color: Qt.rgba(1, 1, 1, 0.96)
         visible: true
         radius: 15
         border.color: "#EEEEEE"
         border.width: 1
         Label {
             id: type
-            x: 22
-            y: 15
+            x: 20
+            y: 12
             width: 45
             height: 30
             // 判断消息类型，设置不同的样式
@@ -36,33 +40,31 @@ Window {
                                            === "msg" ? "消息" : msgbox.type === "warn" ? "警告" : "错误"
             color: Qt.rgba(0, 0, 0, 0.86)
             font.bold: true
-            font.pointSize: 16
+            font.pointSize: 14
         }
         Text {
             id: texts
             x: type.x + type.width / 2
-            y: type.y + type.height + 5
+            y: type.y + type.height + 2
             width: msgbox.width / 1.5
             text: msgbox.texts
-            color: Qt.rgba(0, 0, 0, 0.76)
-            font.bold: true
+            color: Qt.rgba(0, 0, 0, 0.86)
             font.pixelSize: 16
         }
         Text {
             id: helptext
             x: texts.x
-            y: texts.y + texts.height + 3
-            text: "        " + msgbox.helptext
+            y: texts.y + texts.height + 2
+            text: msgbox.helptext
             font.letterSpacing: 0.5
             width: msgbox.width / 1.2
-            height: msgbox.height / 3
+            height: msgbox.height / 5
             color: Qt.rgba(0, 0, 0, 0.56)
-            font.bold: true
             wrapMode: Text.WrapAnywhere
             elide: Text.ElideRight
             font.wordSpacing: 0.1
             lineHeight: 1
-            font.pixelSize: 16
+            font.pixelSize: 12
             horizontalAlignment: Text.AlignLeft
             verticalAlignment: Text.AlignTop
             smooth: true

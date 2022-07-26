@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtDesignStudio 3.5.0, 2022-07-25T19:31:48. -->
+<!-- Written by QtDesignStudio 3.5.0, 2022-07-26T20:59:53. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -355,6 +355,7 @@
     <value type="bool" key="RunConfiguration.UseLibrarySearchPath">true</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/stvsl/Documents/个人项目/竞赛项目/北镇闾山景区巡查监测平台/build-SSIMP_pc-Qt_6_3_0_clang_64-Debug</value>
    </valuemap>
    <value type="qlonglong" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>

@@ -43,8 +43,8 @@ void VerificationCode::drawCode(QPainter *painter)
 
     for (int i = 0; i < letter_number; ++i)
     {
-        p.setX(i*(m_width / letter_number)+ m_width / 25);
-        p.setY(m_height / 1.3  + rand() % (m_height / 6));
+        p.setX(qAbs(i*(m_width / letter_number)+ m_width / 25));
+        p.setY(qAbs(m_height / 1.5  + rand() % (m_height / 6)+5));
         painter->setPen(colorArray[i]);
         painter->setFont(textFont);
         painter->drawText(p, QString(verificationCode[i]));

@@ -4,6 +4,8 @@ import QtQuick.Window
 import QtQuick.Controls.Material
 import Qt5Compat.GraphicalEffects
 import Utils.Verify
+import "../MessageBox"
+import QtQuick.Timeline 1.0
 
 Window {
     id: loginpage
@@ -13,8 +15,7 @@ Window {
     color: "#ffffff"
     flags: Qt.Window | Qt.FramelessWindowHint
     property string _Putvercode
-
-    //    Material.theme: Material.Blue
+    Material.theme: Material.Blue
     Image {
         z: 1
         anchors.fill: parent
@@ -46,16 +47,16 @@ Window {
 
             Text {
                 x: 0
-                y: 46
-                width: 457
+                y: 50
+                width: 430
                 height: 83
                 text: qsTr("北镇闾山景区巡查监测平台")
-                font.pixelSize: 33
+                font.pixelSize: 32
                 horizontalAlignment: Text.AlignHCenter
                 verticalAlignment: Text.AlignVCenter
                 font.bold: false
                 font.italic: true
-                font.family: "Arial Black"
+                font.family: "Courier"
             }
         }
         Rectangle {
@@ -76,22 +77,21 @@ Window {
                     x: parent.width / 15
                     y: parent.height / 20
                     text: qsTr("登录")
-                    font.pixelSize: 20
-                    font.italic: false
+                    font.pixelSize: 22
                     font.bold: true
-                    color: "white"
+                    color: Qt.rgba(1, 1, 1, 0.9)
                 }
 
                 Item {
                     anchors.fill: parent
-                    anchors.topMargin: parent.width / 6
+                    anchors.topMargin: parent.width / 8
 
                     Text {
                         x: parent.width / 10
                         y: parent.height / 12
                         color: "#ffffff"
                         text: qsTr("用户ID")
-                        font.pixelSize: 14
+                        font.pixelSize: 16
                     }
 
                     Text {
@@ -100,7 +100,7 @@ Window {
                         color: "#ffffff"
                         text: qsTr("密    码")
                         font.letterSpacing: 0
-                        font.pixelSize: 14
+                        font.pixelSize: 16
                         font.wordSpacing: 2
                     }
 
@@ -110,7 +110,7 @@ Window {
                         color: "#ffffff"
                         id: text3
                         text: qsTr("验证码")
-                        font.pixelSize: 14
+                        font.pixelSize: 16
                     }
 
                     TextField {
@@ -120,6 +120,7 @@ Window {
                         width: parent.width / 1.5
                         height: 40
                         placeholderText: qsTr("请输入用户ID")
+                        placeholderTextColor: "#CCCCFF"
                         font.pixelSize: 14
                     }
 
@@ -130,6 +131,7 @@ Window {
                         width: parent.width / 1.5
                         height: 40
                         placeholderText: qsTr("请输入密码")
+                        placeholderTextColor: "#CCCCFF"
                         echoMode: TextInput.Password
                         font.pixelSize: 14
                     }
@@ -141,6 +143,7 @@ Window {
                         width: parent.width / 3.5
                         height: 40
                         placeholderText: qsTr("请输入验证码")
+                        placeholderTextColor: "#CCCCFF"
                         font.pixelSize: 14
                     }
 
@@ -182,24 +185,31 @@ Window {
                         width: 85
                         height: 35
                         color: Qt.rgba(0.72, 1, 1, 0.8)
-                        border.color: "#FFFFFF"
-                        border.width: 0
                         Text {
                             text: qsTr("登录")
+                            color: Qt.rgba(0, 0, 0, 0.8)
                             horizontalAlignment: Text.AlignHCenter
                             anchors.horizontalCenter: loginbtn.horizontalCenter
                             anchors.verticalCenter: loginbtn.verticalCenter
                             verticalAlignment: Text.AlignVCenter
                         }
+
                         MouseArea {
                             anchors.fill: parent
-                            onClicked: {
-                                loginbtn.color = "#32B2EF"
+                            onPressed: {
+                                loginbtn.color = Qt.rgba(0.72, 1, 1, 0.4)
+                                loginpage.powerverify()
                             }
-                            onExited: {
+                            onReleased: {
                                 loginbtn.color = Qt.rgba(0.72, 1, 1, 0.8)
                             }
                         }
+                        focus: true
+                        Keys.onPressed: event => {
+                                            if (event.key === Qt.Key_Enter) {
+                                                loginpage.powerverify()
+                                            }
+                                        }
                         radius: 5
                     }
                     Rectangle {
@@ -217,11 +227,13 @@ Window {
                             anchors.horizontalCenter: canclebtn.horizontalCenter
                             anchors.verticalCenter: canclebtn.verticalCenter
                             verticalAlignment: Text.AlignVCenter
+                            color: Qt.rgba(0, 0, 0, 0.8)
                         }
                         MouseArea {
                             anchors.fill: parent
                             onPressed: {
                                 canclebtn.color = Qt.rgba(0.72, 1, 1, 0.4)
+                                verificationItem.slt_reflushVerification()
                                 userid.clear()
                                 passwd.clear()
                                 verify.clear()
@@ -235,6 +247,7 @@ Window {
                 }
             }
         }
+
         Rectangle {
             id: exitbtn
             width: 30
@@ -258,6 +271,57 @@ Window {
                     Qt.quit()
                 }
             }
+        }
+    }
+
+    function powerverify() {
+        if (verify.text !== loginpage._Putvercode) {
+            errloader.sourceComponent = verifyerr
+            verificationItem.slt_reflushVerification()
+            userid.clear()
+            passwd.clear()
+            verify.clear()
+            //// TODO
+            //// 完成登录逻辑
+        } else {
+            daemon.switchtoMain()
+        }
+    }
+
+    Loader {
+        id: errloader
+        anchors.centerIn: parent
+    }
+
+    Connections {
+        target: errloader.item
+        function onBtnClicked(x) {
+            errloader.sourceComponent = null
+            loginbtn.color = Qt.rgba(0.72, 1, 1, 0.8)
+        }
+    }
+
+    Component {
+        id: verifyerr
+        MessageBox {
+            type: "tips"
+            texts: "验证码错误"
+            helptext: "请重新尝试输入验证码"
+            conform: true
+            yesorno: false
+            justconform: true
+        }
+    }
+
+    Component {
+        id: infoerr
+        MessageBox {
+            type: "tips"
+            texts: "用户ID或密码错误"
+            helptext: "请重试"
+            conform: true
+            yesorno: false
+            justconform: true
         }
     }
 
