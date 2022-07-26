@@ -15,7 +15,7 @@ void VerificationCode::paint(QPainter *painter)
 {
     m_width = contentsBoundingRect().width();
     m_height = contentsBoundingRect().height();
-    noice_point_number = m_width * 1.5;
+    noice_point_number = m_width * 1.1;
     double m_scale = 1;
     painter->scale(m_scale,m_scale);
 
@@ -38,13 +38,13 @@ void VerificationCode::drawCode(QPainter *painter)
     QPointF p;
     //绘制验证码
     QFont textFont;
-    textFont.setPixelSize(36);
+    textFont.setPixelSize(40);
     textFont.setStyle(QFont::StyleOblique);
 
     for (int i = 0; i < letter_number; ++i)
     {
-        p.setX(i*(m_width / letter_number)+ m_width / 16);
-        p.setY(m_height / 3  + rand() % (m_height / 2 ));
+        p.setX(qAbs(i*(m_width / letter_number)+ m_width / 25));
+        p.setY(qAbs(m_height / 1.5  + rand() % (m_height / 6)+5));
         painter->setPen(colorArray[i]);
         painter->setFont(textFont);
         painter->drawText(p, QString(verificationCode[i]));
@@ -60,8 +60,8 @@ void VerificationCode::drawCode(QPainter *painter)
     //绘制干扰线
     for (int i = 0; i < letter_number; ++i)
     {
-        p.setX(i*(m_width / letter_number)+ m_width / 8);
-        p.setY(m_height / 2);
+        p.setX(i*(m_width / letter_number)+ m_width / 8.5);
+        p.setY(m_height / 2.2);
 
         QPainterPath anhuipath;
         anhuipath.moveTo( rand() % m_width , rand() % m_height);
@@ -115,7 +115,7 @@ QChar VerificationCode::produceRandomLetter() const
 void VerificationCode::produceRandomColor() const
 {
     for (int i = 0; i < letter_number; ++i)
-        colorArray[i] = QColor(rand() % 255, rand() % 255, rand() % 255);
+        colorArray[i] = QColor(rand() / 255, rand() / 255, rand() / 255);
     return;
 }
 

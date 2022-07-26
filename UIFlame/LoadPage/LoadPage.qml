@@ -203,7 +203,7 @@ Window {
                 running: true
                 repeat: true
                 onTriggered: {
-                    process.progress += 10
+                    process.progress += 3
                     process.text = qsTr(process.progress + "%")
                     if (process.progress == 10) {
                         process.x = 35
@@ -276,6 +276,7 @@ Window {
             onClicked: {
                 loadpage.close()
                 daemon.close()
+                Qt.quit()
             }
         }
     }

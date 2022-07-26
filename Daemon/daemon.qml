@@ -3,6 +3,7 @@ import QtQuick.Window
 import "../UIFlame/LoadPage"
 import "../UIFlame/MainPage"
 import "../UIFlame/LoginPage"
+import "../UIFlame/MessageBox"
 
 Window {
     visible: false
@@ -14,14 +15,16 @@ Window {
         daemonloader.sourceComponent = mainpage
     }
 
-    function switchtoDaemon() {}
+    function switchtoLogin() {
+        daemonloader.sourceComponent = loginpage
+    }
 
     Loader {
         id: daemonloader
         anchors.centerIn: parent // 弹出的界面都居中显示
     }
 
-    Component.onCompleted: daemonloader.sourceComponent = loginpage
+    Component.onCompleted: daemonloader.sourceComponent = mainpage
 
     Component {
         id: loadpage
@@ -35,5 +38,10 @@ Window {
     Component {
         id: loginpage
         LoginPage {}
+    }
+
+    Component {
+        id: msgbox
+        MessageBox {}
     }
 }
