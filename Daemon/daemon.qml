@@ -39,9 +39,4 @@ Window {
         id: loginpage
         LoginPage {}
     }
-
-    Component {
-        id: msgbox
-        MessageBox {}
-    }
 }
