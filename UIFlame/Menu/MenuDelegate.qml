@@ -66,7 +66,7 @@ Item {
                 mainstack.push(systemmaintenance, {})
             } else if (name === qsTr("软件设置")) {
                 mainstack.push(settings, {})
-            } else if (name === qsTr("关         于")) {
+            } else if (name === qsTr("关       于")) {
                 mainstack.push(about, {})
             }
         }

@@ -5,6 +5,7 @@ import "qrc:/jsaddon/jsaddon/file.js" as File
 Rectangle {
     width: parent.width
     height: parent.height
+    border.color: "#ffffff"
 
     TextArea {
         text: File.read("qrc:/text/内嵌文档/aboutqt.md")

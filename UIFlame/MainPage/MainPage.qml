@@ -76,7 +76,7 @@ Window {
                 id: menu
                 y: 20
                 width: 290
-                height: 938
+                height: 800
                 boundsMovement: Flickable.StopAtBounds
                 anchors.horizontalCenter: parent.horizontalCenter
             }
