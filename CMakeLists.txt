@@ -10,6 +10,12 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 find_package(Qt6 6.3 COMPONENTS Quick REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools QuickControls2)
+find_package(OpenSSL REQUIRED)
+
+if(OPENSSL_FOUND)
+  include_directories(${OPENSSL_INCLUDE_DIRS})
+  message(STATUS "OpenSSL Found!")
+endif()
 
 ADD_DEFINITIONS(-DTORRENT_LIBRARY)
 ADD_DEFINITIONS(-DNO_FREETYPE)
@@ -18,8 +24,16 @@ ADD_DEFINITIONS(-DHCPP_LEGACY_API)
 
 qt_add_executable(appSSIMP_pc
     Daemon/main.cpp
+    Daemon/global.h
     Utils/verificationcode.h
+    Utils/tcpnetutils.h
+    Security/aes.h
+    Security/rsa.h
+    Security/security.cpp
     Utils/verificationcode.cpp
+    Utils/tcpnetutils.cpp
+    Security/aes.cpp
+    Security/rsa.cpp
     resource/resource.qrc
 )
 
@@ -70,4 +84,5 @@ target_link_libraries(appSSIMP_pc
     PRIVATE Qt6::Quick
     PRIVATE Qt6::Widgets
     PRIVATE Qt6::QuickControls2
+    PRIVATE OpenSSL::Crypto OpenSSL::SSL
 )
