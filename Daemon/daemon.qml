@@ -19,12 +19,16 @@ Window {
         daemonloader.sourceComponent = loginpage
     }
 
+    function loadPanic(){
+
+    }
+
     Loader {
         id: daemonloader
         anchors.centerIn: parent // 弹出的界面都居中显示
     }
 
-    Component.onCompleted: daemonloader.sourceComponent = mainpage
+    Component.onCompleted: daemonloader.sourceComponent = loadpage
 
     Component {
         id: loadpage

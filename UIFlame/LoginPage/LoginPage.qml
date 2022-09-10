@@ -66,7 +66,7 @@ Window {
             color: Qt.rgba(1, 1, 1, 0.1)
             Rectangle {
                 id: verificationPainter
-                width: parent.width / 1.1
+                width: parent.width / 1.15
                 height: parent.height / 1.5
                 anchors.horizontalCenter: parent.horizontalCenter
                 anchors.verticalCenter: parent.verticalCenter
@@ -86,38 +86,11 @@ Window {
                     anchors.fill: parent
                     anchors.topMargin: parent.width / 8
 
-                    Text {
-                        x: parent.width / 10
-                        y: parent.height / 12
-                        color: "#ffffff"
-                        text: qsTr("用户ID")
-                        font.pixelSize: 16
-                    }
-
-                    Text {
-                        x: parent.width / 10
-                        y: parent.height / 3.3
-                        color: "#ffffff"
-                        text: qsTr("密    码")
-                        font.letterSpacing: 0
-                        font.pixelSize: 16
-                        font.wordSpacing: 2
-                    }
-
-                    Text {
-                        x: parent.width / 10
-                        y: parent.height / 1.9
-                        color: "#ffffff"
-                        id: text3
-                        text: qsTr("验证码")
-                        font.pixelSize: 16
-                    }
-
                     TextField {
                         id: userid
-                        x: parent.width / 3.6
+                        x: parent.width / 5.5
                         y: parent.height / 6.65
-                        width: parent.width / 1.5
+                        width: parent.width /1.3
                         height: 40
                         placeholderText: qsTr("请输入用户ID")
                         placeholderTextColor: "#CCCCFF"
@@ -126,9 +99,9 @@ Window {
 
                     TextField {
                         id: passwd
-                        x: parent.width / 3.6
+                        anchors.left: userid.left
                         y: parent.height / 2.85
-                        width: parent.width / 1.5
+                        anchors.right: userid.right
                         height: 40
                         placeholderText: qsTr("请输入密码")
                         placeholderTextColor: "#CCCCFF"
@@ -138,9 +111,9 @@ Window {
 
                     TextField {
                         id: verify
-                        x: parent.width / 3.6
+                        anchors.left: userid.left
                         y: parent.height / 1.76
-                        width: parent.width / 3.5
+                        width: parent.width / 2.8
                         height: 40
                         placeholderText: qsTr("请输入验证码")
                         placeholderTextColor: "#CCCCFF"
@@ -150,10 +123,11 @@ Window {
                     Rectangle {
                         anchors.left: verify.right
                         anchors.top: verify.top
-                        anchors.right: passwd.right
+                        anchors.right: userid.right
                         anchors.bottom: verify.bottom
-                        anchors.bottomMargin: 8
-                        anchors.leftMargin: 6
+                        anchors.bottomMargin: 6
+                        anchors.leftMargin: 12
+                        anchors.rightMargin: 5
                         VerificationCode {
                             id: verificationItem
                             anchors.fill: parent
@@ -180,7 +154,8 @@ Window {
                     }
                     Rectangle {
                         id: loginbtn
-                        x: parent.width / 4.5
+                        anchors.left: parent.left
+                        anchors.leftMargin: parent.width /5.5
                         y: parent.height / 1.30
                         width: 85
                         height: 35
@@ -214,7 +189,8 @@ Window {
                     }
                     Rectangle {
                         id: canclebtn
-                        x: parent.width / 1.8
+                        anchors.right: parent.right
+                        anchors.rightMargin: parent.width /5.5
                         y: parent.height / 1.30
                         width: 85
                         height: 35

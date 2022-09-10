@@ -1,3 +1,4 @@
+
 import QtQuick
 import QtQuick.Controls
 import Qt5Compat.GraphicalEffects
@@ -203,15 +204,15 @@ Window {
                 running: true
                 repeat: true
                 onTriggered: {
-                    process.progress += 3
+                    process.progress += 5
                     process.text = qsTr(process.progress + "%")
                     if (process.progress == 10) {
                         process.x = 35
                     }
-                    if (process.progress == 100) {
+                    if (process.progress >= 100) {
                         process.x = 31
                         timer.stop()
-                        daemon.switchtoMain()
+                        daemon.switchtoLogin()
                     }
                 }
             }
