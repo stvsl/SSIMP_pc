@@ -12,7 +12,11 @@ int main(int argc, char *argv[]) {
   // js读写文件授权
   qputenv("QML_XHR_ALLOW_FILE_READ", QByteArray("1"));
   // qt5启用高分辨率支持
-  // QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+  //  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+  QCoreApplication::setOrganizationName("stvsljl");
+  QCoreApplication::setApplicationName("SSIMP");
+  QCoreApplication::setOrganizationDomain("stvsljl.com");
+  QCoreApplication::setApplicationVersion("v0.0.2 alpha");
   //注册验证码组件
   qmlRegisterType<VerificationCode>("Utils.Verify", 1, 0, "VerificationCode");
   QTranslator translator;
@@ -46,7 +50,9 @@ int main(int argc, char *argv[]) {
       },
       Qt::QueuedConnection);
   engine.load(url);
-  if (!global_Security::Init()) {
+  // 安全模块初始化
+  if (global_Security::Init()) {
+    qDebug() << "!";
     auto r = engine.rootObjects().constFirst()->findChild<QObject *>("daemon");
     QVariant msg = "";
     QMetaObject::invokeMethod(r, "loadPanic", Q_ARG(QVariant, msg));

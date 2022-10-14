@@ -12,11 +12,6 @@ find_package(Qt6 6.3 COMPONENTS Quick REQUIRED)
 find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools QuickControls2)
 find_package(OpenSSL REQUIRED)
 
-if(OPENSSL_FOUND)
-  include_directories(${OPENSSL_INCLUDE_DIRS})
-  message(STATUS "OpenSSL Found!")
-endif()
-
 ADD_DEFINITIONS(-DTORRENT_LIBRARY)
 ADD_DEFINITIONS(-DNO_FREETYPE)
 ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
