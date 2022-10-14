@@ -18,7 +18,6 @@ Window {
     function switchtoLogin() {
         daemonloader.sourceComponent = loginpage
     }
-
     function loadPanic(){
 
     }

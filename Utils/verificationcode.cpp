@@ -2,10 +2,14 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QTime>
+
 VerificationCode::VerificationCode() {
   setAntialiasing(true);
   //生成随机种子
   srand(QTime::currentTime().second() * 1000 + QTime::currentTime().msec());
+  m_width = 0;
+  m_height = 0;
+  noice_point_number = 0;
   colorArray = new QColor[letter_number];
   verificationCode = new QChar[letter_number];
 }
