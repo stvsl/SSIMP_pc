@@ -22,11 +22,17 @@ qt_add_executable(appSSIMP_pc
     Daemon/global.h
     Utils/verificationcode.h
     Utils/tcpnetutils.h
+    Utils/nget.h
+    Utils/npost.h
+    Utils/netbase.h
     Security/aes.h
     Security/rsa.h
     Security/security.cpp
     Utils/verificationcode.cpp
     Utils/tcpnetutils.cpp
+    Utils/nget.cpp
+    Utils/npost.cpp
+    Utils/netbase.cpp
     Security/aes.cpp
     Security/rsa.cpp
     resource/resource.qrc
