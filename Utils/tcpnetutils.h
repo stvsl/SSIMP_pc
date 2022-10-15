@@ -36,7 +36,7 @@ public:
     // 获取响应状态信息
     QString getStatusMsg();
     // 获取响应头
-    QMap<QString, QString> getResponseHeaders();
+    QList<QNetworkReply::RawHeaderPair> getResponseHeaders();
     // 获取响应内容（响应体）
     QByteArray getResponseBody();
     // 获取响应内容（响应体）字符串
@@ -50,41 +50,27 @@ signals:
     // 请求完成信号
     void requestFinished();
     // 请求失败信号
-    void requestFailed();
+    void requestFailed(QNetworkReply::NetworkError code);
     // 请求超时信号
     void requestTimeout();
     // 请求进度信号
     void requestProgress(qint64 bytesSent, qint64 bytesTotal);
-    // 请求重定向信号
-    void requestRedirected(const QUrl &url);
     // 请求中断信号
     void requestAborted();
-    // 请求错误信号
-    void requestError(QNetworkReply::NetworkError code);
-    // 请求SSL错误信号
-    void requestSslErrors(const QList<QSslError> &errors);
-
-private slots:
-    // 请求完成槽
-    void requestFinishedSlot();
-    // 请求失败槽
-    void requestFailedSlot();
-    // 请求超时槽
-    void requestTimeoutSlot();
-    // 请求进度槽
-    void requestProgressSlot(qint64 bytesSent, qint64 bytesTotal);
-    // 请求重定向槽
-    void requestRedirectedSlot(const QUrl &url);
-    // 请求中断槽
-    void requestAbortedSlot();
-    // 请求错误槽
-    void requestErrorSlot(QNetworkReply::NetworkError code);
-    // 请求SSL错误槽
-    void requestSslErrorsSlot(const QList<QSslError> &errors);
+    // 请求重定向信号
+    void requestRedirected(const QUrl &url);
 
 private:
     // 请求模式
     TcpMode mode;
+    // 目标地址
+    QUrl url;
+    // 请求参数
+    QMap<QString, QString> params;
+    // 请求头
+    QMap<QString, QString> headers;
+    // 请求体
+    QByteArray body;
     // 请求对象
     QNetworkAccessManager *manager;
     // 请求
@@ -102,7 +88,7 @@ private:
     // 请求响应状态信息
     QString statusMsg;
     // 请求响应头
-    QMap<QString, QString> responseHeaders;
+    QList<QNetworkReply::RawHeaderPair> responseHeaders;
     // 请求响应内容（响应体）
     QByteArray responseBody;
     // 请求响应内容（响应体）字符串
