@@ -31,17 +31,17 @@ public:
     // 设置请求超时时间
     void setTimeout(int timeout);
     // 获取请求URL
-    QUrl getUrl();
+    QUrl &getUrl();
     // 获取header
-    QString getHeader(const QString &key);
+    QString getHeader(const QString &key) const;
     // 获取headers
-    QMap<QString, QString> getHeaders();
+    QMap<QString, QString> &getHeaders();
     // 获取请求参数
-    QMap<QString, QString> getParams();
+    QMap<QString, QString> &getParams();
     // 获取请求参数
     QString getParam(const QString &key);
     // 获取请求超时时间
-    int getTimeout();
+    int &getTimeout();
 
 private:
     // 请求URL

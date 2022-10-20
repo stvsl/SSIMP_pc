@@ -1,10 +1,11 @@
 #include "nget.h"
 #include "Daemon/global.h"
+#include <QDebug>
 
 TcpGet::TcpGet(QObject *parent) : QObject(parent)
 {
     this->timeout = 5000;
-    this->url = global::SERVER_URL;
+    this->url = *global::SERVER_URL;
     this->headers = QMap<QString, QString>();
     this->params = QMap<QString, QString>();
 }
@@ -12,7 +13,8 @@ TcpGet::TcpGet(QObject *parent) : QObject(parent)
 TcpGet::TcpGet(const QString &url, QObject *parent) : QObject(parent)
 {
     this->timeout = 5000;
-    this->url = QUrl(url);
+    qDebug() << "当前服务器地址：" << *global::SERVER_URL;
+    this->url = QUrl(global::SERVER_URL->toString() + url);
     this->headers = QMap<QString, QString>();
     this->params = QMap<QString, QString>();
 }
@@ -20,7 +22,7 @@ TcpGet::TcpGet(const QString &url, QObject *parent) : QObject(parent)
 TcpGet::TcpGet(const QString &url, const QMap<QString, QString> &headers, const QMap<QString, QString> &params, QObject *parent) : QObject(parent)
 {
     this->timeout = 5000;
-    this->url = QUrl(url);
+    this->url = QUrl(global::SERVER_URL->toString() + url);
     this->headers = headers;
     this->params = params;
 }
@@ -69,22 +71,22 @@ void TcpGet::setTimeout(int timeout)
     this->timeout = timeout;
 }
 
-QUrl TcpGet::getUrl()
+QUrl &TcpGet::getUrl()
 {
     return this->url;
 }
 
-QString TcpGet::getHeader(const QString &key)
+QString TcpGet::getHeader(const QString &key) const
 {
     return this->headers.value(key);
 }
 
-QMap<QString, QString> TcpGet::getHeaders()
+QMap<QString, QString> &TcpGet::getHeaders()
 {
     return this->headers;
 }
 
-QMap<QString, QString> TcpGet::getParams()
+QMap<QString, QString> &TcpGet::getParams()
 {
     return this->params;
 }
@@ -94,7 +96,7 @@ QString TcpGet::getParam(const QString &key)
     return this->params.value(key);
 }
 
-int TcpGet::getTimeout()
+int &TcpGet::getTimeout()
 {
     return this->timeout;
 }

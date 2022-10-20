@@ -17,8 +17,9 @@ namespace globalsecurity
   extern QString FEATURE;           // 当前系统特征值
 };                                  // namespace globalsecurity
 
-class global_Security
+class global_Security : QObject
 {
+  Q_OBJECT
 public:
   static QString getServerRsaPublic();
   static QString getLocalRsaPrivate();
@@ -33,7 +34,7 @@ public:
 // 系统全局变量
 namespace global
 {
-  QUrl SERVER_URL = QUrl("127.0.0.1:6521"); // 服务器地址
-};                                          // namespace global
+  Q_GLOBAL_STATIC(QUrl, SERVER_URL, ("http://127.0.0.1:6521")); // 服务器地址
+};                                                              // namespace global
 
 #endif

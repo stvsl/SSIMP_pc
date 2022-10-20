@@ -55,11 +55,13 @@ signals:
     void requestTimeout();
     // 请求进度信号
     void requestProgress(qint64 bytesSent, qint64 bytesTotal);
-    // 请求中断信号
-    void requestAborted();
     // 请求重定向信号
     void requestRedirected(const QUrl &url);
 
+private slots:
+    void requestProgressSlot(qint64 bytesReceived, qint64 bytesTotal);
+    void requestRedirectedSlot(const QUrl &url);
+    void requestFailedSlot(QNetworkReply::NetworkError code);
 private:
     // 请求模式
     TcpMode mode;
@@ -71,18 +73,8 @@ private:
     QMap<QString, QString> headers;
     // 请求体
     QByteArray body;
-    // 请求对象
-    QNetworkAccessManager *manager;
-    // 请求
-    QNetworkRequest *request;
-    // 响应
-    QNetworkReply *reply;
-    // 请求超时定时器
-    QTimer *timer;
     // 请求超时时间
     int timeout;
-    // 请求响应
-    QByteArray response;
     // 请求响应状态码
     int statusCode;
     // 请求响应状态信息

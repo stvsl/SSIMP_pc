@@ -39,19 +39,19 @@ public:
     // 设置请求超时时间
     void setTimeout(int timeout);
     // 获取请求URL
-    const QUrl &getUrl();
+    QUrl &getUrl();
     // 获取header
-    const QString &getHeader(const QString &key);
+    QString &getHeader(const QString &key);
     // 获取headers
-    const QMap<QString, QString> &getHeaders();
+    QMap<QString, QString> &getHeaders();
     // 获取请求参数
-    const QMap<QString, QString> &getParams();
+    QMap<QString, QString> &getParams();
     // 获取请求参数
-    const QString &getParam(const QString &key);
+    QString &getParam(const QString &key);
     // 获取请求体
-    const QByteArray &getBody();
+    QByteArray &getBody();
     // 获取请求超时时间
-    const int &getTimeout();
+    int &getTimeout();
 
 private:
     // 请求URL

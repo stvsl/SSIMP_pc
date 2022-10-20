@@ -4,7 +4,7 @@
 TcpPost::TcpPost(QObject *parent) : QObject(parent)
 {
     this->timeout = 5000;
-    this->url = global::SERVER_URL;
+    this->url = *global::SERVER_URL;
     this->headers = QMap<QString, QString>();
     this->params = QMap<QString, QString>();
 }
@@ -12,7 +12,7 @@ TcpPost::TcpPost(QObject *parent) : QObject(parent)
 TcpPost::TcpPost(const QString &url, QObject *parent) : QObject(parent)
 {
     this->timeout = 5000;
-    this->url = QUrl(url);
+    this->url = QUrl(global::SERVER_URL->toString() + url);
     this->headers = QMap<QString, QString>();
     this->params = QMap<QString, QString>();
 }
@@ -20,7 +20,7 @@ TcpPost::TcpPost(const QString &url, QObject *parent) : QObject(parent)
 TcpPost::TcpPost(const QString &url, const QMap<QString, QString> &headers, const QMap<QString, QString> &params, QObject *parent) : QObject(parent)
 {
     this->timeout = 5000;
-    this->url = QUrl(url);
+    this->url = QUrl(global::SERVER_URL->toString() + url);
     this->headers = headers;
     this->params = params;
 }
@@ -64,22 +64,26 @@ void TcpPost::setTimeout(int timeout)
     this->timeout = timeout;
 }
 
-QUrl TcpPost::getUrl()
+QUrl &TcpPost::getUrl()
 {
     return this->url;
 }
 
-QMap<QString, QString> TcpPost::getHeaders()
+QMap<QString, QString> &TcpPost::getHeaders()
 {
     return this->headers;
 }
 
-QMap<QString, QString> TcpPost::getParams()
+QMap<QString, QString> &TcpPost::getParams()
 {
     return this->params;
 }
 
-int TcpPost::getTimeout()
+QByteArray &TcpPost::getBody(){
+    return this->body;
+}
+
+int &TcpPost::getTimeout()
 {
     return this->timeout;
 }

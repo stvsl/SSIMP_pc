@@ -29,6 +29,7 @@ void TcpNetUtils::sendRequest()
     // 创建请求
     QNetworkRequest request;
     // 设置请求URL
+    qDebug() << "请求URL：" << this->url;
     request.setUrl(this->url);
     // 设置请求头
     QMapIterator<QString, QString> i(this->headers);
@@ -65,8 +66,6 @@ void TcpNetUtils::sendRequest()
     connect(reply, &QNetworkReply::downloadProgress, this, &TcpNetUtils::requestProgress);
     // 请求重定向信号槽
     connect(reply, &QNetworkReply::redirected, this, &TcpNetUtils::requestRedirected);
-    // 请求中断信号槽
-    connect(reply, &QNetworkReply::abort, this, &TcpNetUtils::requestAborted);
     // 请求错误信号槽
     connect(reply, &QNetworkReply::errorOccurred, this, &TcpNetUtils::requestFailed);
     // 启动定时器
@@ -89,25 +88,19 @@ void TcpNetUtils::sendRequest()
     manager->deleteLater();
 }
 
-void TcpNetUtils::requestProgress(qint64 bytesReceived, qint64 bytesTotal)
+void TcpNetUtils::requestProgressSlot(qint64 bytesReceived, qint64 bytesTotal)
 {
     // 发送请求进度信号
     emit this->requestProgress(bytesReceived, bytesTotal);
 }
 
-void TcpNetUtils::requestRedirected(const QUrl &url)
+void TcpNetUtils::requestRedirectedSlot(const QUrl &url)
 {
     // 发送请求重定向信号
     emit this->requestRedirected(url);
 }
 
-void TcpNetUtils::requestAborted()
-{
-    // 发送请求中断信号
-    emit this->requestAborted();
-}
-
-void TcpNetUtils::requestFailed(QNetworkReply::NetworkError code)
+void TcpNetUtils::requestFailedSlot(QNetworkReply::NetworkError code)
 {
     // 发送请求错误信号
     emit this->requestFailed(code);
@@ -131,5 +124,19 @@ QList<QNetworkReply::RawHeaderPair> TcpNetUtils::getResponseHeaders()
 QByteArray TcpNetUtils::getResponseBody()
 {
     return this->responseBody;
+}
+QString TcpNetUtils::getResponseBodyStr()
+{
+    return this->responseBody;
+}
+
+QJsonObject TcpNetUtils::getResponseBodyJson()
+{
+    return QJsonDocument::fromJson(this->responseBody).object();
+}
+
+QJsonDocument TcpNetUtils::getResponseBodyJsonDoc()
+{
+    return QJsonDocument::fromJson(this->responseBody);
 }
 // Path: Utils/tcpnetutils.h
