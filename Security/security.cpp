@@ -13,7 +13,8 @@ QString globalsecurity::TOKEN = "";
 QString globalsecurity::FEATURE = "";
 QString globalsecurity::SERVER_RSA_PUBLIC = "";
 
-bool global_Security::Init() {
+bool global_Security::Init()
+{
   // 创建本地RSA密钥对
   RSA *rsa = RSA_new();
   BIGNUM *bn = BN_new();
@@ -38,16 +39,11 @@ bool global_Security::Init() {
       0, pri_key_str.indexOf("-----END RSA PRIVATE KEY-----") + 30);
   globalsecurity::LOCAL_RSA_PRIVATE = pri_key_str;
   // 获取服务器RSA公钥
-  tcpnetutils *tnu = new tcpnetutils();
-  tnu->get("/encryption/rsapubkey");
-  QJsonParseError jsonError;
-  QJsonDocument json = QJsonDocument::fromJson(tnu->exec(), &jsonError);
-  if (jsonError.error != QJsonParseError::NoError) {
-    qDebug() << "json解析失败";
-    return false;
-  }
-  QJsonObject jsonObj = json.object();
-  globalsecurity::SERVER_RSA_PUBLIC = jsonObj.value("pubkey").toString();
+  TcpNetUtils *net = new TcpNetUtils(new TcpGet("/api/encryption/rsapubkey"));
+  net->sendRequest();
+  qDebug() << "请求服务器";
+  connect(net, &TcpNetUtils::requestFinished, [=]()
+          { qDebug() << "请求结果：" << net->getResponseBodyJson(); });
   // 发送本地公钥以及特征密码给服务器
   QString hostName = QHostInfo::localHostName();
   QString deviceType = QSysInfo::productType();
@@ -56,15 +52,18 @@ bool global_Security::Init() {
   QList<QHostAddress> ipAddressesList = QNetworkInterface::allAddresses();
   // 获取第一个本主机的IPv4地址
   int nListSize = ipAddressesList.size();
-  for (int i = 0; i < nListSize; ++i) {
+  for (int i = 0; i < nListSize; ++i)
+  {
     if (ipAddressesList.at(i) != QHostAddress::LocalHost &&
-        ipAddressesList.at(i).toIPv4Address()) {
+        ipAddressesList.at(i).toIPv4Address())
+    {
       strIpAddress = ipAddressesList.at(i).toString();
       break;
     }
   }
   // 如果没有找到，则以本地IP地址为IP
-  if (strIpAddress.isEmpty()) {
+  if (strIpAddress.isEmpty())
+  {
     strIpAddress = QHostAddress(QHostAddress::LocalHost).toString();
   }
   // 获取设备MAC地址
@@ -72,11 +71,13 @@ bool global_Security::Init() {
       QNetworkInterface::allInterfaces(); // 获取所有网络接口列表
   int nCnt = nets.count();
   QString strMacAddr = "";
-  for (int i = 0; i < nCnt; i++) {
+  for (int i = 0; i < nCnt; i++)
+  {
     // 如果此网络接口被激活并且正在运行并且不是回环地址，则就是要找的Mac地址
     if (nets[i].flags().testFlag(QNetworkInterface::IsUp) &&
         nets[i].flags().testFlag(QNetworkInterface::IsRunning) &&
-        !nets[i].flags().testFlag(QNetworkInterface::IsLoopBack)) {
+        !nets[i].flags().testFlag(QNetworkInterface::IsLoopBack))
+    {
       strMacAddr = nets[i].hardwareAddress();
       break;
     }
