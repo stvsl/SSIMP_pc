@@ -18,8 +18,8 @@ Window {
     function switchtoLogin() {
         daemonloader.sourceComponent = loginpage
     }
-    function loadPanic(){
-
+    function loadPanic() {
+        console.log("loadpanic")
     }
 
     Loader {

@@ -19,6 +19,7 @@ Window {
     property bool conform: false
     // 按钮类型 是 | 否
     property bool yesorno: false
+    // 按钮类型 确定
     property bool justconform: false
 
     signal btnClicked(int x)

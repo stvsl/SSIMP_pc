@@ -1,0 +1,9 @@
+{
+    "files.associations": {
+        "*.jsp": "jsp",
+        "mutex": "cpp",
+        "streambuf": "cpp",
+        "cmath": "cpp",
+        "iostream": "cpp"
+    }
+}

@@ -5,7 +5,7 @@
 TcpGet::TcpGet(QObject *parent) : QObject(parent)
 {
     this->timeout = 5000;
-    this->url = *global::SERVER_URL;
+    this->url = QUrl(*global::SERVER_URL_STR());
     this->headers = QMap<QString, QString>();
     this->params = QMap<QString, QString>();
 }
@@ -13,8 +13,7 @@ TcpGet::TcpGet(QObject *parent) : QObject(parent)
 TcpGet::TcpGet(const QString &url, QObject *parent) : QObject(parent)
 {
     this->timeout = 5000;
-    qDebug() << "当前服务器地址：" << *global::SERVER_URL;
-    this->url = QUrl(global::SERVER_URL->toString() + url);
+    this->url = QUrl(*global::SERVER_URL_STR() + url);
     this->headers = QMap<QString, QString>();
     this->params = QMap<QString, QString>();
 }
@@ -22,7 +21,7 @@ TcpGet::TcpGet(const QString &url, QObject *parent) : QObject(parent)
 TcpGet::TcpGet(const QString &url, const QMap<QString, QString> &headers, const QMap<QString, QString> &params, QObject *parent) : QObject(parent)
 {
     this->timeout = 5000;
-    this->url = QUrl(global::SERVER_URL->toString() + url);
+    this->url = QUrl(*global::SERVER_URL_STR() + url);
     this->headers = headers;
     this->params = params;
 }
