@@ -1,5 +1,6 @@
 #include "aes.h"
 #include "Daemon/global.h"
+#include <openssl/evp.h>
 
 #define AES_BLOCK_SIZE 16
 
@@ -8,80 +9,131 @@ QString encrypt(const QByteArray &data)
   return encrypt(data, QString(global_Security::getAesKey()));
 }
 
-QByteArray encrypt(QByteArray data, QString key)
+QByteArray encrypt(const QByteArray data, const QString key)
 {
-  std::string password = key.toStdString();
-  unsigned char iv[AES_BLOCK_SIZE] = {'S', 'S', 'I', 'M', 'P', 'S', 'T', 'V', 'S', 'L', 'J', 'C', 'K', 'E', 'Y', 'S'};
-  AES_KEY aes_key;
-  if (AES_set_encrypt_key((const unsigned char *)password.c_str(),
-                          password.length() * 8, &aes_key) < 0)
+  // 初始化 OpenSSL 库
+  OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CONFIG, NULL);
+
+  // 创建 OpenSSL 的加密上下文
+  EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+  if (!ctx)
   {
-    // assert(false);
+    // 失败时应当返回一个空的 QByteArray 对象
     return QByteArray();
   }
-  std::string strRet;
-  std::string data_bak = data.toStdString();
-  unsigned int data_length = data_bak.length();
 
-  // pkcs7 padding
-  int padding_length = AES_BLOCK_SIZE - data_length % AES_BLOCK_SIZE;
-  for (int i = 0; i < padding_length; i++)
+  // 设置加密算法为 AES-256-ECB
+  if (1 != EVP_EncryptInit_ex(ctx, EVP_aes_256_ecb(), NULL, NULL, NULL))
   {
-    data_bak.push_back(padding_length);
+    // 失败时应当返回一个空的 QByteArray 对象
+    EVP_CIPHER_CTX_free(ctx);
+    return QByteArray();
   }
 
-  // encrypt
-  for (unsigned int i = 0; i < data_length / (AES_BLOCK_SIZE); i++)
+  // 设置加密的密钥，需要将 QString 类型转换为 unsigned char 类型
+  unsigned char *keyData = (unsigned char *)key.toUtf8().data();
+  if (1 != EVP_EncryptInit_ex(ctx, NULL, NULL, keyData, NULL))
   {
-    std::string str16 = data_bak.substr(i * AES_BLOCK_SIZE, AES_BLOCK_SIZE);
-    unsigned char out[AES_BLOCK_SIZE];
-    ::memset(out, 0, AES_BLOCK_SIZE);
-    AES_cbc_encrypt((const unsigned char *)str16.c_str(), out, AES_BLOCK_SIZE,
-                    &aes_key, iv, AES_ENCRYPT);
-    strRet += std::string((const char *)out, AES_BLOCK_SIZE);
+    // 失败时应当返回一个空的 QByteArray 对象
+    EVP_CIPHER_CTX_free(ctx);
+    return QByteArray();
   }
-  return QByteArray::fromStdString(strRet);
+
+  // 准备加密的缓冲区
+  int outLength = 0;
+  int c_len = data.size() + EVP_CIPHER_CTX_block_size(ctx);
+  unsigned char *ciphertext = (unsigned char *)malloc(c_len);
+
+  // 进行加密
+  if (1 != EVP_EncryptUpdate(ctx, ciphertext, &outLength,
+                             (const unsigned char *)data.data(), data.size()))
+  {
+    // 失败时应当返回一个空的 QByteArray 对象
+    EVP_CIPHER_CTX_free(ctx);
+    free(ciphertext);
+    return QByteArray();
+  }
+  int tempLen = outLength;
+
+  // 完成加密
+  if (1 != EVP_EncryptFinal_ex(ctx, ciphertext + tempLen, &outLength))
+  {
+    // 失败时应当返回一个空的 QByteArray 对象
+    EVP_CIPHER_CTX_free(ctx);
+    free(ciphertext);
+    return QByteArray();
+  }
+  tempLen += outLength;
+  // 释放加密上下文并返回结果
+  EVP_CIPHER_CTX_free(ctx);
+  QByteArray result = QByteArray((const char *)ciphertext, tempLen);
+  free(ciphertext);
+  return result;
 }
 
-QString decrypt(QByteArray data)
+QString decrypt(const QByteArray &data)
 {
   return decrypt(data, global_Security::getAesKey());
 }
 
-QByteArray decrypt(QByteArray data, QString key)
+QByteArray decrypt(const QByteArray data, const QString key)
 {
-  std::string password = key.toStdString();
-  std::string strData = data.toStdString();
-  unsigned char iv[AES_BLOCK_SIZE] = {'S', 'S', 'I', 'M', 'P', 'S', 'T', 'V', 'S', 'L', 'J', 'C', 'K', 'E', 'Y', 'S'};
+  // 初始化 OpenSSL 库
+  OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CONFIG, NULL);
 
-  AES_KEY aes_key;
-  if (AES_set_decrypt_key((const unsigned char *)password.c_str(),
-                          password.length() * 8, &aes_key) < 0)
+  // 创建 OpenSSL 的解密上下文
+  EVP_CIPHER_CTX *ctx = EVP_CIPHER_CTX_new();
+  if (!ctx)
   {
-    // assert(false);
+    // 失败时应当返回一个空的 QByteArray 对象
     return QByteArray();
   }
-  std::string strRet;
-  // decrypt
-  for (unsigned int i = 0; i < strData.length() / AES_BLOCK_SIZE; i++)
+
+  // 设置解密算法为 AES-128-ECB
+  if (1 != EVP_DecryptInit_ex(ctx, EVP_aes_256_ecb(), NULL, NULL, NULL))
   {
-    std::string str16 = strData.substr(i * AES_BLOCK_SIZE, AES_BLOCK_SIZE);
-    unsigned char out[AES_BLOCK_SIZE];
-    ::memset(out, 0, AES_BLOCK_SIZE);
-    AES_cbc_encrypt((const unsigned char *)str16.c_str(), out, AES_BLOCK_SIZE,
-                    &aes_key, iv, AES_DECRYPT);
-    strRet += std::string((const char *)out, AES_BLOCK_SIZE);
+    // 失败时应当返回一个空的 QByteArray 对象
+    EVP_CIPHER_CTX_free(ctx);
+    return QByteArray();
   }
-  // pkcs7 ubpadding
-  if (strRet.length() > 1)
+
+  // 设置解密的密钥，需要将 QString 类型转换为 unsigned char 类型
+  unsigned char *keyData = (unsigned char *)key.toUtf8().data();
+  if (1 != EVP_DecryptInit_ex(ctx, NULL, NULL, keyData, NULL))
   {
-    int padding_length = strRet[strRet.length() - 1];
-    strRet.resize(0, strRet.length() - padding_length);
-    return QByteArray::fromStdString(strRet);
+    // 失败时应当返回一个空的 QByteArray 对象
+    EVP_CIPHER_CTX_free(ctx);
+    return QByteArray();
   }
-  else
+
+  // 准备解密的缓冲区
+  int outLength = 0;
+  int p_len = data.size();
+  unsigned char *plaintext = (unsigned char *)malloc(p_len);
+
+  // 进行解密
+  if (1 != EVP_DecryptUpdate(ctx, plaintext, &outLength,
+                             (const unsigned char *)data.data(), data.size()))
   {
-    strRet.resize(0, strRet.length());
-    return QByteArray::fromStdString(strRet);
+    // 失败时应当返回一个空的 QByteArray 对象
+    EVP_CIPHER_CTX_free(ctx);
+    free(plaintext);
+    return QByteArray();
   }
+  int tempLen = outLength;
+
+  // 完成解密
+  if (1 != EVP_DecryptFinal_ex(ctx, plaintext + tempLen, &outLength))
+  {
+    // 失败时应当返回一个空的 QByteArray 对象
+    EVP_CIPHER_CTX_free(ctx);
+    free(plaintext);
+    return QByteArray();
+  }
+  tempLen += outLength;
+  // 释放解密上下文并返回结果
+  EVP_CIPHER_CTX_free(ctx);
+  QByteArray result = QByteArray((const char *)plaintext, tempLen);
+  free(plaintext);
+  return result;
 }

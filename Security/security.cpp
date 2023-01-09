@@ -4,6 +4,10 @@
 #include <QCoreApplication>
 #include <QHostInfo>
 #include <QNetworkInterface>
+#include <Utils/npost.h>
+#include <openssl/evp.h>
+#include <openssl/pem.h>
+#include <openssl/rsa.h>
 
 bool globalsecurity::inited = false;
 QString globalsecurity::AES_KEY = "";
@@ -13,38 +17,60 @@ QString globalsecurity::TOKEN = "";
 QString globalsecurity::FEATURE = "";
 QString globalsecurity::SERVER_RSA_PUBLIC = "";
 
+bool Init_State_2();
+bool Init_State_3();
+/***
+ *  计算本地RSA公钥和私钥，获取服务器的RSA公钥
+ */
 bool global_Security::Init()
 {
   // 创建本地RSA密钥对
-  RSA *rsa = RSA_new();
-  BIGNUM *bn = BN_new();
-  BN_set_word(bn, RSA_F4);
-  RSA_generate_key_ex(rsa, KEY_LENGTH, bn, NULL);
-  // 生成公钥
-  BIO *bio_pub = BIO_new(BIO_s_mem());
-  PEM_write_bio_RSAPublicKey(bio_pub, rsa);
-  char *pub_key = NULL;
-  QString pub_key_str = QString(pub_key);
-  // 去掉-----END RSA PUBLIC KEY-----后面的信息
-  pub_key_str = pub_key_str.mid(
-      0, pub_key_str.indexOf("-----END RSA PUBLIC KEY-----") + 29);
-  globalsecurity::LOCAL_RSA_PUBLIC = pub_key_str;
-  // 生成私钥
-  BIO *bio_pri = BIO_new(BIO_s_mem());
-  PEM_write_bio_RSAPrivateKey(bio_pri, rsa, NULL, NULL, 0, NULL, NULL);
-  char *pri_key = NULL;
-  QString pri_key_str = QString(pri_key);
-  // 去掉-----END RSA PUBLIC KEY-----后面的信息
-  pri_key_str = pri_key_str.mid(
-      0, pri_key_str.indexOf("-----END RSA PRIVATE KEY-----") + 30);
-  globalsecurity::LOCAL_RSA_PRIVATE = pri_key_str;
+  EVP_PKEY_CTX *ctx = EVP_PKEY_CTX_new_from_name(NULL, "RSA", NULL);
+  EVP_PKEY_keygen_init(ctx);
+  EVP_PKEY_CTX_set_rsa_keygen_bits(ctx, 2048);
+  EVP_PKEY *pkey = NULL;
+  EVP_PKEY_keygen(ctx, &pkey);
+  EVP_PKEY_CTX_free(ctx);
+  // 获取本地RSA私钥
+  BIO *pri = BIO_new(BIO_s_mem());
+  PEM_write_bio_PrivateKey(pri, pkey, NULL, NULL, 0, NULL, NULL);
+  char *pri_key;
+  long pri_len = BIO_get_mem_data(pri, &pri_key);
+  globalsecurity::LOCAL_RSA_PRIVATE = QString::fromLatin1(pri_key, pri_len);
+  BIO_free(pri);
+  // 获取本地RSA公钥
+  BIO *pub = BIO_new(BIO_s_mem());
+  PEM_write_bio_PUBKEY(pub, pkey);
+  char *pub_key;
+  long pub_len = BIO_get_mem_data(pub, &pub_key);
+  globalsecurity::LOCAL_RSA_PUBLIC = QString::fromLatin1(pub_key, pub_len);
+  BIO_free(pub);
+  // 释放EVP_PKEY
+  EVP_PKEY_free(pkey);
+
+  qDebug() << "RSA密钥对生成成功";
+  qDebug() << "本地RSA私钥：" << globalsecurity::LOCAL_RSA_PRIVATE;
+  qDebug() << "本地RSA公钥：" << globalsecurity::LOCAL_RSA_PUBLIC;
+
   // 获取服务器RSA公钥
   TcpNetUtils *net = new TcpNetUtils(new TcpGet("/api/encryption/rsapubkey"));
-  net->sendRequest();
-  qDebug() << "请求服务器";
   connect(net, &TcpNetUtils::requestFinished, [=]()
-          { qDebug() << "请求结果：" << net->getResponseBodyJson(); });
-  // 发送本地公钥以及特征密码给服务器
+          {
+    globalsecurity::SERVER_RSA_PUBLIC =
+        net->getResponseBodyJsonDoc()["pubkey"].toString();
+    globalsecurity::inited = Init_State_2(); });
+  connect(net, &TcpNetUtils::requestFailed,
+          [=]()
+          { globalsecurity::inited = false; });
+  net->sendRequest();
+  return globalsecurity::inited;
+}
+
+/***
+ * 计算自身特征值的相关操作
+ */
+bool Init_State_2()
+{
   QString hostName = QHostInfo::localHostName();
   QString deviceType = QSysInfo::productType();
   QString deviceName = QSysInfo::machineHostName();
@@ -107,6 +133,35 @@ bool global_Security::Init()
               .toUtf8(),
           QCryptographicHash::Md5)
           .toHex();
+  // 计算本地AES密钥片段1
+  globalsecurity::AES_KEY =
+      QCryptographicHash::hash((dbpasswd +
+                                current_date_time.toString("yyyyMMddhhmmss") +
+                                random_str + globalsecurity::FEATURE)
+                                   .toUtf8(),
+                               QCryptographicHash::Sha256)
+          .toHex();
+  return Init_State_3();
+}
+
+bool Init_State_3()
+{
+  // 向服务器发送POST请求，获取AES密钥
+  QJsonObject json;
+  json.insert("feature", rsaPubEncrypt(globalsecurity::FEATURE,
+                                       globalsecurity::SERVER_RSA_PUBLIC));
+  json.insert("pubkey", rsaPubEncrypt(globalsecurity::LOCAL_RSA_PUBLIC,
+                                      globalsecurity::SERVER_RSA_PUBLIC));
+  json.insert("aesp", rsaPubEncrypt(globalsecurity::AES_KEY,
+                                    globalsecurity::SERVER_RSA_PUBLIC));
+  TcpPost *post = new TcpPost("/api/encryption/rsatoaes");
+  post->setHeader("Content-Type", "application/json");
+  post->setBody(json);
+  TcpNetUtils *net = new TcpNetUtils(post);
+  QObject::connect(net, &TcpNetUtils::requestFinished, [=]()
+                   { globalsecurity::AES_KEY =
+                         net->getResponseBodyJsonDoc()["aeskey"].toString(); });
+  net->sendRequest();
   return true;
 }
 

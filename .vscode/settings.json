@@ -1,0 +1,12 @@
+{
+  "files.associations": {
+    "*.jsp": "jsp",
+    "*.css": "css",
+    "*.vue": "vue",
+    "mutex": "cpp",
+    "streambuf": "cpp",
+    "cmath": "cpp",
+    "iostream": "cpp",
+    "qqmlapplicationengine": "cpp"
+  }
+}

@@ -8,9 +8,9 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 6.3 COMPONENTS Quick REQUIRED)
-find_package(Qt6 REQUIRED COMPONENTS Widgets LinguistTools QuickControls2)
-find_package(OpenSSL REQUIRED)
+find_package(Qt6 COMPONENTS Quick REQUIRED)
+find_package(Qt6 REQUIRED Widgets LinguistTools QuickControls2)
+find_package(OpenSSL REQUIRED) #请确保已安装OpenSSL 3.0
 
 ADD_DEFINITIONS(-DTORRENT_LIBRARY)
 ADD_DEFINITIONS(-DNO_FREETYPE)
@@ -20,21 +20,23 @@ ADD_DEFINITIONS(-DHCPP_LEGACY_API)
 qt_add_executable(appSSIMP_pc
     Daemon/main.cpp
     Daemon/global.h
-    Utils/verificationcode.h
-    Utils/tcpnetutils.h
-    Utils/nget.h
-    Utils/npost.h
-    Utils/netbase.h
-    Security/aes.h
-    Security/rsa.h
     Security/security.cpp
-    Utils/verificationcode.cpp
-    Utils/tcpnetutils.cpp
-    Utils/nget.cpp
-    Utils/npost.cpp
-    Utils/netbase.cpp
-    Security/aes.cpp
-    Security/rsa.cpp
+
+    #  工具组件封装
+    Utils/verificationcode.h Utils/verificationcode.cpp
+    Utils/tcpnetutils.h Utils/tcpnetutils.cpp
+    Utils/nget.h Utils/nget.cpp
+    Utils/npost.h Utils/npost.cpp
+    Utils/netbase.h Utils/netbase.cpp
+
+    # 安全加密组件封装(使用OpenSSL 3.0)
+    Security/aes.h Security/aes.cpp
+    Security/rsa.h Security/rsa.cpp
+
+    # 界面辅助代理封装
+    Daemon/vctrler.h Daemon/vctrler.cpp
+
+    # 资源文件
     resource/resource.qrc
 )
 
@@ -42,6 +44,7 @@ qt_add_qml_module(appSSIMP_pc
     URI SSIMP_pc
     VERSION 1.0
     QML_FILES Daemon/daemon.qml
+    QML_FILES Daemon/vctrler.qml
     QML_FILES UIFlame/Menu/Menu.qml
     QML_FILES UIFlame/Menu/MenuDelegate.qml
     QML_FILES UIFlame/Menu/MenuModel.qml

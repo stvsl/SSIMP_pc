@@ -62,6 +62,8 @@ private slots:
     void requestProgressSlot(qint64 bytesReceived, qint64 bytesTotal);
     void requestRedirectedSlot(const QUrl &url);
     void requestFailedSlot(QNetworkReply::NetworkError code);
+    void requestFinishedSlot();
+
 private:
     // 请求模式
     TcpMode mode;

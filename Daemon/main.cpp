@@ -1,5 +1,6 @@
 #include "Daemon/global.h"
 #include "Utils/verificationcode.h"
+#include "vctrler.h"
 #include <QFontDatabase>
 #include <QGuiApplication>
 #include <QLocale>
@@ -17,12 +18,13 @@ int main(int argc, char *argv[])
   QCoreApplication::setOrganizationName("stvsljl");
   QCoreApplication::setApplicationName("SSIMP");
   QCoreApplication::setOrganizationDomain("stvsljl.com");
-  QCoreApplication::setApplicationVersion("v0.0.2 alpha");
-  // 设置global::SERVER_URL
-  *global::SERVER_URL.operator->() = "http://localhost:8080";
-  qDebug() << "global::SERVER_URL:" << *global::SERVER_URL;
-  //注册验证码组件
+  QCoreApplication::setApplicationVersion("v0.0.3 alpha");
+  *global::SERVER_URL_STR() = "http://127.0.0.1:6521";
+  qDebug() << "SERVER_URL_STR" << *global::SERVER_URL_STR();
+  // 注册验证码组件
   qmlRegisterType<VerificationCode>("Utils.Verify", 1, 0, "VerificationCode");
+  // 注册组件
+  // TODO
   QTranslator translator;
   const QStringList uiLanguages = QLocale::system().uiLanguages();
   for (const QString &locale : uiLanguages)
@@ -42,10 +44,9 @@ int main(int argc, char *argv[])
   if (fontFamilies.size() > 0)
   {
     QFont font;
-    font.setFamily(fontFamilies[0]); //设置全局字体
+    font.setFamily(fontFamilies[0]); // 设置全局字体
     app.setFont(font);
   }
-
   qDebug() << "Qt 版本: " << QT_VERSION_STR;
   QQmlApplicationEngine engine;
   const QUrl url(u"qrc:/SSIMP_pc/Daemon/daemon.qml"_qs);
@@ -58,13 +59,17 @@ int main(int argc, char *argv[])
       },
       Qt::QueuedConnection);
   engine.load(url);
+  // 初始化交互控制器
+  vctrler::setEngine();
+  vctrler::showDialog(dialogType::DIALOG_MESSAGE, dialogBtnType::DIALOG_OK, "系统初始化",
+                      "正在初始化系统环境，请稍后", NULL);
   // 安全模块初始化
-  if (global_Security::Init())
+  global_Security::Init();
+  if (!globalsecurity::inited)
   {
-    auto r = engine.rootObjects().constFirst()->findChild<QObject *>("daemon");
-    QVariant msg = "";
-    QMetaObject::invokeMethod(r, "loadPanic", Q_ARG(QVariant, msg));
+    qDebug() << "err";
+    vctrler::showDialog(dialogType::DIALOG_ERROR, dialogBtnType::DIALOG_OK, "系统环境错误",
+                        "系统环境错误，请检查系统环境是否完整", NULL);
   };
-
   return app.exec();
 }

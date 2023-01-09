@@ -1,5 +1,6 @@
 #include "tcpnetutils.h"
 #include "netbase.h"
+#include <QThread>
 
 TcpNetUtils::TcpNetUtils(TcpPost *post)
 {
@@ -28,8 +29,6 @@ void TcpNetUtils::sendRequest()
 {
     // 创建请求
     QNetworkRequest request;
-    // 设置请求URL
-    qDebug() << "请求URL：" << this->url;
     request.setUrl(this->url);
     // 设置请求头
     QMapIterator<QString, QString> i(this->headers);
@@ -62,6 +61,8 @@ void TcpNetUtils::sendRequest()
     connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
     // 请求完成信号槽
     connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    // 请求完成信号
+    connect(reply, &QNetworkReply::finished, this, &TcpNetUtils::requestFinishedSlot);
     // 请求进度信号槽
     connect(reply, &QNetworkReply::downloadProgress, this, &TcpNetUtils::requestProgress);
     // 请求重定向信号槽
@@ -72,8 +73,6 @@ void TcpNetUtils::sendRequest()
     timer.start();
     // 启动事件循环
     loop.exec();
-    // 停止定时器
-    timer.stop();
     // 获取响应状态码
     this->statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
     // 获取响应状态信息
@@ -82,9 +81,10 @@ void TcpNetUtils::sendRequest()
     this->responseHeaders = reply->rawHeaderPairs();
     // 获取响应内容
     this->responseBody = reply->readAll();
-    // 释放请求
+    emit requestFinished();
+    // 停止定时器
+    timer.stop();
     reply->deleteLater();
-    // 释放请求管理器
     manager->deleteLater();
 }
 
@@ -104,6 +104,10 @@ void TcpNetUtils::requestFailedSlot(QNetworkReply::NetworkError code)
 {
     // 发送请求错误信号
     emit this->requestFailed(code);
+}
+
+void TcpNetUtils::requestFinishedSlot()
+{
 }
 
 int TcpNetUtils::getStatusCode()

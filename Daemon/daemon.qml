@@ -3,7 +3,6 @@ import QtQuick.Window
 import "../UIFlame/LoadPage"
 import "../UIFlame/MainPage"
 import "../UIFlame/LoginPage"
-import "../UIFlame/MessageBox"
 
 Window {
     visible: false
@@ -11,15 +10,14 @@ Window {
     height: 380
     id: daemon
 
-    function switchtoMain() {
+    function switchtoMain()
+    {
         daemonloader.sourceComponent = mainpage
     }
 
-    function switchtoLogin() {
+    function switchtoLogin()
+    {
         daemonloader.sourceComponent = loginpage
-    }
-    function loadPanic(){
-
     }
 
     Loader {
