@@ -44,7 +44,6 @@ qt_add_qml_module(appSSIMP_pc
     URI SSIMP_pc
     VERSION 1.0
     QML_FILES Daemon/daemon.qml
-    QML_FILES Daemon/vctrler.qml
     QML_FILES UIFlame/Menu/Menu.qml
     QML_FILES UIFlame/Menu/MenuDelegate.qml
     QML_FILES UIFlame/Menu/MenuModel.qml

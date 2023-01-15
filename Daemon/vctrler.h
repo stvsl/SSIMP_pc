@@ -2,6 +2,10 @@
 #define VCTRLER_H
 
 #include <QQmlApplicationEngine>
+#include <QObject>
+#include <QMutex>
+#include <QGuiApplication>
+#include <QMetaObject>
 
 enum dialogType
 {
@@ -48,7 +52,7 @@ class vctrler : public QObject
 
 public:
     /// @brief 设置QML引擎
-    static void setEngine();
+    static void setEngine(QQmlApplicationEngine *engine);
 
     /// @brief  显示对话框
     /// @param type 对话框类型
@@ -59,6 +63,7 @@ public:
 
 private:
     static QQmlApplicationEngine *m_engine;
+    static QMutex *m_mutex;
 };
 
 #endif // VCTRLER_H

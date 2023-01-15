@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
       Qt::QueuedConnection);
   engine.load(url);
   // 初始化交互控制器
-  vctrler::setEngine();
+  vctrler::setEngine(&engine);
   vctrler::showDialog(dialogType::DIALOG_MESSAGE, dialogBtnType::DIALOG_OK, "系统初始化",
                       "正在初始化系统环境，请稍后", NULL);
   // 安全模块初始化

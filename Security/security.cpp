@@ -49,8 +49,8 @@ bool global_Security::Init()
   EVP_PKEY_free(pkey);
 
   qDebug() << "RSA密钥对生成成功";
-  qDebug() << "本地RSA私钥：" << globalsecurity::LOCAL_RSA_PRIVATE;
-  qDebug() << "本地RSA公钥：" << globalsecurity::LOCAL_RSA_PUBLIC;
+  // qDebug() << "本地RSA私钥：" << globalsecurity::LOCAL_RSA_PRIVATE;
+  // qDebug() << "本地RSA公钥：" << globalsecurity::LOCAL_RSA_PUBLIC;
 
   // 获取服务器RSA公钥
   TcpNetUtils *net = new TcpNetUtils(new TcpGet("/api/encryption/rsapubkey"));

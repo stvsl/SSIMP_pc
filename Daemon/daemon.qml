@@ -1,8 +1,10 @@
 ﻿import QtQuick
 import QtQuick.Window
+import QtQuick.Controls
 import "../UIFlame/LoadPage"
 import "../UIFlame/MainPage"
 import "../UIFlame/LoginPage"
+import "../UIFlame/MessageBox"
 
 Window {
     visible: false
@@ -18,6 +20,11 @@ Window {
     function switchtoLogin()
     {
         daemonloader.sourceComponent = loginpage
+    }
+
+    function showDialog(type, btntype, title, content)
+    {
+        console.log("showDialog" + type + btntype + title + content)
     }
 
     Loader {

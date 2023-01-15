@@ -16,12 +16,14 @@ Window {
     flags: Qt.Window | Qt.FramelessWindowHint
     property string _Putvercode
     Material.theme: Material.Blue
+
     Image {
         z: 1
         anchors.fill: parent
         source: "qrc:/login/Login/background.jpg"
         layer.smooth: true
     }
+
     Rectangle {
         z: 10
         opacity: 0.8
@@ -90,7 +92,7 @@ Window {
                         id: userid
                         x: parent.width / 5.5
                         y: parent.height / 6.65
-                        width: parent.width /1.3
+                        width: parent.width / 1.3
                         height: 40
                         placeholderText: qsTr("请输入用户ID")
                         placeholderTextColor: "#CCCCFF"
@@ -155,7 +157,7 @@ Window {
                     Rectangle {
                         id: loginbtn
                         anchors.left: parent.left
-                        anchors.leftMargin: parent.width /5.5
+                        anchors.leftMargin: parent.width / 5.5
                         y: parent.height / 1.30
                         width: 85
                         height: 35
@@ -190,7 +192,7 @@ Window {
                     Rectangle {
                         id: canclebtn
                         anchors.right: parent.right
-                        anchors.rightMargin: parent.width /5.5
+                        anchors.rightMargin: parent.width / 5.5
                         y: parent.height / 1.30
                         width: 85
                         height: 35
@@ -300,7 +302,8 @@ Window {
             justconform: true
         }
     }
-
+    property real windowRotation: 0
+    property bool dragging: false
     MouseArea {
         //为窗口添加鼠标事件
         anchors.fill: parent
@@ -309,7 +312,9 @@ Window {
         onPressed: mouse => {
                        //接收鼠标按下事件
                        clickPos = Qt.point(mouse.x, mouse.y)
+                       loginpage.dragging = true
                    }
+        onReleased: loginpage.dragging = false
         onPositionChanged: mouse => {
                                //鼠标按下后改变位置
                                //鼠标偏移量
@@ -321,4 +326,12 @@ Window {
                                loginpage.setY(loginpage.y + delta.y)
                            }
     }
+    // 当窗口处于拖动状态时，播放旋转动画
+     NumberAnimation {
+         target: loginpage
+         property: "windowRotation"
+         to: loginpage.dragging ? 20 : 0
+         duration: 100
+         easing.type: Easing.OutBounce
+     }
 }
