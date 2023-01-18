@@ -13,6 +13,8 @@
 #include <QEventLoop>
 #include "Utils/npost.h"
 #include "Utils/nget.h"
+#include "Daemon/vctrler.h"
+
 /***
  * 网络TCP通信工具类
  * @param parent
@@ -50,7 +52,7 @@ signals:
     // 请求完成信号
     void requestFinished();
     // 请求失败信号
-    void requestFailed(QNetworkReply::NetworkError code);
+    void requestErrorHappen(QNetworkReply::NetworkError code);
     // 请求超时信号
     void requestTimeout();
     // 请求进度信号
@@ -61,8 +63,7 @@ signals:
 private slots:
     void requestProgressSlot(qint64 bytesReceived, qint64 bytesTotal);
     void requestRedirectedSlot(const QUrl &url);
-    void requestFailedSlot(QNetworkReply::NetworkError code);
-    void requestFinishedSlot();
+    void requestErrorHappenSlot(QNetworkReply::NetworkError code);
 
 private:
     // 请求模式

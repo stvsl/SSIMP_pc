@@ -61,20 +61,23 @@ void TcpNetUtils::sendRequest()
     connect(&timer, &QTimer::timeout, &loop, &QEventLoop::quit);
     // 请求完成信号槽
     connect(reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-    // 请求完成信号
-    connect(reply, &QNetworkReply::finished, this, &TcpNetUtils::requestFinishedSlot);
     // 请求进度信号槽
     connect(reply, &QNetworkReply::downloadProgress, this, &TcpNetUtils::requestProgress);
     // 请求重定向信号槽
     connect(reply, &QNetworkReply::redirected, this, &TcpNetUtils::requestRedirected);
     // 请求错误信号槽
-    connect(reply, &QNetworkReply::errorOccurred, this, &TcpNetUtils::requestFailed);
+    connect(reply, &QNetworkReply::errorOccurred, this, &TcpNetUtils::requestErrorHappen);
     // 启动定时器
     timer.start();
     // 启动事件循环
     loop.exec();
     // 获取响应状态码
     this->statusCode = reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+    // 判断响应状态码是否为200
+    if (this->statusCode != 200)
+    {
+        requestErrorHappenSlot(reply->error());
+    }
     // 获取响应状态信息
     this->statusMsg = reply->attribute(QNetworkRequest ::HttpReasonPhraseAttribute).toString();
     // 获取响应头
@@ -100,14 +103,23 @@ void TcpNetUtils::requestRedirectedSlot(const QUrl &url)
     emit this->requestRedirected(url);
 }
 
-void TcpNetUtils::requestFailedSlot(QNetworkReply::NetworkError code)
+void TcpNetUtils::requestErrorHappenSlot(QNetworkReply::NetworkError code)
 {
+    QString msg = "服务器未知错误";
     // 发送请求错误信号
-    emit this->requestFailed(code);
-}
-
-void TcpNetUtils::requestFinishedSlot()
-{
+    if (code == 1)
+    {
+        msg = "远程主机关闭了一个现有的连接,请检查网络";
+    }
+    // 打印请求信息
+    qDebug().noquote() << "\033[31m************请求失败************";
+    qDebug().noquote() << "\033[31mMode:" << (this->mode == TcpMode::Post ? "POST" : "GET");
+    qDebug().noquote() << "\033[31mRequest:" << this->url.toString();
+    qDebug().noquote() << "\033[31mHeaders:" << this->headers;
+    qDebug().noquote() << "\033[31mBody:" << this->body
+                       << "*******************************\033[0m\n";
+    vctrler::showDialog(dialogType::DIALOG_ERROR, dialogBtnType::DIALOG_OK, "网络请求错误", msg + "（错误代码：" + QString::number(code) + ")", NULL);
+    emit this->requestErrorHappen(code);
 }
 
 int TcpNetUtils::getStatusCode()

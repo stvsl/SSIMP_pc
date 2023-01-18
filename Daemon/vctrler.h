@@ -34,6 +34,8 @@ class vctrler : public QObject {
   Q_OBJECT
 
 public:
+  static vctrler *m_vctrler;
+
   /// @brief 设置QML引擎
   static void setEngine(QQmlApplicationEngine *engine);
 
@@ -44,6 +46,11 @@ public:
   /// @return 对话框结果
   static void showDialog(dialogType type, dialogBtnType btntype, QString title,
                          QString content, QString customtype);
+
+  /// @brief 紧急退出
+  static void emergencyExit();
+
+  static vctrler getVctrler();
 
 signals:
   /// @brief 对话框结果

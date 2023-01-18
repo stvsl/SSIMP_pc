@@ -30,13 +30,16 @@ Window {
     }
 
     function showDialog(type, btntype, title, content) {
-        // 单独线程中调用
-        console.log("showDialog" + type + btntype + title + content);
         daemon.dialogtype = type;
         daemon.dialogbtntype = btntype;
         daemon.dialogtitle = title;
         daemon.dialogcontent = content;
         dialogloader.sourceComponent = dialog;
+    }
+
+    // 紧急退出
+    function emergencyExit() {
+        Qt.quit();
     }
 
     visible: false
@@ -52,7 +55,6 @@ Window {
         id: dialogloader
 
         anchors.centerIn: parent
-        sourceComponent: dialog
     }
 
     Component {

@@ -8,7 +8,8 @@
 #include <QQuickStyle>
 #include <QTranslator>
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
   QGuiApplication app(argc, argv);
   // js读写文件授权
   qputenv("QML_XHR_ALLOW_FILE_READ", QByteArray("1"));
@@ -26,9 +27,11 @@ int main(int argc, char *argv[]) {
   // TODO
   QTranslator translator;
   const QStringList uiLanguages = QLocale::system().uiLanguages();
-  for (const QString &locale : uiLanguages) {
+  for (const QString &locale : uiLanguages)
+  {
     const QString baseName = "SSIMP_pc_" + QLocale(locale).name();
-    if (translator.load(":/i18n/" + baseName)) {
+    if (translator.load(":/i18n/" + baseName))
+    {
       app.installTranslator(&translator);
       break;
     }
@@ -38,7 +41,8 @@ int main(int argc, char *argv[]) {
       QStringLiteral("qrc:/font/fonts/NotoSans-Regular.ttf"));
   QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
   qDebug() << "fontfamilies:" << fontFamilies;
-  if (fontFamilies.size() > 0) {
+  if (fontFamilies.size() > 0)
+  {
     QFont font;
     font.setFamily(fontFamilies[0]); // 设置全局字体
     app.setFont(font);
@@ -48,7 +52,8 @@ int main(int argc, char *argv[]) {
   const QUrl url(u"qrc:/SSIMP_pc/Daemon/daemon.qml"_qs);
   QObject::connect(
       &engine, &QQmlApplicationEngine::objectCreated, &app,
-      [url](const QObject *obj, const QUrl &objUrl) {
+      [url](const QObject *obj, const QUrl &objUrl)
+      {
         if (!obj && url == objUrl)
           QCoreApplication::exit(-1);
       },
@@ -56,15 +61,7 @@ int main(int argc, char *argv[]) {
   engine.load(url);
   // 初始化交互控制器
   vctrler::setEngine(&engine);
-  vctrler::showDialog(dialogType::DIALOG_MESSAGE, dialogBtnType::DIALOG_OK,
-                      "系统初始化", "正在初始化系统环境，请稍后", NULL);
   // 安全模块初始化
   global_Security::Init();
-  if (!globalsecurity::inited) {
-    qDebug() << "err";
-    vctrler::showDialog(dialogType::DIALOG_ERROR, dialogBtnType::DIALOG_OK,
-                        "系统环境错误", "系统环境错误，请检查系统环境是否完整",
-                        NULL);
-  };
   return app.exec();
 }

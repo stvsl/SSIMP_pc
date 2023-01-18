@@ -1,3 +1,11 @@
+/*
+ * @Author: stvsl
+ * @Date: 2023-01-17 17:08:17
+ * @Last Modified by: stvsl
+ * @Last Modified time: 2023-01-17 17:08:41
+ * @Description: 安全模块
+ */
+
 #include "Daemon/global.h"
 #include "Utils/tcpnetutils.h"
 #include "rsa.h"
@@ -8,6 +16,7 @@
 #include <openssl/evp.h>
 #include <openssl/pem.h>
 #include <openssl/rsa.h>
+#include <QObject>
 
 bool globalsecurity::inited = false;
 QString globalsecurity::AES_KEY = "";
@@ -54,14 +63,15 @@ bool global_Security::Init()
 
   // 获取服务器RSA公钥
   TcpNetUtils *net = new TcpNetUtils(new TcpGet("/api/encryption/rsapubkey"));
+  connect(net, &TcpNetUtils::requestErrorHappen, [=]()
+          { globalsecurity::inited = false; 
+            qDebug() << "服务器RSA公钥获取失败"; });
   connect(net, &TcpNetUtils::requestFinished, [=]()
           {
     globalsecurity::SERVER_RSA_PUBLIC =
         net->getResponseBodyJsonDoc()["pubkey"].toString();
     globalsecurity::inited = Init_State_2(); });
-  connect(net, &TcpNetUtils::requestFailed,
-          [=]()
-          { globalsecurity::inited = false; });
+
   net->sendRequest();
   return globalsecurity::inited;
 }
@@ -148,6 +158,8 @@ bool Init_State_3()
 {
   // 向服务器发送POST请求，获取AES密钥
   QJsonObject json;
+  qDebug().noquote() << "服务器RSA公钥:\n"
+                     << globalsecurity::SERVER_RSA_PUBLIC;
   json.insert("feature", rsaPubEncrypt(globalsecurity::FEATURE,
                                        globalsecurity::SERVER_RSA_PUBLIC));
   json.insert("pubkey", rsaPubEncrypt(globalsecurity::LOCAL_RSA_PUBLIC,
@@ -161,6 +173,14 @@ bool Init_State_3()
   QObject::connect(net, &TcpNetUtils::requestFinished, [=]()
                    { globalsecurity::AES_KEY =
                          net->getResponseBodyJsonDoc()["aeskey"].toString(); });
+  QObject::connect(net, &TcpNetUtils::requestErrorHappen, [=]()
+                   {
+                     // 连接vctrl静态类的信号
+                     QObject::connect(vctrler::m_vctrler,&vctrler::dialogResult,
+                                      [=]()
+                                      {
+                                        vctrler::emergencyExit();
+                                      }); });
   net->sendRequest();
   return true;
 }

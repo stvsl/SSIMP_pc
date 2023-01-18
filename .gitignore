@@ -1,3 +1,7 @@
 CMakeLists.txt.user
 build
 CMakeLists.txt.qtds
+CMakeLists.txt.user.qtds
+.cache
+.vscode
+.VSCodeCounter
