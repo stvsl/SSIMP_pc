@@ -112,12 +112,12 @@ void TcpNetUtils::requestErrorHappenSlot(QNetworkReply::NetworkError code)
         msg = "远程主机关闭了一个现有的连接,请检查网络";
     }
     // 打印请求信息
-    qDebug().noquote() << "\033[31m************请求失败************";
-    qDebug().noquote() << "\033[31mMode:" << (this->mode == TcpMode::Post ? "POST" : "GET");
-    qDebug().noquote() << "\033[31mRequest:" << this->url.toString();
-    qDebug().noquote() << "\033[31mHeaders:" << this->headers;
-    qDebug().noquote() << "\033[31mBody:" << this->body
-                       << "*******************************\033[0m\n";
+    qDebug().noquote().nospace() << "\n\033[31m*************请求失败*************";
+    qDebug().noquote().nospace() << "\033[31mMode:" << (this->mode == TcpMode::Post ? "POST" : "GET");
+    qDebug().noquote().nospace() << "\033[31mRequest:" << this->url.toString();
+    qDebug().noquote().nospace() << "\033[31mHeaders:" << this->headers;
+    qDebug().noquote().nospace() << "\033[31mBody:" << (this->body == nullptr ? "Null\n" : this->body)
+                                 << "**********************************\033[0m\n";
     vctrler::showDialog(dialogType::DIALOG_ERROR, dialogBtnType::DIALOG_OK, "网络请求错误", msg + "（错误代码：" + QString::number(code) + ")", NULL);
     emit this->requestErrorHappen(code);
 }
