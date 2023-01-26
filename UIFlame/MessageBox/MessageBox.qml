@@ -23,6 +23,7 @@ Window {
     property bool justconform: false
 
     signal btnClicked(int x)
+    
     Rectangle {
         anchors.fill: parent
         color: Qt.rgba(1, 1, 1, 0.96)

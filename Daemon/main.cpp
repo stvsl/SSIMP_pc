@@ -60,16 +60,8 @@ int main(int argc, char *argv[])
       Qt::QueuedConnection);
   engine.load(url);
   // 初始化交互控制器
-  vctrler::setEngine();
-  vctrler::showDialog(dialogType::DIALOG_MESSAGE, dialogBtnType::DIALOG_OK, "系统初始化",
-                      "正在初始化系统环境，请稍后", NULL);
+  vctrler::setEngine(&engine);
   // 安全模块初始化
   global_Security::Init();
-  if (!globalsecurity::inited)
-  {
-    qDebug() << "err";
-    vctrler::showDialog(dialogType::DIALOG_ERROR, dialogBtnType::DIALOG_OK, "系统环境错误",
-                        "系统环境错误，请检查系统环境是否完整", NULL);
-  };
   return app.exec();
 }
