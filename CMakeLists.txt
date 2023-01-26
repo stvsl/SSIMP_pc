@@ -8,14 +8,25 @@ set(CMAKE_AUTOUIC ON)
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+add_compile_definitions(
+    #加密组件调试模式开关 0:关闭 1:开启
+    ENCRYPT_ERR_DEBUG=1
+)
+
 find_package(Qt6 COMPONENTS Quick REQUIRED)
 find_package(Qt6 REQUIRED Widgets LinguistTools QuickControls2)
-find_package(OpenSSL REQUIRED) #请确保已安装OpenSSL 3.0
 
 ADD_DEFINITIONS(-DTORRENT_LIBRARY)
 ADD_DEFINITIONS(-DNO_FREETYPE)
 ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
 ADD_DEFINITIONS(-DHCPP_LEGACY_API)
+
+add_custom_target(crypto ALL
+  COMMENT "编译go代码组件"
+  COMMAND go build -o Plugins/lib/libcrypto.so -buildmode=c-shared ./Plugins/Encrypt_go_binding/libencryptiongo/main.go
+    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    VERBATIM
+)
 
 qt_add_executable(appSSIMP_pc
     Daemon/main.cpp
@@ -29,9 +40,8 @@ qt_add_executable(appSSIMP_pc
     Utils/npost.h Utils/npost.cpp
     Utils/netbase.h Utils/netbase.cpp
 
-    # 安全加密组件封装(使用OpenSSL 3.0)
-    Security/aes.h Security/aes.cpp
-    Security/rsa.h Security/rsa.cpp
+    # 安全加密组件封装(Go组件编译绑定)
+    Security/encryption.h Security/encryption.cpp
 
     # 界面辅助代理封装
     Daemon/vctrler.h Daemon/vctrler.cpp
@@ -67,7 +77,6 @@ qt_create_translation(appQM_FILES
     ${TS_FILES}
     OPTIONS -source-language zh_CN -no-obsolete
     OPTIONS -source-language en_US -no-obsolete
-
 )
 
 set_target_properties(appSSIMP_pc PROPERTIES
@@ -78,8 +87,6 @@ set_target_properties(appSSIMP_pc PROPERTIES
     WIN32_EXECUTABLE TRUE
 )
 
-set_property(SOURCE file.h PROPERTY SKIP_AUTOGEN ON)
-
 target_compile_definitions(appSSIMP_pc
     PRIVATE $<$<OR:$<CONFIG:Debug>,$<CONFIG:RelWithDebInfo>>:QT_QML_DEBUG>)
 
@@ -87,5 +94,9 @@ target_link_libraries(appSSIMP_pc
     PRIVATE Qt6::Quick
     PRIVATE Qt6::Widgets
     PRIVATE Qt6::QuickControls2
-    PRIVATE OpenSSL::Crypto OpenSSL::SSL
-)
+    )
+
+target_link_libraries(appSSIMP_pc PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Plugins/lib/libcrypto.so)
+
+
+# target_compile_definitions(appSSIMP_pc PRIVATE QT_DEPRECATED_WARNINGS)

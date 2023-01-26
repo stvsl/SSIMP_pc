@@ -8,14 +8,10 @@
 
 #include "Daemon/global.h"
 #include "Utils/tcpnetutils.h"
-#include "rsa.h"
 #include <QCoreApplication>
 #include <QHostInfo>
 #include <QNetworkInterface>
 #include <Utils/npost.h>
-#include <openssl/evp.h>
-#include <openssl/pem.h>
-#include <openssl/rsa.h>
 #include <QObject>
 
 bool globalsecurity::inited = false;
@@ -33,33 +29,10 @@ bool Init_State_3();
  */
 bool global_Security::Init()
 {
-  // 创建本地RSA密钥对
-  EVP_PKEY_CTX *ctx = EVP_PKEY_CTX_new_from_name(NULL, "RSA", NULL);
-  EVP_PKEY_keygen_init(ctx);
-  EVP_PKEY_CTX_set_rsa_keygen_bits(ctx, 2048);
-  EVP_PKEY *pkey = NULL;
-  EVP_PKEY_keygen(ctx, &pkey);
-  EVP_PKEY_CTX_free(ctx);
-  // 获取本地RSA私钥
-  BIO *pri = BIO_new(BIO_s_mem());
-  PEM_write_bio_PrivateKey(pri, pkey, NULL, NULL, 0, NULL, NULL);
-  char *pri_key;
-  long pri_len = BIO_get_mem_data(pri, &pri_key);
-  globalsecurity::LOCAL_RSA_PRIVATE = QString::fromLatin1(pri_key, pri_len);
-  BIO_free(pri);
-  // 获取本地RSA公钥
-  BIO *pub = BIO_new(BIO_s_mem());
-  PEM_write_bio_PUBKEY(pub, pkey);
-  char *pub_key;
-  long pub_len = BIO_get_mem_data(pub, &pub_key);
-  globalsecurity::LOCAL_RSA_PUBLIC = QString::fromLatin1(pub_key, pub_len);
-  BIO_free(pub);
-  // 释放EVP_PKEY
-  EVP_PKEY_free(pkey);
 
   qDebug() << "RSA密钥对生成成功";
-  // qDebug() << "本地RSA私钥：" << globalsecurity::LOCAL_RSA_PRIVATE;
-  // qDebug() << "本地RSA公钥：" << globalsecurity::LOCAL_RSA_PUBLIC;
+  qDebug().noquote() << "本地RSA私钥：" << globalsecurity::LOCAL_RSA_PRIVATE;
+  qDebug().noquote() << "本地RSA公钥：" << globalsecurity::LOCAL_RSA_PUBLIC;
 
   // 获取服务器RSA公钥
   TcpNetUtils *net = new TcpNetUtils(new TcpGet("/api/encryption/rsapubkey"));
@@ -160,19 +133,24 @@ bool Init_State_3()
   QJsonObject json;
   qDebug().noquote() << "服务器RSA公钥:\n"
                      << globalsecurity::SERVER_RSA_PUBLIC;
-  json.insert("feature", rsaPubEncrypt(globalsecurity::FEATURE,
-                                       globalsecurity::SERVER_RSA_PUBLIC));
-  json.insert("pubkey", rsaPubEncrypt(globalsecurity::LOCAL_RSA_PUBLIC,
-                                      globalsecurity::SERVER_RSA_PUBLIC));
-  json.insert("aesp", rsaPubEncrypt(globalsecurity::AES_KEY,
-                                    globalsecurity::SERVER_RSA_PUBLIC));
+  // json.insert("feature", rsaPubEncrypt(globalsecurity::FEATURE,
+  //                                      globalsecurity::SERVER_RSA_PUBLIC));
+  // json.insert("pubkey", rsaPubEncrypt(globalsecurity::LOCAL_RSA_PUBLIC,
+  //                                     globalsecurity::SERVER_RSA_PUBLIC));
+  // json.insert("aesp", rsaPubEncrypt(globalsecurity::AES_KEY,
+  //                                   globalsecurity::SERVER_RSA_PUBLIC));
   TcpPost *post = new TcpPost("/api/encryption/rsatoaes");
   post->setHeader("Content-Type", "application/json");
   post->setBody(json);
   TcpNetUtils *net = new TcpNetUtils(post);
   QObject::connect(net, &TcpNetUtils::requestFinished, [=]()
                    { globalsecurity::AES_KEY =
-                         net->getResponseBodyJsonDoc()["aeskey"].toString(); });
+                         net->getResponseBodyJsonDoc()["aesp2"].toString();
+                        //  globalsecurity::AES_KEY =
+                        //      rsaPriDecryptWithBase64(globalsecurity::AES_KEY,
+                        //                    globalsecurity::LOCAL_RSA_PRIVATE);
+                         qDebug().noquote() << "AES协议密钥:\n"
+                                            << globalsecurity::AES_KEY; });
   QObject::connect(net, &TcpNetUtils::requestErrorHappen, [=]()
                    {
                      // 连接vctrl静态类的信号
