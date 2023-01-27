@@ -18,7 +18,7 @@ int main(int argc, char *argv[])
   QCoreApplication::setOrganizationName("stvsljl");
   QCoreApplication::setApplicationName("SSIMP");
   QCoreApplication::setOrganizationDomain("stvsljl.com");
-  QCoreApplication::setApplicationVersion("v0.0.3 alpha");
+  QCoreApplication::setApplicationVersion("v0.0.4 alpha");
   *global::SERVER_URL_STR() = "http://127.0.0.1:6521";
   qDebug() << "SERVER_URL_STR" << *global::SERVER_URL_STR();
   // 注册验证码组件

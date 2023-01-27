@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QString>
 #include <iostream>
+#include <QByteArray>
 
 using namespace std;
 
@@ -37,4 +38,17 @@ namespace RSA
     QString generateRSAKeyQ();
 } // namespace RSA
 
+namespace Base64
+{
+    string encodeStd(string str);
+    QString encodeQ(QString str);
+    string decodeStd(string str);
+    QString decodeQ(QString str);
+} // namespace Base64
+
 #endif // ENCRYPTION_H
+
+namespace CGOSET
+{
+    void DisableCgoCheck();
+}

@@ -1,13 +1,22 @@
 package main
 
 import "C"
+
 import (
 	"bytes"
 	"crypto/aes"
 	"crypto/cipher"
+	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
+	"encoding/pem"
+	"fmt"
+	"os"
 )
+
+func main() {
+	fmt.Println("1")
+}
 
 // RSA 解密
 //
@@ -15,10 +24,37 @@ import (
 func GoRSADecrypt(ciphertext string, privatekey string) string {
 	ciphertextByte := []byte(ciphertext)
 	privatekeyByte := []byte(privatekey)
+	block, _ := pem.Decode(privatekeyByte)
+	if block == nil {
+		return "私钥解析失败"
+	}
 	// 解析私钥
-	privateKey, err := x509.ParsePKCS1PrivateKey(privatekeyByte)
+	privateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 	if err != nil {
 		return "私钥解析失败" + err.Error()
+	}
+	if len(ciphertext) > 256 {
+		// 切片解密
+		var result []byte
+		for i := 0; i < len(ciphertext); i += 256 {
+			// 判断切片是否超出长度
+			if i+256 > len(ciphertext) {
+				// 解密
+				decrypted, err := rsa.DecryptPKCS1v15(rand.Reader, privateKey, ciphertextByte[i:])
+				if err != nil {
+					return "解密失败" + err.Error()
+				}
+				result = append(result, decrypted...)
+			} else {
+				// 解密
+				decrypted, err := rsa.DecryptPKCS1v15(rand.Reader, privateKey, ciphertextByte[i:i+256])
+				if err != nil {
+					return "解密失败" + err.Error()
+				}
+				result = append(result, decrypted...)
+			}
+		}
+		return string(result)
 	}
 	// 解密
 	plaintextByte, err := privateKey.Decrypt(nil, ciphertextByte, nil)
@@ -34,15 +70,31 @@ func GoRSADecrypt(ciphertext string, privatekey string) string {
 func GoRSAEncrypt(plaintext string, publickey string) string {
 	plaintextByte := []byte(plaintext)
 	publickeyByte := []byte(publickey)
-	// 解析公钥
-	publicKey, err := x509.ParsePKIXPublicKey(publickeyByte)
+	block, _ := pem.Decode(publickeyByte)
+	if block == nil {
+		return "公钥解析失败"
+	}
+	publicKey, err := x509.ParsePKCS1PublicKey(block.Bytes)
 	if err != nil {
 		return "公钥解析失败" + err.Error()
 	}
-	// 加密
-	ciphertextByte, err := rsa.EncryptPKCS1v15(nil, publicKey.(*rsa.PublicKey), plaintextByte)
+	ciphertextByte, err := rsa.EncryptPKCS1v15(rand.Reader, publicKey, plaintextByte)
 	if err != nil {
-		return "加密失败" + err.Error()
+		ciphertextByte = make([]byte, 0)
+		for i := 0; i < len(plaintextByte); i += 245 {
+			var end int
+			if i+245 > len(plaintextByte) {
+				end = len(plaintextByte)
+			} else {
+				end = i + 245
+			}
+			// 加密
+			ciphertextByteTemp, err := rsa.EncryptPKCS1v15(rand.Reader, publicKey, plaintextByte[i:end])
+			if err != nil {
+				return "加密失败" + err.Error()
+			}
+			ciphertextByte = append(ciphertextByte, ciphertextByteTemp...)
+		}
 	}
 	return string(ciphertextByte)
 }
@@ -101,17 +153,27 @@ func GoAESEncrypt(plaintext string, key string) string {
 //
 //export GoRSAKey
 func GoRSAKey() string {
-	// 生成RSA密钥对
-	privateKey, err := rsa.GenerateKey(nil, 2048)
+	// 生成RSA私钥
+	privateKey, err := rsa.GenerateKey(rand.Reader, 2048)
 	if err != nil {
 		return "密钥对生成失败" + err.Error()
 	}
-	privateKeyBytes := x509.MarshalPKCS1PrivateKey(privateKey)
-	publicKeyBytes, err := x509.MarshalPKIXPublicKey(&privateKey.PublicKey)
-	if err != nil {
-		return "密钥对生成失败" + err.Error()
-	}
-	return string(privateKeyBytes) + string(publicKeyBytes)
+	// 获取公钥
+	publicKey := privateKey.PublicKey
+	privateKeyPem := pem.EncodeToMemory(&pem.Block{
+		Type:  "RSA PRIVATE KEY",
+		Bytes: x509.MarshalPKCS1PrivateKey(privateKey),
+	})
+	publicKeyPem := pem.EncodeToMemory(&pem.Block{
+		Type:  "RSA PUBLIC KEY",
+		Bytes: x509.MarshalPKCS1PublicKey(&publicKey),
+	})
+	return fmt.Sprintf("%s|%s", privateKeyPem, publicKeyPem)
 }
 
-func main() {}
+// 注册环境变量
+//
+//export CloseCGOWarningEnv
+func CloseCGOWarningEnv() {
+	os.Setenv("GODEBUG", "cgocheck=0")
+}

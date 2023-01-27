@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_compile_definitions(
     #加密组件调试模式开关 0:关闭 1:开启
-    ENCRYPT_ERR_DEBUG=1
+    ENCRYPT_ERR_DEBUG=0
 )
 
 find_package(Qt6 COMPONENTS Quick REQUIRED)
@@ -21,11 +21,18 @@ ADD_DEFINITIONS(-DNO_FREETYPE)
 ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
 ADD_DEFINITIONS(-DHCPP_LEGACY_API)
 
-add_custom_target(crypto ALL
-  COMMENT "编译go代码组件"
-  COMMAND go build -o Plugins/lib/libcrypto.so -buildmode=c-shared ./Plugins/Encrypt_go_binding/libencryptiongo/main.go
+
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/Plugins/lib/libcrypto.so
+    COMMAND go build -o Plugins/lib/libcrypto.so -buildmode=c-shared ./Plugins/Encrypt_go_binding/libencryptiongo/main.go
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    VERBATIM
+    COMMENT "******************************编译Go组件******************************"    
+)
+
+add_custom_target(
+    COMMENT "******************************注册Go组件******************************"
+    crypto ALL
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Plugins/lib/libcrypto.so
 )
 
 qt_add_executable(appSSIMP_pc
