@@ -13,6 +13,7 @@ int main(int argc, char *argv[])
   QGuiApplication app(argc, argv);
   // js读写文件授权
   qputenv("QML_XHR_ALLOW_FILE_READ", QByteArray("1"));
+  // qputenv("GODEBUG", QByteArray("cgocheck=0"));
   // qt5启用高分辨率支持
   //  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
   QCoreApplication::setOrganizationName("stvsljl");

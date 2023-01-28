@@ -149,7 +149,7 @@ bool Init_State_3()
                    {
     globalsecurity::AES_KEY =
         net->getResponseBodyJsonDoc()["aesp2"].toString();
-    //  globalsecurity::AES_KEY = 
+    globalsecurity::AES_KEY = RSA::decryptQ(globalsecurity::AES_KEY);
     qDebug().noquote() << "AES协议密钥:\n"
                        << globalsecurity::AES_KEY; });
   QObject::connect(net, &TcpNetUtils::requestErrorHappen, [=]()

@@ -16,7 +16,7 @@ namespace AES
     cout << "密钥： " << key << endl;
     cout << "密文： " << ret << endl;
     cout << "**********************************" << endl
-         << "\033[0m";
+         << "\033[0m" << endl;
 #endif
     return Base64::encodeStd(ret);
   }
@@ -58,7 +58,7 @@ namespace AES
     cout << "密钥： " << key << endl;
     cout << "原文： " << ret << endl;
     cout << "**********************************" << endl
-         << "\033[0m";
+         << "\033[0m << endl";
 #endif
     return ret;
   }
@@ -145,7 +145,7 @@ namespace RSA
     cout << "密钥： " << prikey << endl;
     cout << "原文： " << ret << endl;
     cout << "**********************************" << endl
-         << "\033[0m";
+         << "\033[0m" << endl;
 #endif
     return ret;
   }
@@ -168,7 +168,7 @@ namespace RSA
     return decrypt(str, key_);
   }
 
-  QString decryptQ(QString str) { return decryptQ(str, globalsecurity::AES_KEY); }
+  QString decryptQ(QString str) { return decryptQ(str, globalsecurity::LOCAL_RSA_PRIVATE); }
 
   string generateRSAKey()
   {
@@ -203,19 +203,11 @@ namespace Base64
     return QString(strbytebase64);
   }
 
-  string decodeStd(string str)
-  {
-    QByteArray strbyte = QByteArray::fromStdString(str);
-    strbyte = QByteArray::fromBase64(strbyte);
-    string strbase64 = strbyte.toStdString();
-    return strbase64;
-  }
-
-  QString decodeQ(QString str)
+  QByteArray decodeQ(QString str)
   {
     QByteArray strbyte = str.toUtf8();
     strbyte = QByteArray::fromBase64(strbyte);
-    return QString(strbyte);
+    return strbyte;
   }
 } // namespace Base64
 

@@ -29,10 +29,10 @@ namespace RSA
     string encrypt(string str);
     QString encryptQ(QString str);
 
-    string decrypt(string str, string prikey);
-    QString decryptQ(QString str, QString prikey);
-    string decrypt(string str);
-    QString decryptQ(QString str);
+    string decrypt(string Base64str, string prikey);
+    QString decryptQ(QString Base64str, QString prikey);
+    string decrypt(string Base64str);
+    QString decryptQ(QString Base64str);
 
     string generateRSAKey();
     QString generateRSAKeyQ();
@@ -42,8 +42,7 @@ namespace Base64
 {
     string encodeStd(string str);
     QString encodeQ(QString str);
-    string decodeStd(string str);
-    QString decodeQ(QString str);
+    QByteArray decodeQ(QString str);
 } // namespace Base64
 
 #endif // ENCRYPTION_H

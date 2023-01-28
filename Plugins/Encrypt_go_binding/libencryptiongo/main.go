@@ -9,6 +9,7 @@ import (
 	"crypto/rand"
 	"crypto/rsa"
 	"crypto/x509"
+	"encoding/base64"
 	"encoding/pem"
 	"fmt"
 	"os"
@@ -22,7 +23,8 @@ func main() {
 //
 //export GoRSADecrypt
 func GoRSADecrypt(ciphertext string, privatekey string) string {
-	ciphertextByte := []byte(ciphertext)
+	ciphertextByte, _ := base64.StdEncoding.DecodeString(ciphertext)
+	fmt.Println("ciphertextByte", ciphertextByte)
 	privatekeyByte := []byte(privatekey)
 	block, _ := pem.Decode(privatekeyByte)
 	if block == nil {
@@ -33,12 +35,13 @@ func GoRSADecrypt(ciphertext string, privatekey string) string {
 	if err != nil {
 		return "私钥解析失败" + err.Error()
 	}
-	if len(ciphertext) > 256 {
+	if len(ciphertextByte) > 256 {
+		fmt.Println("切片解密")
 		// 切片解密
 		var result []byte
-		for i := 0; i < len(ciphertext); i += 256 {
+		for i := 0; i < len(ciphertextByte); i += 256 {
 			// 判断切片是否超出长度
-			if i+256 > len(ciphertext) {
+			if i+256 > len(ciphertextByte) {
 				// 解密
 				decrypted, err := rsa.DecryptPKCS1v15(rand.Reader, privateKey, ciphertextByte[i:])
 				if err != nil {
@@ -57,7 +60,7 @@ func GoRSADecrypt(ciphertext string, privatekey string) string {
 		return string(result)
 	}
 	// 解密
-	plaintextByte, err := privateKey.Decrypt(nil, ciphertextByte, nil)
+	plaintextByte, err := privateKey.Decrypt(rand.Reader, ciphertextByte, nil)
 	if err != nil {
 		return "解密失败" + err.Error()
 	}

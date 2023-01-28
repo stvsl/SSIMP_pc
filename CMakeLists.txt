@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_compile_definitions(
     #加密组件调试模式开关 0:关闭 1:开启
-    ENCRYPT_ERR_DEBUG=0
+    ENCRYPT_ERR_DEBUG=1
 )
 
 find_package(Qt6 COMPONENTS Quick REQUIRED)
