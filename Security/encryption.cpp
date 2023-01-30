@@ -1,5 +1,37 @@
 #include "encryption.h"
 #include "Daemon/global.h"
+
+string Xor(string a, string b)
+{
+  // 保证a,b长度相同
+  if (a.length() > b.length())
+  {
+    b = b + a.substr(b.length());
+  }
+  if (a.length() < b.length())
+  {
+    a = a + b.substr(a.length());
+  }
+  // 异或运算
+  string result;
+  for (int i = 0; i < a.length(); i++)
+  {
+    result = result + (char)(a[i] ^ b[i]);
+  }
+  return result;
+}
+
+QString XorQ(QString a, QString b)
+{
+  QByteArray a_ = a.toUtf8();
+  QByteArray b_ = b.toUtf8();
+  string a__ = a_.toStdString();
+  string b__ = b_.toStdString();
+  string result_ = Xor(a__, b__);
+  QString result = QString::fromStdString(result_);
+  return result;
+}
+
 namespace AES
 {
   string encrypt(string str, string key)
@@ -210,6 +242,16 @@ namespace Base64
     return strbyte;
   }
 } // namespace Base64
+
+namespace SHA256
+{
+  QString hash(QString str)
+  {
+    QByteArray strbyte = str.toUtf8();
+    QByteArray strbytebase64 = QCryptographicHash::hash(strbyte, QCryptographicHash::Sha256);
+    return QString(strbytebase64);
+  }
+}
 
 namespace CGOSET
 {

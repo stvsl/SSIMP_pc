@@ -24,7 +24,6 @@ func main() {
 //export GoRSADecrypt
 func GoRSADecrypt(ciphertext string, privatekey string) string {
 	ciphertextByte, _ := base64.StdEncoding.DecodeString(ciphertext)
-	fmt.Println("ciphertextByte", ciphertextByte)
 	privatekeyByte := []byte(privatekey)
 	block, _ := pem.Decode(privatekeyByte)
 	if block == nil {

@@ -7,6 +7,7 @@
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 #include <QTranslator>
+#include <Service/businessservice.h>
 
 int main(int argc, char *argv[])
 {
@@ -22,8 +23,10 @@ int main(int argc, char *argv[])
   QCoreApplication::setApplicationVersion("v0.0.4 alpha");
   *global::SERVER_URL_STR() = "http://127.0.0.1:6521";
   qDebug() << "SERVER_URL_STR" << *global::SERVER_URL_STR();
-  // 注册验证码组件
+
+  /************************注册组件************************/
   qmlRegisterType<VerificationCode>("Utils.Verify", 1, 0, "VerificationCode");
+  qmlRegisterType<AccountService>("Service.Account", 1, 0, "AccountService");
   // 注册组件
   // TODO
   QTranslator translator;

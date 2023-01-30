@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_compile_definitions(
     #加密组件调试模式开关 0:关闭 1:开启
-    ENCRYPT_ERR_DEBUG=1
+    ENCRYPT_ERR_DEBUG=0
 )
 
 find_package(Qt6 COMPONENTS Quick REQUIRED)
@@ -49,6 +49,9 @@ qt_add_executable(appSSIMP_pc
 
     # 安全加密组件封装(Go组件编译绑定)
     Security/encryption.h Security/encryption.cpp
+
+    # 业务逻辑组件封装
+    Service/businessservice.h Service/businessservice.cpp
 
     # 界面辅助代理封装
     Daemon/vctrler.h Daemon/vctrler.cpp

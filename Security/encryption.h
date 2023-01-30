@@ -5,9 +5,12 @@
 #include <QDebug>
 #include <QString>
 #include <iostream>
-#include <QByteArray>
+#include <QCryptographicHash>
 
 using namespace std;
+
+string Xor(string a, string b);
+QString XorQ(QString a, QString b);
 
 namespace AES
 {
@@ -44,6 +47,11 @@ namespace Base64
     QString encodeQ(QString str);
     QByteArray decodeQ(QString str);
 } // namespace Base64
+
+namespace SHA256
+{
+    QString hash(QString str);
+} // namespace SHA256
 
 #endif // ENCRYPTION_H
 
