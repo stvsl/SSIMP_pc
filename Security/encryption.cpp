@@ -43,7 +43,7 @@ namespace AES
 #if ENCRYPT_ERR_DEBUG == 1
     cout << endl
          << "\033[1;33m"
-         << "**************RSA加密**************" << endl;
+         << "**************AES加密**************" << endl;
     cout << "原文： " << str << endl;
     cout << "密钥： " << key << endl;
     cout << "密文： " << ret << endl;
@@ -85,7 +85,7 @@ namespace AES
 #if ENCRYPT_ERR_DEBUG == 1
     cout << endl
          << "\033[1;33m"
-         << "**************RSA解密**************" << endl;
+         << "**************AES解密**************" << endl;
     cout << "密文： " << ciphertext << endl;
     cout << "密钥： " << key << endl;
     cout << "原文： " << ret << endl;
@@ -248,8 +248,17 @@ namespace SHA256
   QString hash(QString str)
   {
     QByteArray strbyte = str.toUtf8();
-    QByteArray strbytebase64 = QCryptographicHash::hash(strbyte, QCryptographicHash::Sha256);
-    return QString(strbytebase64);
+    QByteArray strbytesha = QCryptographicHash::hash(strbyte, QCryptographicHash::Sha256);
+#if ENCRYPT_ERR_DEBUG == 1
+    cout << endl
+         << "\033[1;33m"
+         << "**************SHA256**************" << endl;
+    cout << "原  文： " << str.toStdString() << endl;
+    cout << "SHA256： " << strbytesha.toHex().toStdString() << endl;
+    cout << "**********************************" << endl
+         << "\033[0m" << endl;
+#endif
+    return QString(strbytesha.toHex());
   }
 }
 

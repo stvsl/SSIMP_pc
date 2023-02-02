@@ -11,6 +11,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_definitions(
     #加密组件调试模式开关 0:关闭 1:开启
     ENCRYPT_ERR_DEBUG=0
+    #调试模式开关 0:关闭 1:开启
+    DEV_MODE=0
 )
 
 find_package(Qt6 COMPONENTS Quick REQUIRED)
@@ -52,6 +54,7 @@ qt_add_executable(appSSIMP_pc
 
     # 业务逻辑组件封装
     Service/businessservice.h Service/businessservice.cpp
+    Service/entity.h Service/entity.cpp
 
     # 界面辅助代理封装
     Daemon/vctrler.h Daemon/vctrler.cpp
@@ -69,6 +72,7 @@ qt_add_qml_module(appSSIMP_pc
     QML_FILES UIFlame/Menu/MenuModel.qml
     QML_FILES UIFlame/LoadPage/LoadPage.qml
     QML_FILES UIFlame/MainPage/MainPage.qml
+    QML_FILES UIFlame/EmployeePage/EmployeePage.qml
     QML_FILES UIFlame/AboutPage/AboutPage.qml
     QML_FILES UIFlame/AboutPage/AboutQt.qml
     QML_FILES UIFlame/AboutPage/AboutQml.qml
@@ -78,6 +82,7 @@ qt_add_qml_module(appSSIMP_pc
     QML_FILES UIFlame/LoginPage/LoginPage.qml
     QML_FILES UIFlame/MessageBox/MessageBox.qml
     QML_FILES UIFlame/MessageBox/MsgButton.qml
+
 )
 
 file(GLOB TS_FILES "${PROJECT_SOURCE_DIR}/*.ts")

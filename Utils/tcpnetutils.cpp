@@ -2,17 +2,16 @@
 #include "netbase.h"
 #include <QThread>
 
-TcpNetUtils::TcpNetUtils(TcpPost *post)
+TcpNetUtils::TcpNetUtils(TcpPost *post) : QObject(post)
 {
     this->mode = TcpMode::Post;
     this->timeout = post->getTimeout();
     this->url = post->getUrl();
     this->headers = post->getHeaders();
-    this->params = post->getParams();
     this->body = post->getBody();
 }
 
-TcpNetUtils::TcpNetUtils(TcpGet *get)
+TcpNetUtils::TcpNetUtils(TcpGet *get) : QObject(get)
 {
     this->mode = TcpMode::Get;
     this->timeout = get->getTimeout();

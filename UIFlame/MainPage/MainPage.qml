@@ -1,18 +1,28 @@
-import QtQuick
-import QtQuick.Window
-import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
-import "../Menu"
+/*##^##
+Designer {
+    D{i:0;formeditorColor:"#c0c0c0";formeditorZoom:0.5;height:1080;width:1920}
+}
+##^##*/
+
 import "../AboutPage"
+import "../Menu"
+import "../EmployeePage"
+import Qt5Compat.GraphicalEffects
+import QtQuick
+import QtQuick.Controls
+import QtQuick.Window
 
 Window {
     id: root
+
     width: Screen.desktopAvailableWidth
     height: Screen.desktopAvailableHeight
     visible: true
     title: qsTr("北镇闾山景区巡查监测平台")
     onClosing: {
-        daemon.close()
+        root.close();
+        daemon.close();
+        Qt.quit();
     }
 
     Flow {
@@ -26,36 +36,41 @@ Window {
 
     Rectangle {
         id: topbar
+
         x: 0
         z: 0
         width: root.width
         height: 70
         border.width: 0
         smooth: true
+
         Rectangle {
             z: 1
             anchors.verticalCenter: topbar.verticalCenter
             anchors.left: parent.left
             visible: true
+            height: 70
+            width: 300
+
             LinearGradient {
                 anchors.fill: parent
                 start: Qt.point(0, 0)
                 end: Qt.point(width, height)
+
                 gradient: Gradient {
                     GradientStop {
-                        position: 0.0
+                        position: 0
                         color: "#005be0"
                     }
 
                     GradientStop {
-                        position: 1.0
+                        position: 1
                         color: "#00c6fb"
                     }
-                }
-            }
 
-            height: 70
-            width: 300
+                }
+
+            }
 
             Text {
                 x: 6
@@ -65,101 +80,122 @@ Window {
                 text: qsTr("北镇闾山景区巡查监测平台")
                 font.pixelSize: 24
             }
+
         }
+
         Rectangle {
             id: menubar
+
             y: topbar.y + topbar.height
             width: 300
             height: root.height - topbar.height - 1
             border.color: "#EEEEEE"
+
             Menu {
                 id: menu
+
                 y: 20
                 width: 290
                 height: 800
                 boundsMovement: Flickable.StopAtBounds
                 anchors.horizontalCenter: parent.horizontalCenter
             }
+
         }
+
         Component {
             id: globaloverview
+
             Rectangle {
                 width: 200
                 height: 100
                 color: "blue"
             }
+
         }
 
         Component {
             id: datamonitoring
+
             Rectangle {
                 width: 200
                 height: 100
                 color: "blue"
             }
+
         }
 
         Component {
             id: staffmanagement
-            Rectangle {
-                width: 200
-                height: 100
-                color: "orange"
-            }
+            EmployeePage{}
         }
 
         Component {
             id: worktask
+
             Rectangle {
                 width: 200
                 height: 100
                 color: "green"
             }
+
         }
 
         Component {
             id: contentmanagement
+
             Rectangle {
                 width: 200
                 height: 100
                 color: "pink"
             }
+
         }
 
         Component {
             id: supermanagement
+
             Rectangle {
                 width: 200
                 height: 100
                 color: "black"
             }
+
         }
 
         Component {
             id: systemmaintenance
+
             Rectangle {
                 width: 200
                 height: 100
                 color: "yellow"
             }
+
         }
 
         Component {
             id: settings
+
             Rectangle {
                 width: 200
                 height: 100
                 color: "orange"
             }
+
         }
 
         Component {
             id: about
-            AboutPage {}
+
+            AboutPage {
+            }
+
         }
 
         StackView {
             id: mainstack
+
             x: menubar.width + 10
             y: topbar.height / 3
             width: root.width - x - 10
@@ -173,7 +209,9 @@ Window {
                     to: 1
                     duration: 100
                 }
+
             }
+
             pushExit: Transition {
                 PropertyAnimation {
                     property: "opacity"
@@ -181,7 +219,9 @@ Window {
                     to: 0.3
                     duration: 100
                 }
+
             }
+
             popEnter: Transition {
                 PropertyAnimation {
                     property: "opacity"
@@ -189,7 +229,9 @@ Window {
                     to: 1
                     duration: 100
                 }
+
             }
+
             popExit: Transition {
                 PropertyAnimation {
                     property: "opacity"
@@ -197,14 +239,11 @@ Window {
                     to: 0.3
                     duration: 100
                 }
+
             }
+
         }
+
     }
-}
 
-/*##^##
-Designer {
-    D{i:0;formeditorColor:"#c0c0c0";formeditorZoom:0.5;height:1080;width:1920}
 }
-##^##*/
-

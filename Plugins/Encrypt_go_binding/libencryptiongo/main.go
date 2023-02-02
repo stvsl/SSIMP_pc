@@ -119,17 +119,22 @@ func PKCS7UnPadding(origData []byte) []byte {
 func GoAESDecrypt(ciphertext string, key string) string {
 	ciphertextByte := []byte(ciphertext)
 	keyByte := []byte(key)
-	// 解密
+	// 创建实例
 	block, err := aes.NewCipher(keyByte)
 	if err != nil {
-		return "解密失败" + err.Error()
+		return "创建实例失败" + err.Error()
 	}
+	// 获取块的大小
 	blockSize := block.BlockSize()
+	// 使用cbc
 	blockMode := cipher.NewCBCDecrypter(block, keyByte[:blockSize])
-	origData := make([]byte, len(ciphertextByte))
-	blockMode.CryptBlocks(origData, ciphertextByte)
-	origData = PKCS7UnPadding(origData)
-	return string(origData)
+	// 初始化解密数据接收切片
+	crypted := make([]byte, len(ciphertext))
+	// 执行解密
+	blockMode.CryptBlocks(crypted, ciphertextByte)
+	// 去除填充
+	crypted = PKCS7UnPadding(crypted)
+	return string(crypted)
 }
 
 // AES 加密
@@ -138,16 +143,21 @@ func GoAESDecrypt(ciphertext string, key string) string {
 func GoAESEncrypt(plaintext string, key string) string {
 	ciphertextByte := []byte(plaintext)
 	keyByte := []byte(key)
-	// 加密
+	//创建加密实例
 	block, err := aes.NewCipher(keyByte)
 	if err != nil {
-		return "加密失败" + err.Error()
+		return "创建加密实例失败" + err.Error()
 	}
+	//判断加密快的大小
 	blockSize := block.BlockSize()
-	ciphertextByte = PKCS7Padding(ciphertextByte, blockSize)
+	//填充
+	encryptBytes := PKCS7Padding(ciphertextByte, blockSize)
+	//初始化加密数据接收切片
+	crypted := make([]byte, len(encryptBytes))
+	//使用cbc加密模式
 	blockMode := cipher.NewCBCEncrypter(block, keyByte[:blockSize])
-	crypted := make([]byte, len(ciphertextByte))
-	blockMode.CryptBlocks(crypted, ciphertextByte)
+	//执行加密
+	blockMode.CryptBlocks(crypted, encryptBytes)
 	return string(crypted)
 }
 

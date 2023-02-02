@@ -15,19 +15,19 @@ Window {
     property real windowRotation: 0
     property bool dragging: false
 
+    AccountService {
+        id: accountService
+    }
+
     function powerverify() {
-        //// TODO
         if (verify.text !== loginpage._Putvercode) {
-            errloader.sourceComponent = verifyerr;
-            verificationItem.slt_reflushVerification();
-            userid.clear();
-            passwd.clear();
-            verify.clear();
+            errloader.sourceComponent = verifyerr
+            verificationItem.slt_reflushVerification()
+            userid.clear()
+            passwd.clear()
+            verify.clear()
         } else {
-            // 登录业务逻辑TODO
-            var r = accountService.Login("1", "2");
-            console.log("r: " + r);
-            daemon.switchtoMain();
+            accountService.login(userid.text, passwd.text)
         }
     }
 
@@ -38,8 +38,23 @@ Window {
     flags: Qt.Window | Qt.FramelessWindowHint
     Material.theme: Material.Blue
 
-    AccountService {
-        id: accountService
+    // 连接信号槽
+    Connections {
+        function onLoginSuccess() {
+            console.log("登录成功")
+            daemon.switchtoMain()
+        }
+
+        function onLoginFailed() {
+            console.log("登录失败")
+            errloader.sourceComponent = infoerr
+            verificationItem.slt_reflushVerification()
+            userid.clear()
+            passwd.clear()
+            verify.clear()
+        }
+
+        target: accountService
     }
 
     // 窗口rotation
@@ -90,6 +105,33 @@ Window {
                 font.family: "Courier"
             }
 
+            Rectangle {
+                id: devbtn
+                x: 54
+                y: 122
+                width: 200
+                height: 100
+                color: "#ffffff"
+                z:100
+                Text{
+                    x: 0
+                    y: 0
+                    width: 192
+                    height: 92
+                    text: "debug"
+                    horizontalAlignment: Text.AlignHCenter
+                    verticalAlignment: Text.AlignVCenter
+                    font.pointSize: 20
+                    font.weight: Font.Bold
+                }
+                MouseArea{
+                anchors.fill: parent
+                onClicked: {
+                    accountService.login("1000000001","stvsl2060")
+                }
+                }
+            }
+
             gradient: Gradient {
                 GradientStop {
                     position: 0
@@ -100,9 +142,7 @@ Window {
                     position: 1
                     color: Qt.rgba(0, 128 / 255, 251 / 255, 0.5)
                 }
-
             }
-
         }
 
         Rectangle {
@@ -190,13 +230,12 @@ Window {
 
                                 anchors.fill: parent
                             }
-
                         }
 
                         //刷新
                         Connections {
                             function onClicked() {
-                                verificationItem.slt_reflushVerification();
+                                verificationItem.slt_reflushVerification()
                             }
 
                             target: verchange
@@ -205,12 +244,11 @@ Window {
                         //获取字符
                         Connections {
                             function onVerificationChanged() {
-                                _Putvercode = verificationItem.verification;
+                                _Putvercode = verificationItem.verification
                             }
 
                             target: verificationItem
                         }
-
                     }
 
                     Rectangle {
@@ -223,11 +261,10 @@ Window {
                         height: 35
                         color: Qt.rgba(0.72, 1, 1, 0.8)
                         focus: true
-                        Keys.onPressed: (event) => {
-                            if (event.key === Qt.Key_Enter)
-                                loginpage.powerverify();
-
-                        }
+                        Keys.onPressed: event => {
+                                            if (event.key === Qt.Key_Enter)
+                                            loginpage.powerverify()
+                                        }
                         radius: 5
 
                         Text {
@@ -242,14 +279,13 @@ Window {
                         MouseArea {
                             anchors.fill: parent
                             onPressed: {
-                                loginbtn.color = Qt.rgba(0.72, 1, 1, 0.4);
-                                loginpage.powerverify();
+                                loginbtn.color = Qt.rgba(0.72, 1, 1, 0.4)
+                                loginpage.powerverify()
                             }
                             onReleased: {
-                                loginbtn.color = Qt.rgba(0.72, 1, 1, 0.8);
+                                loginbtn.color = Qt.rgba(0.72, 1, 1, 0.8)
                             }
                         }
-
                     }
 
                     Rectangle {
@@ -277,23 +313,19 @@ Window {
                         MouseArea {
                             anchors.fill: parent
                             onPressed: {
-                                canclebtn.color = Qt.rgba(0.72, 1, 1, 0.4);
-                                verificationItem.slt_reflushVerification();
-                                userid.clear();
-                                passwd.clear();
-                                verify.clear();
+                                canclebtn.color = Qt.rgba(0.72, 1, 1, 0.4)
+                                verificationItem.slt_reflushVerification()
+                                userid.clear()
+                                passwd.clear()
+                                verify.clear()
                             }
                             onReleased: {
-                                canclebtn.color = Qt.rgba(0.72, 1, 1, 0.8);
+                                canclebtn.color = Qt.rgba(0.72, 1, 1, 0.8)
                             }
                         }
-
                     }
-
                 }
-
             }
-
         }
 
         Rectangle {
@@ -317,14 +349,12 @@ Window {
             MouseArea {
                 anchors.fill: parent
                 onClicked: {
-                    daemon.close();
-                    loginpage.close();
-                    Qt.quit();
+                    daemon.close()
+                    loginpage.close()
+                    Qt.quit()
                 }
             }
-
         }
-
     }
 
     Loader {
@@ -335,8 +365,8 @@ Window {
 
     Connections {
         function onBtnClicked(x) {
-            errloader.sourceComponent = null;
-            loginbtn.color = Qt.rgba(0.72, 1, 1, 0.8);
+            errloader.sourceComponent = null
+            loginbtn.color = Qt.rgba(0.72, 1, 1, 0.8)
         }
 
         target: errloader.item
@@ -353,7 +383,6 @@ Window {
             yesorno: false
             justconform: true
         }
-
     }
 
     Component {
@@ -367,7 +396,6 @@ Window {
             yesorno: false
             justconform: true
         }
-
     }
 
     MouseArea {
@@ -376,23 +404,24 @@ Window {
         //为窗口添加鼠标事件
         anchors.fill: parent
         acceptedButtons: Qt.LeftButton //只处理鼠标左键
-        onPressed: (mouse) => {
-            //接收鼠标按下事件
-            clickPos = Qt.point(mouse.x, mouse.y);
-            loginpage.dragging = true;
-        }
+        onPressed: mouse => {
+                       //接收鼠标按下事件
+                       clickPos = Qt.point(mouse.x, mouse.y)
+                       loginpage.dragging = true
+                   }
         onReleased: loginpage.dragging = false
-        onPositionChanged: (mouse) => {
-            //鼠标按下后改变位置
-            //鼠标偏移量
-            var delta = Qt.point(mouse.x - clickPos.x, mouse.y - clickPos.y);
-            //如果mainwindow继承自QWidget,用setPos
-            loginpage.setX(loginpage.x + delta.x);
-            loginpage.setY(loginpage.y + delta.y);
-        }
+        onPositionChanged: mouse => {
+                               //鼠标按下后改变位置
+                               //鼠标偏移量
+                               var delta = Qt.point(mouse.x - clickPos.x,
+                                                    mouse.y - clickPos.y)
+                               //如果mainwindow继承自QWidget,用setPos
+                               loginpage.setX(loginpage.x + delta.x)
+                               loginpage.setY(loginpage.y + delta.y)
+                           }
     }
-    // 当窗口处于拖动状态时，播放旋转动画
 
+    // 当窗口处于拖动状态时，播放旋转动画
     NumberAnimation {
         target: loginpage
         property: "windowRotation"
@@ -400,5 +429,4 @@ Window {
         duration: 100
         easing.type: Easing.OutBounce
     }
-
 }

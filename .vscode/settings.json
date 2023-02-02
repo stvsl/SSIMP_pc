@@ -78,5 +78,6 @@
     "variant": "cpp"
   },
   "go.inferGopath": false,
-  "C_Cpp.errorSquiggles": "enabled"
+  "C_Cpp.errorSquiggles": "enabled",
+  "commentTranslate.multiLineMerge": true
 }
