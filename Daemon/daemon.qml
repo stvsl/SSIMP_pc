@@ -43,6 +43,7 @@ Window {
     }
 
     visible: false
+    color: "#ffffff"
     Component.onCompleted: daemonloader.sourceComponent = loadpage
 
     Loader {

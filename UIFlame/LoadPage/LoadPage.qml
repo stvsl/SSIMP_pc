@@ -1,18 +1,19 @@
-
+import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
-import Qt5Compat.GraphicalEffects
 
 Window {
+    id: loadpage
+
     visible: true
     width: 640
     height: 380
-    id: loadpage
     title: qsTr("北镇闾山景区巡查监测平台守护程序")
     flags: Qt.FramelessWindowHint
 
     Image {
         id: image
+
         anchors.fill: parent
         fillMode: Image.PreserveAspectCrop
         source: "qrc:/daemon/daemon/background.jpg"
@@ -24,18 +25,20 @@ Window {
         smooth: true
 
         Repeater {
-            model: 5
             id: repeater
+
+            model: 5
+
             Rectangle {
+                id: dot
+
                 property real radius1: 25
                 property real dx: 45 //圆心坐标
                 property real dy: loadpage.height - 50
-                property real cx: radius1 * Math.sin(
-                                      percent * 6.283185307179) + dx //各个圆点的实时坐标
-                property real cy: radius1 * Math.cos(
-                                      percent * 6.283185307179) + dy
+                property real cx: radius1 * Math.sin(percent * 6.28319) + dx //各个圆点的实时坐标
+                property real cy: radius1 * Math.cos(percent * 6.28319) + dy
                 property real percent: 2
-                id: dot
+
                 width: 8
                 height: 8
                 radius: 25
@@ -46,11 +49,13 @@ Window {
                 y: cy
 
                 SequentialAnimation on percent {
+                    loops: Animation.Infinite
+                    running: true
+
                     PauseAnimation {
                         duration: 225 * index
                     }
-                    loops: Animation.Infinite
-                    running: true
+
                     ParallelAnimation {
                         NumberAnimation {
                             target: dot
@@ -59,11 +64,13 @@ Window {
                             to: 1
                             duration: 225
                         }
+
                         NumberAnimation {
                             duration: 225
                             from: 1 + index * 0.05
                             to: 0.75
                         }
+
                     }
 
                     NumberAnimation {
@@ -71,11 +78,13 @@ Window {
                         from: 0.75
                         to: 0.7
                     }
+
                     NumberAnimation {
                         duration: 140
                         from: 0.7
                         to: 0.65
                     }
+
                     NumberAnimation {
                         duration: 160
                         from: 0.65
@@ -87,6 +96,7 @@ Window {
                         from: 0.6
                         to: 0.55
                     }
+
                     NumberAnimation {
                         duration: 225
                         from: 0.55
@@ -98,26 +108,31 @@ Window {
                         from: 0.5
                         to: 0.45
                     }
+
                     NumberAnimation {
                         duration: 225
                         from: 0.45
                         to: 0.4
                     }
+
                     NumberAnimation {
                         duration: 50
                         from: 0.4
                         to: 0.35
                     }
+
                     NumberAnimation {
                         duration: 30
                         from: 0.35
                         to: 0.3
                     }
+
                     NumberAnimation {
                         duration: 180
                         from: 0.3
                         to: 0
                     }
+
                     NumberAnimation {
                         duration: 225
                         from: 1
@@ -129,11 +144,13 @@ Window {
                         from: 0.75
                         to: 0.7
                     }
+
                     NumberAnimation {
                         duration: 140
                         from: 0.7
                         to: 0.65
                     }
+
                     NumberAnimation {
                         duration: 160
                         from: 0.65
@@ -145,36 +162,43 @@ Window {
                         from: 0.6
                         to: 0.55
                     }
+
                     NumberAnimation {
                         duration: 225
                         from: 0.55
                         to: 0.5
                     }
+
                     NumberAnimation {
                         duration: 225
                         from: 0.5
                         to: 0.45
                     }
+
                     NumberAnimation {
                         duration: 225
                         from: 0.45
                         to: 0.4
                     }
+
                     NumberAnimation {
                         duration: 50
                         from: 0.4
                         to: 0.35
                     }
+
                     NumberAnimation {
                         duration: 30
                         from: 0.35
                         to: 0.3
                     }
+
                     NumberAnimation {
                         duration: 180
                         from: 0.3
                         to: 0
                     }
+
                     NumberAnimation {
                         target: dot
                         duration: 50
@@ -186,47 +210,58 @@ Window {
                     PauseAnimation {
                         duration: (repeater.count - index - 1) * 225
                     }
+
                 }
+
             }
+
         }
 
         Label {
             id: process
-            x: 38
-            y: loadpage.height - 54
+
             // 定义全局变量，用于记录当前进度
             property int progress: 0
+
+            x: 38
+            y: loadpage.height - 54
             text: qsTr(progress + "%")
             color: Qt.rgba(1, 1, 1, 0.5)
+
             Timer {
                 id: timer
-                interval: 100
+
+                interval: 20
                 running: true
                 repeat: true
                 onTriggered: {
-                    process.progress += 5
-                    process.text = qsTr(process.progress + "%")
-                    if (process.progress == 10) {
-                        process.x = 35
-                    }
+                    process.progress += 5;
+                    process.text = qsTr(process.progress + "%");
+                    if (process.progress == 10)
+                        process.x = 35;
+
                     if (process.progress >= 100) {
-                        process.x = 31
-                        timer.stop()
-                        daemon.switchtoLogin()
+                        process.x = 31;
+                        timer.stop();
+                        daemon.switchtoLogin();
                     }
                 }
             }
+
         }
 
         Label {
             id: status
+
             text: qsTr("正在加载中...")
             x: process.x + process.width + 370
             y: loadpage.height - 54
             color: Qt.rgba(1, 1, 1, 0.5)
         }
+
         Label {
             id: label
+
             text: qsTr("北镇闾山景区巡查监测平台")
             verticalAlignment: Text.AlignVCenter
             font.strikeout: false
@@ -242,8 +277,10 @@ Window {
             height: 59
             color: "#000000"
         }
+
         Label {
             id: info
+
             x: label.x + label.width - 180
             y: label.y + 50
             color: "#be000000"
@@ -256,6 +293,7 @@ Window {
 
         Button {
             id: button
+
             x: 607
             y: 0
             width: 33
@@ -275,10 +313,12 @@ Window {
             checkable: true
             flat: true
             onClicked: {
-                loadpage.close()
-                daemon.close()
-                Qt.quit()
+                loadpage.close();
+                daemon.close();
+                Qt.quit();
             }
         }
+
     }
+
 }

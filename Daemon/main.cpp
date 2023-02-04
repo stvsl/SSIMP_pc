@@ -7,22 +7,26 @@
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 #include <QTranslator>
+#include <Service/businessservice.h>
 
 int main(int argc, char *argv[])
 {
   QGuiApplication app(argc, argv);
   // js读写文件授权
   qputenv("QML_XHR_ALLOW_FILE_READ", QByteArray("1"));
+  // qputenv("GODEBUG", QByteArray("cgocheck=0"));
   // qt5启用高分辨率支持
   //  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
   QCoreApplication::setOrganizationName("stvsljl");
   QCoreApplication::setApplicationName("SSIMP");
   QCoreApplication::setOrganizationDomain("stvsljl.com");
-  QCoreApplication::setApplicationVersion("v0.0.3 alpha");
+  QCoreApplication::setApplicationVersion("v0.0.4 alpha");
   *global::SERVER_URL_STR() = "http://127.0.0.1:6521";
   qDebug() << "SERVER_URL_STR" << *global::SERVER_URL_STR();
-  // 注册验证码组件
+
+  /************************注册组件************************/
   qmlRegisterType<VerificationCode>("Utils.Verify", 1, 0, "VerificationCode");
+  qmlRegisterType<AccountService>("Service.Account", 1, 0, "AccountService");
   // 注册组件
   // TODO
   QTranslator translator;

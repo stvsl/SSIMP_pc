@@ -5,8 +5,12 @@
 #include <QDebug>
 #include <QString>
 #include <iostream>
+#include <QCryptographicHash>
 
 using namespace std;
+
+string Xor(string a, string b);
+QString XorQ(QString a, QString b);
 
 namespace AES
 {
@@ -28,13 +32,30 @@ namespace RSA
     string encrypt(string str);
     QString encryptQ(QString str);
 
-    string decrypt(string str, string prikey);
-    QString decryptQ(QString str, QString prikey);
-    string decrypt(string str);
-    QString decryptQ(QString str);
+    string decrypt(string Base64str, string prikey);
+    QString decryptQ(QString Base64str, QString prikey);
+    string decrypt(string Base64str);
+    QString decryptQ(QString Base64str);
 
     string generateRSAKey();
     QString generateRSAKeyQ();
 } // namespace RSA
 
+namespace Base64
+{
+    string encodeStd(string str);
+    QString encodeQ(QString str);
+    QByteArray decodeQ(QString str);
+} // namespace Base64
+
+namespace SHA256
+{
+    QString hash(QString str);
+} // namespace SHA256
+
 #endif // ENCRYPTION_H
+
+namespace CGOSET
+{
+    void DisableCgoCheck();
+}

@@ -7,7 +7,6 @@ TcpPost::TcpPost(QObject *parent) : QObject(parent)
     this->timeout = 5000;
     this->url = QUrl(*global::SERVER_URL_STR());
     this->headers = QMap<QString, QString>();
-    this->params = QMap<QString, QString>();
 }
 
 TcpPost::TcpPost(const QString &url, QObject *parent) : QObject(parent)
@@ -15,15 +14,13 @@ TcpPost::TcpPost(const QString &url, QObject *parent) : QObject(parent)
     this->timeout = 5000;
     this->url = QUrl(*global::SERVER_URL_STR() + url);
     this->headers = QMap<QString, QString>();
-    this->params = QMap<QString, QString>();
 }
 
-TcpPost::TcpPost(const QString &url, const QMap<QString, QString> &headers, const QMap<QString, QString> &params, QObject *parent) : QObject(parent)
+TcpPost::TcpPost(const QString &url, const QMap<QString, QString> &headers, QObject *parent) : QObject(parent)
 {
     this->timeout = 5000;
     this->url = QUrl(*global::SERVER_URL_STR() + url);
     this->headers = headers;
-    this->params = params;
 }
 
 TcpPost::~TcpPost()
@@ -50,24 +47,9 @@ void TcpPost::addHeader(const QString &key, const QString &value)
     this->headers.insert(key, value);
 }
 
-void TcpPost::setParams(const QMap<QString, QString> &params)
-{
-    this->params = params;
-}
-
-void TcpPost::addParam(const QString &key, const QString &value)
-{
-    this->params.insert(key, value);
-}
-
 void TcpPost::setTimeout(int timeout)
 {
     this->timeout = timeout;
-}
-
-void TcpPost::setParam(const QString &key, const QString &value)
-{
-    this->params.insert(key, value);
 }
 
 void TcpPost::setBody(const QByteArray &body)
@@ -83,6 +65,7 @@ void TcpPost::setBody(const QString &body)
 void TcpPost::setBody(const QJsonObject &body)
 {
     this->body = QJsonDocument(body).toJson();
+    this->headers.insert("Content-Type", "application/json");
 }
 
 void TcpPost::setBody(const QJsonDocument &body)
@@ -98,11 +81,6 @@ QUrl &TcpPost::getUrl()
 QMap<QString, QString> &TcpPost::getHeaders()
 {
     return this->headers;
-}
-
-QMap<QString, QString> &TcpPost::getParams()
-{
-    return this->params;
 }
 
 QByteArray &TcpPost::getBody()

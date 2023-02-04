@@ -10,7 +10,9 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_compile_definitions(
     #加密组件调试模式开关 0:关闭 1:开启
-    ENCRYPT_ERR_DEBUG=1
+    ENCRYPT_ERR_DEBUG=0
+    #调试模式开关 0:关闭 1:开启
+    DEV_MODE=0
 )
 
 find_package(Qt6 COMPONENTS Quick REQUIRED)
@@ -21,11 +23,18 @@ ADD_DEFINITIONS(-DNO_FREETYPE)
 ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
 ADD_DEFINITIONS(-DHCPP_LEGACY_API)
 
-add_custom_target(crypto ALL
-  COMMENT "编译go代码组件"
-  COMMAND go build -o Plugins/lib/libcrypto.so -buildmode=c-shared ./Plugins/Encrypt_go_binding/libencryptiongo/main.go
+
+add_custom_command(
+    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/Plugins/lib/libcrypto.so
+    COMMAND go build -o Plugins/lib/libcrypto.so -buildmode=c-shared ./Plugins/Encrypt_go_binding/libencryptiongo/main.go
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    VERBATIM
+    COMMENT "******************************编译Go组件******************************"    
+)
+
+add_custom_target(
+    COMMENT "******************************注册Go组件******************************"
+    crypto ALL
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Plugins/lib/libcrypto.so
 )
 
 qt_add_executable(appSSIMP_pc
@@ -43,6 +52,13 @@ qt_add_executable(appSSIMP_pc
     # 安全加密组件封装(Go组件编译绑定)
     Security/encryption.h Security/encryption.cpp
 
+    # 业务逻辑组件封装
+    Service/businessservice.h Service/businessservice.cpp
+    Service/entity.h Service/entity.cpp
+
+    ModeData/employeedata.h ModeData/employeedata.cpp
+    ModeData/employmodel.h ModeData/employmodel.cpp
+
     # 界面辅助代理封装
     Daemon/vctrler.h Daemon/vctrler.cpp
 
@@ -59,6 +75,7 @@ qt_add_qml_module(appSSIMP_pc
     QML_FILES UIFlame/Menu/MenuModel.qml
     QML_FILES UIFlame/LoadPage/LoadPage.qml
     QML_FILES UIFlame/MainPage/MainPage.qml
+    QML_FILES UIFlame/EmployeePage/EmployeePage.qml
     QML_FILES UIFlame/AboutPage/AboutPage.qml
     QML_FILES UIFlame/AboutPage/AboutQt.qml
     QML_FILES UIFlame/AboutPage/AboutQml.qml
@@ -68,6 +85,7 @@ qt_add_qml_module(appSSIMP_pc
     QML_FILES UIFlame/LoginPage/LoginPage.qml
     QML_FILES UIFlame/MessageBox/MessageBox.qml
     QML_FILES UIFlame/MessageBox/MsgButton.qml
+
 )
 
 file(GLOB TS_FILES "${PROJECT_SOURCE_DIR}/*.ts")

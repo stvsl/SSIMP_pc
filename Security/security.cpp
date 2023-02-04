@@ -13,6 +13,7 @@
 #include <QNetworkInterface>
 #include <Utils/npost.h>
 #include <QObject>
+#include "encryption.h"
 
 bool globalsecurity::inited = false;
 QString globalsecurity::AES_KEY = "";
@@ -29,13 +30,18 @@ bool Init_State_3();
  */
 bool global_Security::Init()
 {
-
+  // 关闭cgo安全检查
+  CGOSET::DisableCgoCheck();
+  QStringList list = RSA::generateRSAKeyQ().split("|");
+  globalsecurity::LOCAL_RSA_PRIVATE = list[0];
+  globalsecurity::LOCAL_RSA_PUBLIC = list[1];
   qDebug() << "RSA密钥对生成成功";
-  qDebug().noquote() << "本地RSA私钥：" << globalsecurity::LOCAL_RSA_PRIVATE;
-  qDebug().noquote() << "本地RSA公钥：" << globalsecurity::LOCAL_RSA_PUBLIC;
+  // qDebug().noquote() << "本地RSA私钥：" << globalsecurity::LOCAL_RSA_PRIVATE;
+  // qDebug().noquote() << "本地RSA公钥：" << globalsecurity::LOCAL_RSA_PUBLIC;
 
   // 获取服务器RSA公钥
-  TcpNetUtils *net = new TcpNetUtils(new TcpGet("/api/encryption/rsapubkey"));
+  TcpGet *get = new TcpGet("/api/encryption/rsapubkey");
+  TcpNetUtils *net = new TcpNetUtils(get);
   connect(net, &TcpNetUtils::requestErrorHappen, [=]()
           { globalsecurity::inited = false; 
             qDebug() << "服务器RSA公钥获取失败"; });
@@ -46,6 +52,8 @@ bool global_Security::Init()
     globalsecurity::inited = Init_State_2(); });
 
   net->sendRequest();
+  net->deleteLater();
+  get->deleteLater();
   return globalsecurity::inited;
 }
 
@@ -131,35 +139,38 @@ bool Init_State_3()
 {
   // 向服务器发送POST请求，获取AES密钥
   QJsonObject json;
-  qDebug().noquote() << "服务器RSA公钥:\n"
-                     << globalsecurity::SERVER_RSA_PUBLIC;
-  // json.insert("feature", rsaPubEncrypt(globalsecurity::FEATURE,
-  //                                      globalsecurity::SERVER_RSA_PUBLIC));
-  // json.insert("pubkey", rsaPubEncrypt(globalsecurity::LOCAL_RSA_PUBLIC,
-  //                                     globalsecurity::SERVER_RSA_PUBLIC));
-  // json.insert("aesp", rsaPubEncrypt(globalsecurity::AES_KEY,
-  //                                   globalsecurity::SERVER_RSA_PUBLIC));
+  // qDebug().noquote() << "服务器RSA公钥:\n"
+  //                    << globalsecurity::SERVER_RSA_PUBLIC;
+  json.insert("feature", RSA::encryptQ(globalsecurity::FEATURE, globalsecurity::SERVER_RSA_PUBLIC));
+  json.insert("pubkey", RSA::encryptQ(globalsecurity::LOCAL_RSA_PUBLIC, globalsecurity::SERVER_RSA_PUBLIC));
+  json.insert("aesp", RSA::encryptQ(globalsecurity::AES_KEY, globalsecurity::SERVER_RSA_PUBLIC));
   TcpPost *post = new TcpPost("/api/encryption/rsatoaes");
   post->setHeader("Content-Type", "application/json");
   post->setBody(json);
   TcpNetUtils *net = new TcpNetUtils(post);
   QObject::connect(net, &TcpNetUtils::requestFinished, [=]()
-                   { globalsecurity::AES_KEY =
-                         net->getResponseBodyJsonDoc()["aesp2"].toString();
-                        //  globalsecurity::AES_KEY =
-                        //      rsaPriDecryptWithBase64(globalsecurity::AES_KEY,
-                        //                    globalsecurity::LOCAL_RSA_PRIVATE);
-                         qDebug().noquote() << "AES协议密钥:\n"
-                                            << globalsecurity::AES_KEY; });
+                   {
+    QString key2 = net->getResponseBodyJsonDoc()["aesp2"].toString();
+    key2 = RSA::decryptQ(key2);
+    qDebug().noquote() << "AES协议密钥1:" << globalsecurity::AES_KEY; 
+    qDebug().noquote() << "AES协议密钥2:" << key2; 
+    // 计算两个密钥的亦或数值
+    QString _key3 = XorQ(globalsecurity::AES_KEY, key2);   
+    // 计算MD5值
+    globalsecurity::AES_KEY = QCryptographicHash::hash(_key3.toUtf8(), QCryptographicHash::Md5).toHex();
+    qDebug().noquote() << "AES协议密钥:" << globalsecurity::AES_KEY; });
+
   QObject::connect(net, &TcpNetUtils::requestErrorHappen, [=]()
                    {
-                     // 连接vctrl静态类的信号
-                     QObject::connect(vctrler::m_vctrler,&vctrler::dialogResult,
-                                      [=]()
-                                      {
-                                        vctrler::emergencyExit();
-                                      }); });
+    // 连接vctrl静态类的信号
+    QObject::connect(vctrler::m_vctrler, &vctrler::dialogResult,
+                     [=]()
+                     {
+                       vctrler::emergencyExit();
+                     }); });
   net->sendRequest();
+  post->deleteLater();
+  net->deleteLater();
   return true;
 }
 

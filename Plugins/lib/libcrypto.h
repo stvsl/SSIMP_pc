@@ -95,6 +95,10 @@ extern GoString GoAESEncrypt(GoString plaintext, GoString key);
 //
 extern GoString GoRSAKey();
 
+// 注册环境变量
+//
+extern void CloseCGOWarningEnv();
+
 #ifdef __cplusplus
 }
 #endif
