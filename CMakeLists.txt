@@ -56,6 +56,9 @@ qt_add_executable(appSSIMP_pc
     Service/businessservice.h Service/businessservice.cpp
     Service/entity.h Service/entity.cpp
 
+    ModeData/employeedata.h ModeData/employeedata.cpp
+    ModeData/employmodel.h ModeData/employmodel.cpp
+
     # 界面辅助代理封装
     Daemon/vctrler.h Daemon/vctrler.cpp
 

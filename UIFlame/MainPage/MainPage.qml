@@ -24,6 +24,10 @@ Window {
         daemon.close();
         Qt.quit();
     }
+    Rectangle{
+        anchors.fill: parent
+        color:"#fbfcfe"
+    }
 
     Flow {
         anchors.left: parent.left
@@ -39,7 +43,7 @@ Window {
 
         x: 0
         z: 0
-        width: root.width
+        width: menubar.width
         height: 70
         border.width: 0
         smooth: true
@@ -196,9 +200,9 @@ Window {
         StackView {
             id: mainstack
 
-            x: menubar.width + 10
-            y: topbar.height / 3
-            width: root.width - x - 10
+            x: menubar.width+20
+            y: 5
+            width: root.width - x - 20
             height: root.height - y - 10
             initialItem: globaloverview
 
