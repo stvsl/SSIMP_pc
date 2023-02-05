@@ -53,7 +53,8 @@ qt_add_executable(appSSIMP_pc
     Security/encryption.h Security/encryption.cpp
 
     # 业务逻辑组件封装
-    Service/businessservice.h Service/businessservice.cpp
+    Service/accountservice.h Service/accountservice.cpp
+    Service/employeeservice.h Service/employeeservice.cpp
     Service/entity.h Service/entity.cpp
 
     ModeData/employeedata.h ModeData/employeedata.cpp

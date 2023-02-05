@@ -7,8 +7,6 @@ Item {
     id: emlpoyeepage
 
     layer.smooth: true
-    width: parent.width
-    height: parent.height
 
     Flow {
         anchors.fill: parent

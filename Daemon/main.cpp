@@ -7,7 +7,7 @@
 #include <QQmlApplicationEngine>
 #include <QQuickStyle>
 #include <QTranslator>
-#include <Service/businessservice.h>
+#include <Service/accountservice.h>
 
 int main(int argc, char *argv[])
 {
