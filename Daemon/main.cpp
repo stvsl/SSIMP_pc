@@ -8,6 +8,7 @@
 #include <QQuickStyle>
 #include <QTranslator>
 #include <Service/accountservice.h>
+#include <Service/employeeservice.h>
 
 int main(int argc, char *argv[])
 {
@@ -27,6 +28,7 @@ int main(int argc, char *argv[])
   /************************注册组件************************/
   qmlRegisterType<VerificationCode>("Utils.Verify", 1, 0, "VerificationCode");
   qmlRegisterType<AccountService>("Service.Account", 1, 0, "AccountService");
+  qmlRegisterType<EmployeeService>("Service.Employee", 1, 0, "EmployeeService");
   // 注册组件
   // TODO
   QTranslator translator;

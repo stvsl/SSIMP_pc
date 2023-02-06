@@ -2,6 +2,8 @@
 #define EMPLOYEESERVICE_H
 
 #include <QObject>
+#include <QQmlListProperty>
+#include "ModeData/employeedata.h"
 
 class EmployeeService : public QObject
 {
@@ -9,11 +11,19 @@ class EmployeeService : public QObject
 public:
     explicit EmployeeService(QObject *parent = nullptr);
     Q_INVOKABLE void getEmployeeInfoList();
-    Q_INVOKABLE void addEmployee();
-    Q_INVOKABLE void deleteEmployee(QString name);
-    Q_INVOKABLE void updateEmployee(QString name, QString password);
-    Q_INVOKABLE void queryEmployee(QString name);
-    Q_INVOKABLE void queryEmployStatus();
+    Q_INVOKABLE QQmlListProperty<EmployeeData> employees();
+
+    Q_INVOKABLE void addEmployee(QString employid, QString name, QString birthDate,
+                                 QString hireDate, QString idNumber,
+                                 QString address, QString imageUrl,
+                                 QString photoUrl, QString tel);
+    Q_INVOKABLE void deleteEmployee(QString id);
+    Q_INVOKABLE void updateEmployee(QString employid, QString name, QString birthDate,
+                                    QString hireDate, QString idNumber,
+                                    QString address, QString imageUrl,
+                                    QString photoUrl, QString tel);
+    Q_INVOKABLE void queryEmployee(QString id);
+
 signals:
     void addEmployeeSuccess();
     void addEmployeeFailed();
@@ -23,6 +33,10 @@ signals:
     void updateEmployeeFailed();
     void queryEmployeeSuccess();
     void queryEmployeeFailed();
+    void employeeInfoListChanged();
+
+private:
+    static QList<EmployeeData *> *m_employees;
 };
 
 #endif // EMPLOYEESERVICE_H

@@ -1,12 +1,29 @@
 import Qt5Compat.GraphicalEffects
+import QtQml.WorkerScript
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
+import Service.Employee
 
 Item {
     id: emlpoyeepage
 
     layer.smooth: true
+
+    Timer {
+        id: timer
+
+        interval: 100
+        running: true
+        repeat: false
+        onTriggered: {
+            employeeService.getEmployeeInfoList();
+        }
+    }
+
+    EmployeeService {
+        id: employeeService
+    }
 
     Flow {
         anchors.fill: parent
@@ -118,7 +135,7 @@ Item {
                         height: parent.height
 
                         Image {
-                            source: "qrc:/icon/AboutPage/icon/AboutPage/关于我们.png"
+                            source: "qrc:/icon/EmployeePage/icon/EmployeePage/人员情况.png"
                             anchors.centerIn: parent
                             fillMode: Image.PreserveAspectFit
                             width: 75
@@ -221,7 +238,7 @@ Item {
                         height: parent.height
 
                         Image {
-                            source: "qrc:/icon/AboutPage/icon/AboutPage/关于我们.png"
+                            source: "qrc:/icon/EmployeePage/icon/EmployeePage/签到签退人数.png"
                             anchors.centerIn: parent
                             fillMode: Image.PreserveAspectFit
                             width: 75
@@ -315,7 +332,7 @@ Item {
                         height: parent.height
 
                         Image {
-                            source: "qrc:/icon/AboutPage/icon/AboutPage/关于我们.png"
+                            source: "qrc:/icon/EmployeePage/icon/EmployeePage/缺勤率完成率.png"
                             anchors.centerIn: parent
                             fillMode: Image.PreserveAspectFit
                             width: 75
@@ -358,15 +375,16 @@ Item {
 
                     width: 35
                     height: 35
-                    scale: 0.598
-                    //        rotation: 90
+                    scale: 0.5
+                    rotation: 270
                     layer.smooth: true
                 }
 
                 Text {
                     width: 35
                     height: parent.height
-                    text: upordown.checked ? qsTr("1") : qsTr("2")
+                    color: "#8E99A5"
+                    text: upordown.checked ? qsTr("升序") : qsTr("降序")
                     horizontalAlignment: Text.AlignHCenter
                     verticalAlignment: Text.AlignVCenter
                     font.pointSize: 12
@@ -414,11 +432,14 @@ Item {
 
             Flow {
                 id: grid
+
                 anchors.fill: parent
                 anchors.margins: 20
                 spacing: 20
+
                 Row {
                     width: 400
+
                     // 用户ID
                     Text {
                         text: qsTr("用户ID:")
@@ -439,10 +460,12 @@ Item {
                     }
 
                 }
+
                 Row {
                     // 用户ID
                     width: 400
                     height: 800
+
                     Text {
                         text: qsTr("用户ID:")
                         width: 100
@@ -462,7 +485,6 @@ Item {
                     }
 
                 }
-
 
             }
 

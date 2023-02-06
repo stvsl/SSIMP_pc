@@ -15,7 +15,7 @@ add_compile_definitions(
     DEV_MODE=0
 )
 
-find_package(Qt6 COMPONENTS Quick REQUIRED)
+find_package(Qt6 COMPONENTS Quick Qml REQUIRED)
 find_package(Qt6 REQUIRED Widgets LinguistTools QuickControls2)
 
 ADD_DEFINITIONS(-DTORRENT_LIBRARY)
@@ -58,7 +58,6 @@ qt_add_executable(appSSIMP_pc
     Service/entity.h Service/entity.cpp
 
     ModeData/employeedata.h ModeData/employeedata.cpp
-    ModeData/employmodel.h ModeData/employmodel.cpp
 
     # 界面辅助代理封装
     Daemon/vctrler.h Daemon/vctrler.cpp
@@ -113,6 +112,7 @@ target_link_libraries(appSSIMP_pc
     PRIVATE Qt6::Quick
     PRIVATE Qt6::Widgets
     PRIVATE Qt6::QuickControls2
+    PRIVATE Qt6::Qml
     )
 
 target_link_libraries(appSSIMP_pc PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Plugins/lib/libcrypto.so)
