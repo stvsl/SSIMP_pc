@@ -1,7 +1,8 @@
+import Data.Employee
 import Qt5Compat.GraphicalEffects
-import QtQml.WorkerScript
 import QtQuick
 import QtQuick.Controls
+import QtQuick.Controls.Material
 import QtQuick.Layouts
 import Service.Employee
 
@@ -23,6 +24,34 @@ Item {
 
     EmployeeService {
         id: employeeService
+    }
+
+    ListModel {
+        id: employeedata
+    }
+
+    Connections {
+        function onEmployeeInfoListChanged() {
+            console.log("employee list changed: " + typeof employeeService.employees());
+            console.log("employee list changed: " + employeeService.employees().length);
+            employeeCount.text = employeeService.employees().length;
+            employeedata.clear();
+            if (upordown.checked) {
+                employeedata.clear();
+                for (var i = employeeService.employees().length - 1; i >= 0; i--) {
+                    var employee = employeeService.employees()[i];
+                    employeedata.append(employee);
+                }
+            } else {
+                employeedata.clear();
+                for (var j = 0; j < employeeService.employees().length; j++) {
+                    var employe = employeeService.employees()[j];
+                    employeedata.append(employe);
+                }
+            }
+        }
+
+        target: employeeService
     }
 
     Flow {
@@ -88,7 +117,9 @@ Item {
                             }
 
                             Text {
-                                text: "0"
+                                id: employeeCount
+
+                                text: employeeService.employees().length
                                 horizontalAlignment: Text.AlignLeft
                                 verticalAlignment: Text.AlignVCenter
                                 width: 50
@@ -378,6 +409,24 @@ Item {
                     scale: 0.5
                     rotation: 270
                     layer.smooth: true
+                    onCheckedChanged: {
+                        var index = employeelist.currentIndex;
+                        if (upordown.checked) {
+                            employeedata.clear();
+                            for (var i = employeeService.employees().length - 1; i >= 0; i--) {
+                                var employee = employeeService.employees()[i];
+                                employeedata.append(employee);
+                            }
+                            employeelist.currentIndex = employeeService.employees().length - 1 - index;
+                        } else {
+                            employeedata.clear();
+                            for (var j = 0; j < employeeService.employees().length; j++) {
+                                var employe = employeeService.employees()[j];
+                                employeedata.append(employe);
+                            }
+                            employeelist.currentIndex = employeeService.employees().length - 1 - index;
+                        }
+                    }
                 }
 
                 Text {
@@ -407,9 +456,187 @@ Item {
             id: leftbar
 
             radius: 10
-            width: parent.width / 4
+            width: parent.width / 5 + 25
             height: parent.height - topinfobar.height - 110
             layer.enabled: true
+
+            ListView {
+                id: employeelist
+
+                anchors.fill: parent
+                anchors.margins: 8
+                spacing: 3
+                model: employeedata
+                onOpacityChanged: {
+                    if (opacity === 0)
+                        listView.currentIndex = index;
+
+                }
+
+                populate: Transition {
+                    NumberAnimation {
+                        property: "opacity"
+                        from: 0
+                        to: 1
+                        duration: 200
+                    }
+                    //populate Transition is end
+
+                }
+
+                add: Transition {
+                    ParallelAnimation {
+                        NumberAnimation {
+                            property: "opacity"
+                            from: 0
+                            to: 1
+                            duration: 200
+                        }
+
+                        NumberAnimation {
+                            property: "y"
+                            from: 0
+                            duration: 200
+                        }
+
+                    }
+                    // add transition is end
+
+                }
+
+                /*  displaced属性
+         *  此属性用于指定通用的、由于model变化导致Item位移时的动画效果，还有removeDisplaced、moveDisplaced
+         *  如果同时指定了displaced 和xxxDisplaced,那么xxxDisplaced生效
+         */
+                displaced: Transition {
+                    SpringAnimation {
+                        property: "y"
+                        spring: 3
+                        damping: 0.1
+                        epsilon: 0.25
+                    }
+
+                }
+
+                remove: Transition {
+                    SequentialAnimation {
+                        NumberAnimation {
+                            property: "y"
+                            to: 0
+                            duration: 120
+                        }
+
+                        NumberAnimation {
+                            property: "opacity"
+                            to: 0
+                            duration: 120
+                        }
+
+                    }
+                    //remove Transition is end
+
+                }
+
+                delegate: Item {
+                    height: 70
+                    width: parent.width
+
+                    Rectangle {
+                        anchors.fill: parent
+                        // 判断是否选中
+                        color: employeelist.currentIndex === index ? "#F5F5F5" : "transparent"
+                        radius: 10
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                employeelist.currentIndex = index;
+                            }
+                        }
+                        // 底部分割线
+
+                        Rectangle {
+                            width: parent.width / 1.2
+                            height: 1
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            anchors.bottom: parent.bottom
+
+                            gradient: Gradient {
+                                GradientStop {
+                                    position: 0
+                                    color: "#FFFFFF"
+                                }
+
+                                GradientStop {
+                                    position: 0.5
+                                    color: "#EEEEEE"
+                                }
+
+                                GradientStop {
+                                    position: 1
+                                    color: "#FFFFFF"
+                                }
+
+                            }
+
+                        }
+
+                        Item {
+                            anchors.fill: parent
+
+                            Image {
+                                id: listimage
+
+                                source: "qrc:/icon/EmployeePage/icon/EmployeePage/缺勤率完成率.png"
+                                width: 50
+                                height: 50
+                                fillMode: Image.PreserveAspectFit
+                                anchors.verticalCenter: parent.verticalCenter
+                                anchors.left: parent.left
+                                anchors.leftMargin: 15
+                            }
+
+                            Text {
+                                id: listname
+
+                                y: 10
+                                text: name
+                                color: "#292826"
+                                font.styleName: "Medium"
+                                font.pointSize: 15
+                                anchors.left: listimage.right
+                                anchors.leftMargin: 15
+                            }
+
+                            Text {
+                                id: listemployid
+
+                                text: "eid " + employid
+                                color: "#8E99A5"
+                                font.styleName: "Medium"
+                                font.pointSize: 10
+                                anchors.left: listimage.right
+                                anchors.bottom: listimage.bottom
+                                anchors.leftMargin: 15
+                            }
+
+                            Text {
+                                text: "显示详情 >"
+                                color: "#AA8E99A5"
+                                font.styleName: "Medium"
+                                font.pointSize: 10
+                                anchors.right: parent.right
+                                anchors.rightMargin: 20
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+
+                        }
+
+                    }
+
+                }
+
+            }
 
             layer.effect: DropShadow {
                 cached: true
@@ -431,61 +658,402 @@ Item {
             layer.enabled: true
 
             Flow {
-                id: grid
-
                 anchors.fill: parent
-                anchors.margins: 20
-                spacing: 20
+                anchors.margins: 30
+                spacing: 25
 
-                Row {
-                    width: 400
+                Flow {
+                    id: mainflow
+                    width: (parent.width / 5) * 3
+                    spacing: 21
 
-                    // 用户ID
-                    Text {
-                        text: qsTr("用户ID:")
-                        width: 100
-                        height: 25
-                        color: "#8E99A5"
-                        font.styleName: "Medium"
-                        font.pointSize: 18
+                    Item {
+                        width: parent.width
+                        height: 30
+
+                        Row {
+                            Text {
+                                text: qsTr("员工编号(EID): ")
+                                color: "#AA201F1F"
+                                font.styleName: "Medium"
+                                font.pointSize: 16
+                            }
+
+                            Text {
+                                text: employeedata.get(employeelist.currentIndex).employid
+                                height: 25
+                                color: "#AA201F1F"
+                                font.styleName: "Medium"
+                                font.pointSize: 16
+                            }
+
+                        }
+
                     }
 
-                    Text {
-                        text: qsTr("123456")
-                        width: 100
-                        height: 25
-                        color: "#8E99A5"
-                        font.styleName: "Medium"
-                        font.pointSize: 18
+                    Item {
+                        width: parent.width / 5
+                        height: 30
+
+                        Row {
+                            Text {
+                                text: qsTr("姓名: ")
+                                color: "#AA201F1F"
+                                font.styleName: "Medium"
+                                font.pointSize: 16
+                            }
+
+                            Text {
+                                text: employeedata.get(employeelist.currentIndex).name
+                                color: "#AA201F1F"
+                                font.styleName: "Medium"
+                                font.pointSize: 16
+                            }
+
+                        }
+
+                    }
+
+                    Item {
+                        width: parent.width / 6
+                        height: 30
+
+                        Row {
+                            Text {
+                                text: qsTr("性别: ")
+                                color: "#AA201F1F"
+                                font.styleName: "Medium"
+                                font.pointSize: 16
+                            }
+
+                            Text {
+                                text: employeedata.get(employeelist.currentIndex).idNumber[16] % 2 === 0 ? qsTr("女") : qsTr("男")
+                                color: "#AA201F1F"
+                                font.styleName: "Medium"
+                                font.pointSize: 16
+                            }
+
+                        }
+
+                    }
+
+                    Item {
+                        width: parent.width / 6
+                        height: 30
+
+                        Row {
+                            Text {
+                                text: qsTr("年龄: ")
+                                color: "#AA201F1F"
+                                font.styleName: "Medium"
+                                font.pointSize: 16
+                            }
+
+                            Text {
+                                // 通过身份证号码计算年龄
+                                text: new Date().getFullYear() - parseInt(employeedata.get(employeelist.currentIndex).idNumber.substring(6, 10))
+                                color: "#AA201F1F"
+                                font.styleName: "Medium"
+                                font.pointSize: 16
+                            }
+
+                        }
+
+                    }
+
+                    Item {
+                        width: parent.width / 6
+                        height: 30
+
+                        Row {
+                            Text {
+                                text: qsTr("出生日期: ")
+                                color: "#AA201F1F"
+                                font.styleName: "Medium"
+                                font.pointSize: 16
+                            }
+
+                            Text {
+                                text: employeedata.get(employeelist.currentIndex).idNumber.substring(6, 10) + "年" + employeedata.get(employeelist.currentIndex).idNumber.substring(10, 12) + "月" + employeedata.get(employeelist.currentIndex).idNumber.substring(12, 14) + "日"
+                                color: "#AA201F1F"
+                                font.styleName: "Medium"
+                                font.pointSize: 16
+                            }
+
+                        }
+
+                    }
+
+                    Item {
+                        width: parent.width
+                        height: 30
+
+                        Row {
+                            Text {
+                                text: qsTr("身份证号: ")
+                                color: "#AA201F1F"
+                                font.styleName: "Medium"
+                                font.pointSize: 16
+                            }
+
+                            Text {
+                                text: employeedata.get(employeelist.currentIndex).idNumber
+                                color: "#AA201F1F"
+                                font.styleName: "Medium"
+                                font.pointSize: 16
+                            }
+
+                        }
+
+                    }
+
+                    Item {
+                        width: parent.width
+                        height: 30
+
+                        Row {
+                            Text {
+                                text: qsTr("家庭地址: ")
+                                color: "#AA201F1F"
+                                font.styleName: "Medium"
+                                font.pointSize: 16
+                            }
+
+                            Text {
+                                text: employeedata.get(employeelist.currentIndex).address
+                                color: "#AA201F1F"
+                                font.styleName: "Medium"
+                                font.pointSize: 16
+                            }
+
+                        }
+
+                    }
+
+                    Item {
+                        width: parent.width * 11 / 30 + 25
+                        height: 30
+
+                        Row {
+                            Text {
+                                text: qsTr("雇佣日期: ")
+                                color: "#AA201F1F"
+                                font.styleName: "Medium"
+                                font.pointSize: 16
+                            }
+
+                            Text {
+                                text: employeedata.get(employeelist.currentIndex).hireDate.substring(0, 4) + "年" + employeedata.get(employeelist.currentIndex).hireDate.substring(5, 7) + "月" + employeedata.get(employeelist.currentIndex).hireDate.substring(8, 10) + "日"
+                                color: "#AA201F1F"
+                                font.styleName: "Medium"
+                                font.pointSize: 16
+                            }
+
+                        }
+
+                    }
+
+                    Item {
+                        width: parent.width / 2
+                        height: 30
+
+                        Row {
+                            Text {
+                                text: qsTr("联系电话: ")
+                                color: "#AA201F1F"
+                                font.styleName: "Medium"
+                                font.pointSize: 16
+                            }
+
+                            Text {
+                                text: employeedata.get(employeelist.currentIndex).tel
+                                color: "#AA201F1F"
+                                font.styleName: "Medium"
+                                font.pointSize: 16
+                            }
+
+                        }
+
+                    }
+                    // 修改信息,删除员工,重置密码,更新人像照片按钮
+
+                    Item {
+                        width: parent.width
+                        height: 40
+
+                        Row {
+                            spacing: 35
+                            anchors.left: parent.left
+
+                            Rectangle {
+                                width: 120
+                                height: 40
+                                color: "#1791FF"
+                                radius: 5
+
+                                Text {
+                                    text: qsTr("修改信息")
+                                    color: "white"
+                                    font.styleName: "Medium"
+                                    font.pointSize: 14
+                                    anchors.centerIn: parent
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                    }
+                                }
+
+                            }
+
+                            Rectangle {
+                                width: 120
+                                height: 40
+                                color: "#1791FF"
+                                radius: 5
+
+                                Text {
+                                    text: qsTr("重置密码")
+                                    color: "white"
+                                    font.styleName: "Medium"
+                                    font.pointSize: 14
+                                    anchors.centerIn: parent
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                    }
+                                }
+
+                            }
+
+                            Rectangle {
+                                width: 160
+                                height: 40
+                                color: "#1791FF"
+                                radius: 5
+
+                                Text {
+                                    text: qsTr("更新人像照片")
+                                    color: "white"
+                                    font.styleName: "Medium"
+                                    font.pointSize: 14
+                                    anchors.centerIn: parent
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                    }
+                                }
+
+                            }
+
+                            Rectangle {
+                                width: 135
+                                height: 40
+                                color: "#FF516B"
+                                radius: 5
+
+                                Text {
+                                    text: qsTr("删除此员工")
+                                    color: "white"
+                                    font.styleName: "Medium"
+                                    font.pointSize: 14
+                                    anchors.centerIn: parent
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                    }
+                                }
+
+                            }
+
+                        }
+
                     }
 
                 }
 
-                Row {
-                    // 用户ID
-                    width: 400
-                    height: 800
+                Item {
+                    id:photoview
+                    width: parent.width / 3
+                    height: parent.height / 3
 
-                    Text {
-                        text: qsTr("用户ID:")
-                        width: 100
-                        height: 25
-                        color: "#8E99A5"
-                        font.styleName: "Medium"
-                        font.pointSize: 18
-                    }
+                    Column {
+                        anchors.left: parent.left
+                        anchors.right: parent.right
+                        anchors.leftMargin: 20
 
-                    Text {
-                        text: qsTr("123456")
-                        width: 100
-                        height: 25
-                        color: "#8E99A5"
-                        font.styleName: "Medium"
-                        font.pointSize: 18
+                        Text {
+                            text: qsTr("员工照片")
+                            color: "#AA201F1F"
+                            font.styleName: "Medium"
+                            font.pointSize: 18
+                        }
+
+                        Rectangle {
+                            width: parent.width / 2
+                            height: parent.width * 3 / 4
+                            color: "red"
+                            anchors.horizontalCenter: parent.horizontalCenter
+                            radius: 10
+
+                            Image {
+                                id: infoimage
+
+                                anchors.fill: parent
+                                anchors.margins: 10
+                                anchors.centerIn: parent
+                                source: "qrc:/icon/EmployeePage/icon/EmployeePage/缺勤率完成率.png"
+                                fillMode: Image.PreserveAspectFit
+                            }
+
+                        }
+
                     }
 
                 }
 
+                Item{
+                    width: parent.width
+                    height: 1
+                    // 底部分割线
+
+                     Rectangle {
+                         width: parent.width / 1.1
+                         height: 1
+                         anchors.horizontalCenter: parent.horizontalCenter
+                         anchors.top: mainflow.bottom
+
+                         gradient: Gradient {
+                             GradientStop {
+                                 position: 0
+                                 color: "#FFFFFF"
+                             }
+
+                             GradientStop {
+                                 position: 0.5
+                                 color: "#EEEEEE"
+                             }
+
+                             GradientStop {
+                                 position: 1
+                                 color: "#FFFFFF"
+                             }
+
+                         }
+
+                     }
+                }
             }
 
             layer.effect: DropShadow {

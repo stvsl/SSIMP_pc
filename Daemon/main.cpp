@@ -9,6 +9,7 @@
 #include <QTranslator>
 #include <Service/accountservice.h>
 #include <Service/employeeservice.h>
+#include <ModeData/employeedata.h>
 
 int main(int argc, char *argv[])
 {
@@ -29,6 +30,7 @@ int main(int argc, char *argv[])
   qmlRegisterType<VerificationCode>("Utils.Verify", 1, 0, "VerificationCode");
   qmlRegisterType<AccountService>("Service.Account", 1, 0, "AccountService");
   qmlRegisterType<EmployeeService>("Service.Employee", 1, 0, "EmployeeService");
+  qmlRegisterType<EmployeeData>("Data.Employee",1,0,"EmployeeData");
   // 注册组件
   // TODO
   QTranslator translator;

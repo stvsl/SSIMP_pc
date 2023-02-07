@@ -18,6 +18,7 @@ public:
                                  QString address, QString imageUrl,
                                  QString photoUrl, QString tel);
     Q_INVOKABLE void deleteEmployee(QString id);
+    Q_INVOKABLE void deleteAllEmployee();
     Q_INVOKABLE void updateEmployee(QString employid, QString name, QString birthDate,
                                     QString hireDate, QString idNumber,
                                     QString address, QString imageUrl,

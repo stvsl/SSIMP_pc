@@ -28,6 +28,7 @@ void EmployeeService::getEmployeeInfoList()
                             QString datastr = resp["data"].toString();
                             QJsonDocument data = QJsonDocument::fromJson(datastr.toUtf8());
                             QJsonArray array = data.array();
+                            deleteAllEmployee();
                             for (int i = 0; i < array.size(); i++) {
                                 QJsonObject obj = array.at(i).toObject();
                                 QString employid = obj["employid"].toString();
@@ -37,7 +38,6 @@ void EmployeeService::getEmployeeInfoList()
                                 QString tel = obj["tel"].isString() ? obj["telephone"].toString() : QString::number(obj["telephone"].toVariant().toLongLong());
                                 QString address = obj["address"].toString();
                                 QString avatar = obj["avatar"].toString();
-                                QString passwd = obj["passwd"].toString();
                                 QString hireDay = obj["employDay"].toString();
                                 QString birthday = obj["birthDay"].toString();
                                 QString bustPhoto = obj["bustPhoto"].toString();
@@ -79,6 +79,11 @@ void EmployeeService::deleteEmployee(QString idNumber)
         }
     }
     emit deleteEmployeeFailed();
+}
+
+void EmployeeService::deleteAllEmployee()
+{
+    m_employees->clear();
 }
 
 void EmployeeService::updateEmployee(QString employid, QString name, QString birthDate, QString hireDate,
