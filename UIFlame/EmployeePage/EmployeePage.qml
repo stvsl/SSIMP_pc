@@ -1,14 +1,16 @@
-import Data.Employee
+import Data.Employee 1.0
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Material
-import QtQuick.Layouts
-import Service.Employee
+import QtWebEngine
+import Service.Employee 1.0
 
 Item {
     id: emlpoyeepage
 
+    // Material主题，蓝色
+    Material.theme: Material.Light
     layer.smooth: true
 
     Timer {
@@ -19,6 +21,7 @@ Item {
         repeat: false
         onTriggered: {
             employeeService.getEmployeeInfoList();
+            infochartanimation.start();
         }
     }
 
@@ -385,6 +388,164 @@ Item {
                 clip: topinfobar.clip
                 layer.enabled: topinfobar.layer.enabled
                 layer.effect: topinfobar.layer.effect
+
+                Row {
+                    anchors.fill: parent
+                    anchors.margins: 10
+
+                    Column {
+                        width: parent.width
+                        height: parent.height
+
+                        Row {
+                            x: 20
+                            width: parent.width
+                            height: 50
+                            spacing: 10
+
+                            Text {
+                                width: 68
+                                height: 50
+                                text: qsTr("查找员工:")
+                                horizontalAlignment: Text.AlignLeft
+                                verticalAlignment: Text.AlignVCenter
+                                font.styleName: "Normal"
+                                font.pointSize: 12
+                                color: "#082342"
+                            }
+
+                            TextField {
+                                id: searchinput
+
+                                width: 150
+                                height: 40
+                                placeholderText: qsTr("请输入员工工号")
+                                font.styleName: "Normal"
+                                font.pointSize: 12
+                                color: "#082342"
+                                horizontalAlignment: Text.AlignLeft
+                                verticalAlignment: Text.AlignVCenter
+                                anchors.verticalCenter: parent.verticalCenter
+                                focus: true
+                            }
+
+                            Switch {
+                                id: searchtype
+
+                                width: 35
+                                height: 35
+                                scale: 0.75
+                                anchors.verticalCenter: parent.verticalCenter
+                                layer.smooth: true
+                                onCheckedChanged: {
+                                    if (searchtype.checked)
+                                        searchinput.placeholderText = qsTr("请输入员工姓名");
+                                    else
+                                        searchinput.placeholderText = qsTr("请输入员工工号");
+                                }
+                            }
+
+                            //    模式Text
+                            Text {
+                                id: searchtypetext
+
+                                width: 68
+                                height: 50
+                                text: searchtype.checked ? qsTr("按姓名查找") : qsTr("按工号查找")
+                                horizontalAlignment: Text.AlignLeft
+                                verticalAlignment: Text.AlignVCenter
+                                font.styleName: "Normal"
+                                font.pointSize: 12
+                                color: "#082342"
+                            }
+
+                        }
+
+                        // 按钮组 下拉列表（全部，缺勤，迟到，早退，出勤），添加员工，导出
+                        Row {
+                            x: 20
+                            width: parent.width
+                            height: 50
+                            spacing: 10
+
+                            Text {
+                                width: 68
+                                height: 50
+                                text: qsTr("规则筛选:")
+                                horizontalAlignment: Text.AlignLeft
+                                verticalAlignment: Text.AlignVCenter
+                                font.styleName: "Normal"
+                                font.pointSize: 12
+                                color: "#082342"
+                            }
+
+                            // 下拉列表
+                            ComboBox {
+                                id: searchtypebox
+
+                                width: 100
+                                height: 40
+                                font.styleName: "Normal"
+                                font.pointSize: 12
+                                model: ["全部", "缺勤", "迟到", "早退", "出勤"]
+                                currentIndex: 0
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+
+                            Rectangle {
+                                width: 100
+                                height: 30
+                                color: "#1791FF"
+                                radius: 5
+                                anchors.verticalCenter: parent.verticalCenter
+
+                                Text {
+                                    text: qsTr("添加员工")
+                                    color: "white"
+                                    font.styleName: "Medium"
+                                    font.pointSize: 12
+                                    anchors.centerIn: parent
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                    }
+                                }
+
+                            }
+
+                            Rectangle {
+                                width: 100
+                                height: 30
+                                color: "#1791FF"
+                                radius: 5
+                                anchors.verticalCenter: parent.verticalCenter
+
+                                Text {
+                                    text: qsTr("导出列表")
+                                    color: "white"
+                                    font.styleName: "Medium"
+                                    font.pointSize: 12
+                                    anchors.centerIn: parent
+                                }
+
+                                MouseArea {
+                                    anchors.fill: parent
+                                    cursorShape: Qt.PointingHandCursor
+                                    onClicked: {
+                                    }
+                                }
+
+                            }
+
+                        }
+
+                    }
+
+                }
+
             }
 
         }
@@ -553,8 +714,8 @@ Item {
                                 employeelist.currentIndex = index;
                             }
                         }
-                        // 底部分割线
 
+                        // 底部分割线
                         Rectangle {
                             width: parent.width / 1.2
                             height: 1
@@ -664,6 +825,7 @@ Item {
 
                 Flow {
                     id: mainflow
+
                     width: (parent.width / 5) * 3
                     spacing: 21
 
@@ -875,8 +1037,8 @@ Item {
                         }
 
                     }
-                    // 修改信息,删除员工,重置密码,更新人像照片按钮
 
+                    // 修改信息,删除员工,重置密码,更新人像照片按钮
                     Item {
                         width: parent.width
                         height: 40
@@ -984,7 +1146,8 @@ Item {
                 }
 
                 Item {
-                    id:photoview
+                    id: photoview
+
                     width: parent.width / 3
                     height: parent.height / 3
 
@@ -1023,37 +1186,67 @@ Item {
 
                 }
 
-                Item{
+                Item {
+                    // 底部分割线
                     width: parent.width
                     height: 1
-                    // 底部分割线
 
-                     Rectangle {
-                         width: parent.width / 1.1
-                         height: 1
-                         anchors.horizontalCenter: parent.horizontalCenter
-                         anchors.top: mainflow.bottom
+                    Rectangle {
+                        width: parent.width / 1.1
+                        height: 1
 
-                         gradient: Gradient {
-                             GradientStop {
-                                 position: 0
-                                 color: "#FFFFFF"
-                             }
+                        gradient: Gradient {
+                            GradientStop {
+                                position: 0
+                                color: "#FFFFFF"
+                            }
 
-                             GradientStop {
-                                 position: 0.5
-                                 color: "#EEEEEE"
-                             }
+                            GradientStop {
+                                position: 0.5
+                                color: "#EEEEEE"
+                            }
 
-                             GradientStop {
-                                 position: 1
-                                 color: "#FFFFFF"
-                             }
+                            GradientStop {
+                                position: 1
+                                color: "#FFFFFF"
+                            }
 
-                         }
+                        }
 
-                     }
+                    }
+
                 }
+
+                Item {
+                    width: parent.width
+                    height: parent.height - photoview.height - 80
+
+                    Rectangle {
+                        id: infochart
+
+                        anchors.fill: parent
+
+                        WebEngineView {
+                            anchors.fill: parent
+                            url: "qrc:/htmlpage/htmlpage/employeeinfo.html"
+                        }
+
+                        PropertyAnimation {
+                            id: infochartanimation
+
+                            target: infochart
+                            property: "opacity"
+                            from: 0
+                            to: 1
+                            duration: 500
+                            running: false
+                            loops: 1
+                        }
+
+                    }
+
+                }
+
             }
 
             layer.effect: DropShadow {

@@ -33,5 +33,10 @@
         <file>icon/EmployeePage/签到签退人数.png</file>
         <file>icon/EmployeePage/缺勤率完成率.png</file>
         <file>icon/EmployeePage/人员情况.png</file>
+        <file>resource.qrc</file>
+        <file>icon/EmployeePage/搜索.png</file>
+    </qresource>
+    <qresource prefix="/htmlpage">
+        <file>htmlpage/employeeinfo.html</file>
     </qresource>
 </RCC>

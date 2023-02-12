@@ -5,8 +5,9 @@ Designer {
 ##^##*/
 
 import "../AboutPage"
-import "../Menu"
 import "../EmployeePage"
+import "../Menu"
+import "../TaskPage"
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -24,9 +25,10 @@ Window {
         daemon.close();
         Qt.quit();
     }
-    Rectangle{
+
+    Rectangle {
         anchors.fill: parent
-        color:"#fbfcfe"
+        color: "#fbfcfe"
     }
 
     Flow {
@@ -131,16 +133,16 @@ Window {
 
         Component {
             id: staffmanagement
-            EmployeePage{}
+
+            EmployeePage {
+            }
+
         }
 
         Component {
             id: worktask
 
-            Rectangle {
-                width: 200
-                height: 100
-                color: "green"
+            TaskPage {
             }
 
         }
@@ -200,7 +202,7 @@ Window {
         StackView {
             id: mainstack
 
-            x: menubar.width+20
+            x: menubar.width + 20
             y: 5
             width: root.width - x - 20
             height: root.height - y - 10

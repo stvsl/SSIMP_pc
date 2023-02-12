@@ -15,7 +15,7 @@ add_compile_definitions(
     DEV_MODE=0
 )
 
-find_package(Qt6 COMPONENTS Quick Qml REQUIRED)
+find_package(Qt6 COMPONENTS Quick Qml REQUIRED WebEngineQuick)
 find_package(Qt6 REQUIRED Widgets LinguistTools QuickControls2)
 
 ADD_DEFINITIONS(-DTORRENT_LIBRARY)
@@ -76,6 +76,7 @@ qt_add_qml_module(appSSIMP_pc
     QML_FILES UIFlame/LoadPage/LoadPage.qml
     QML_FILES UIFlame/MainPage/MainPage.qml
     QML_FILES UIFlame/EmployeePage/EmployeePage.qml
+    QML_FILES UIFlame/TaskPage/TaskPage.qml
     QML_FILES UIFlame/AboutPage/AboutPage.qml
     QML_FILES UIFlame/AboutPage/AboutQt.qml
     QML_FILES UIFlame/AboutPage/AboutQml.qml
@@ -113,6 +114,7 @@ target_link_libraries(appSSIMP_pc
     PRIVATE Qt6::Widgets
     PRIVATE Qt6::QuickControls2
     PRIVATE Qt6::Qml
+    PRIVATE Qt6::WebEngineQuick
     )
 
 target_link_libraries(appSSIMP_pc PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Plugins/lib/libcrypto.so)
