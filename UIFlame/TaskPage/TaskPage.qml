@@ -421,8 +421,8 @@ Item {
                 id: mainarea
 
                 width: parent.width
-                height: parent.height - overviewarea.height - 20
                 anchors.top: overviewarea.bottom
+                anchors.bottom: parent.bottom
                 anchors.topMargin: 10
                 layer.enabled: true
                 color: "white"

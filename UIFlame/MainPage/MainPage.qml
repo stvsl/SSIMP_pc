@@ -5,7 +5,9 @@ Designer {
 ##^##*/
 
 import "../AboutPage"
+import "../ContentMgrPage"
 import "../EmployeePage"
+import "../LsKyPage"
 import "../Menu"
 import "../TaskPage"
 import Qt5Compat.GraphicalEffects
@@ -150,21 +152,15 @@ Window {
         Component {
             id: contentmanagement
 
-            Rectangle {
-                width: 200
-                height: 100
-                color: "pink"
+            ContentMgrPage {
             }
 
         }
 
         Component {
-            id: supermanagement
+            id: lskymanagement
 
-            Rectangle {
-                width: 200
-                height: 100
-                color: "black"
+            LsKyPage {
             }
 
         }
