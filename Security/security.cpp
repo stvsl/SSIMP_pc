@@ -152,8 +152,6 @@ bool Init_State_3()
                    {
     QString key2 = net->getResponseBodyJsonDoc()["aesp2"].toString();
     key2 = RSA::decryptQ(key2);
-    qDebug().noquote() << "AES协议密钥1:" << globalsecurity::AES_KEY; 
-    qDebug().noquote() << "AES协议密钥2:" << key2; 
     // 计算两个密钥的亦或数值
     QString _key3 = XorQ(globalsecurity::AES_KEY, key2);   
     // 计算MD5值

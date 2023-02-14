@@ -5,8 +5,12 @@ Designer {
 ##^##*/
 
 import "../AboutPage"
-import "../Menu"
+import "../ContentMgrPage"
 import "../EmployeePage"
+import "../LsKyPage"
+import "../Menu"
+import "../TaskPage"
+import "../TaskSetPage"
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -24,9 +28,10 @@ Window {
         daemon.close();
         Qt.quit();
     }
-    Rectangle{
+
+    Rectangle {
         anchors.fill: parent
-        color:"#fbfcfe"
+        color: "#fbfcfe"
     }
 
     Flow {
@@ -131,16 +136,16 @@ Window {
 
         Component {
             id: staffmanagement
-            EmployeePage{}
+
+            EmployeePage {
+            }
+
         }
 
         Component {
             id: worktask
 
-            Rectangle {
-                width: 200
-                height: 100
-                color: "green"
+            TaskPage {
             }
 
         }
@@ -148,32 +153,23 @@ Window {
         Component {
             id: contentmanagement
 
-            Rectangle {
-                width: 200
-                height: 100
-                color: "pink"
+            ContentMgrPage {
             }
 
         }
 
         Component {
-            id: supermanagement
+            id: lskymanagement
 
-            Rectangle {
-                width: 200
-                height: 100
-                color: "black"
+            LsKyPage {
             }
 
         }
 
         Component {
-            id: systemmaintenance
+            id: taskset
 
-            Rectangle {
-                width: 200
-                height: 100
-                color: "yellow"
+            TaskSetPage {
             }
 
         }
@@ -200,7 +196,7 @@ Window {
         StackView {
             id: mainstack
 
-            x: menubar.width+20
+            x: menubar.width + 20
             y: 5
             width: root.width - x - 20
             height: root.height - y - 10
