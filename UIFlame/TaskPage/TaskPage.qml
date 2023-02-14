@@ -49,39 +49,6 @@ Item {
     }
 
     Flow {
-        // Rectangle {
-        //     id: overview2
-        //     width: parent.width - leftarea.width - 20
-        //     height: 150
-        //     radius: 10
-        //     layer.enabled: true
-        //     layer.effect: DropShadow {
-        //         cached: true
-        //         color: "#90849292"
-        //         horizontalOffset: 3
-        //         verticalOffset: 3
-        //         radius: 10
-        //         samples: 2 * radius + 1
-        //     }
-        // }
-        //        // 当前员工任务
-        //        Rectangle {
-        //            id: currentemployeetask
-        //            width: 500
-        //            height: parent.height - 160
-        //            radius: 10
-        //            layer.enabled: true
-        //            color: "red"
-        //            layer.effect: DropShadow {
-        //                cached: true
-        //                color: "#90849292"
-        //                horizontalOffset: 3
-        //                verticalOffset: 3
-        //                radius: 10
-        //                samples: 2 * radius + 1
-        //            }
-        //        }
-
         anchors.fill: parent
         anchors.margins: 10
         anchors.topMargin: 0

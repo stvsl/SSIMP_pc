@@ -10,6 +10,7 @@ import "../EmployeePage"
 import "../LsKyPage"
 import "../Menu"
 import "../TaskPage"
+import "../TaskSetPage"
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -166,12 +167,9 @@ Window {
         }
 
         Component {
-            id: systemmaintenance
+            id: taskset
 
-            Rectangle {
-                width: 200
-                height: 100
-                color: "yellow"
+            TaskSetPage {
             }
 
         }

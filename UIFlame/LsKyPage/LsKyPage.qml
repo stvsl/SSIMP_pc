@@ -23,7 +23,7 @@ Item {
         Timer {
             id: timer
 
-            interval: 200
+            interval: 300
             running: true
             repeat: true
             onTriggered: {
@@ -93,14 +93,9 @@ Item {
 
                     // 从左向右滚动
                     NumberAnimation {
-                        from: -rolltext.width
-                        to: parent.width + rolltext.width
+                        from: parent.width + rolltext.width
+                        to: -1200
                         duration: parent.width * 50
-                    }
-
-                    // 暂停
-                    PauseAnimation {
-                        duration: 1000
                     }
 
                 }

@@ -87,31 +87,31 @@ Item {
         onTriggered: {
             if (name === qsTr("全局概要"))
                 mainstack.push(globaloverview, {
-                });
+            });
             else if (name === qsTr("数据监控"))
                 mainstack.push(datamonitoring, {
-                });
+            });
             else if (name === qsTr("员工管理"))
                 mainstack.push(staffmanagement, {
-                });
+            });
             else if (name === qsTr("工作任务"))
                 mainstack.push(worktask, {
-                });
+            });
             else if (name === qsTr("内容管理"))
                 mainstack.push(contentmanagement, {
-                });
+            });
             else if (name === qsTr("图床管理"))
                 mainstack.push(lskymanagement, {
-                });
-            else if (name === qsTr("系统维护"))
-                mainstack.push(systemmaintenance, {
-                });
+            });
+            else if (name === qsTr("任务设置"))
+                mainstack.push(taskset, {
+            });
             else if (name === qsTr("软件设置"))
                 mainstack.push(settings, {
-                });
+            });
             else if (name === qsTr("关       于"))
                 mainstack.push(about, {
-                });
+            });
         }
     }
 

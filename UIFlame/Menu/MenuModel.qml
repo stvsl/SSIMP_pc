@@ -27,7 +27,7 @@ ListModel {
     }
 
     ListElement {
-        name: qsTr("系统维护")
+        name: qsTr("任务设置")
     }
 
     ListElement {
