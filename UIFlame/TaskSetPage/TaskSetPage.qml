@@ -6,7 +6,7 @@ import QtQuick.Layouts
 
 // import QtWebEngine
 Item {
-    id: emlpoyeepage
+    id: tasksetpage
 
     // Material主题，蓝色
     Material.theme: Material.Light
@@ -19,10 +19,7 @@ Item {
         running: true
         repeat: false
         onTriggered: {
-            for (var j = 0; j < employeeService.employees().length; j++) {
-                var employe = employeeService.employees()[j];
-                employeedata.append(employe);
-            }
+
         }
     }
 
@@ -48,10 +45,8 @@ Item {
         Rectangle {
             id: leftarea
 
-            width: 300
+            width: 350
             height: parent.height - 50
-            layer.enabled: true
-            radius: 10
             color: "transparent"
 
             Text {
@@ -65,12 +60,13 @@ Item {
 
             Rectangle {
                 anchors.top: parent.top
-                anchors.topMargin: 30
+                anchors.topMargin: 35
                 anchors.bottom: parent.bottom
-                anchors.bottomMargin: 200
                 anchors.left: parent.left
                 anchors.right: parent.right
                 layer.enabled: true
+                radius: 10
+                clip: true
 
                 layer.effect: DropShadow {
                     cached: true
@@ -86,7 +82,7 @@ Item {
 
                     anchors.fill: parent
                     anchors.margins: 8
-                    anchors.bottomMargin: 200
+                    anchors.bottomMargin: 300
                     spacing: 3
                     // model:
                     onOpacityChanged: {
@@ -174,7 +170,7 @@ Item {
                                 width: parent.width / 1.2
                                 height: 1
                                 anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.bottom: parent.bottom
+                                anchors.bottom: parent.bottomk
 
                                 gradient: Gradient {
                                     GradientStop {
@@ -228,6 +224,14 @@ Item {
             width: parent.width - leftarea.width - 20
             height: leftarea.height
             radius: 10
+            // 任务概览
+            Text{
+                text: qsTr("任务总概览")
+                height: 25
+                color: "#8E99A5"
+                font.styleName: "Medium"
+                font.pointSize: 18
+            }
 
             Rectangle {
                 id: overviewarea
@@ -235,6 +239,8 @@ Item {
                 width: parent.width
                 height: 150
                 radius: 10
+                anchors.top: parent.top
+                anchors.topMargin: 35
                 layer.enabled: true
                 color: "white"
 
@@ -249,13 +255,24 @@ Item {
 
             }
 
+            // 任务详情
+            Text{
+                text: qsTr("任务详情")
+                height: 25
+                anchors.top: overviewarea.bottom
+                anchors.topMargin: 10
+                color: "#8E99A5"
+                font.styleName: "Medium"
+                font.pointSize: 18
+            }
+
             Rectangle {
                 id: mainarea
 
                 width: parent.width
                 anchors.top: overviewarea.bottom
                 anchors.bottom: parent.bottom
-                anchors.topMargin: 10
+                anchors.topMargin: 50
                 layer.enabled: true
                 color: "white"
                 radius: 10

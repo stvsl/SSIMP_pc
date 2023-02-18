@@ -92,14 +92,21 @@ qt_add_qml_module(appSSIMP_pc
 
 )
 
-file(GLOB TS_FILES "${PROJECT_SOURCE_DIR}/*.ts")
+# file(GLOB TS_FILES "${PROJECT_SOURCE_DIR}/*.ts")
 
-qt_create_translation(appQM_FILES
-    ${PROJECT_SOURCE_DIR}
-    ${TS_FILES}
-    OPTIONS -source-language zh_CN -no-obsolete
-    OPTIONS -source-language en_US -no-obsolete
+# qt_create_translation(appSSIMP_pc
+#     ${PROJECT_SOURCE_DIR}
+#     ${TS_FILES}
+#     OPTIONS -source-language zh_CN -no-obsolete
+#     OPTIONS -source-language en_US -no-obsolete
+# )
+qt_add_translations(appSSIMP_pc
+    TS_FILES
+    translations/SSIMP_pc_zh_CN.ts
+    translations/SSIMP_pc_en_US.ts
+    QM_FILES_OUTPUT_VARIABLE qm_files
 )
+install(FILES ${qm_files} DESTINATION "translations")
 
 set_target_properties(appSSIMP_pc PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER stvsljl.com

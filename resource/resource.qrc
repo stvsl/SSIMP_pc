@@ -22,6 +22,8 @@
     </qresource>
     <qresource prefix="/jsaddon">
         <file>jsaddon/file.js</file>
+        <file>jsaddon/echarts.min.js</file>
+        <file>jsaddon/wangeditor5.1.23.js</file>
     </qresource>
     <qresource prefix="/login">
         <file>Login/background.jpg</file>
@@ -38,5 +40,7 @@
     </qresource>
     <qresource prefix="/htmlpage">
         <file>htmlpage/employeeinfo.html</file>
+        <file>htmlpage/contentedit.html</file>
+        <file>htmlpage/wangeditor.css</file>
     </qresource>
 </RCC>

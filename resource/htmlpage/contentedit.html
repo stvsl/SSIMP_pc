@@ -6,11 +6,11 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>内容编辑器</title>
-    <link href="https://unpkg.com/@wangeditor/editor@latest/dist/css/style.css" rel="stylesheet">
+    <link href="qrc:/htmlpage/htmlpage/wangeditor.css" rel="stylesheet">
     <style>
         #editor—wrapper {
-            border: 1px solid #ccc;
             z-index: 100;
+            margin: 10px;
             /* 按需定义 */
         }
 
@@ -29,18 +29,25 @@
         <div id="toolbar-container"><!-- 工具栏 --></div>
         <div id="editor-container"><!-- 编辑器 --></div>
     </div>
-    <script src="https://unpkg.com/@wangeditor/editor@latest/dist/index.js"></script>
-    <script src="https://unpkg.com/@wangeditor/editor@latest/dist/config.js"></script>
+    <script src="qrc:/jsaddon/jsaddon/wangeditor5.1.23.js"></script>
     <script>
         const { createEditor, createToolbar } = window.wangEditor
 
         const editorConfig = {
-            placeholder: 'Type here...',
+            placeholder: '开始编辑内容吧!',
             onChange(editor) {
                 const html = editor.getHtml()
                 console.log('editor content', html)
-                // 也可以同步到 <textarea>
-            }
+                // 同步到 <textarea>
+                document.getElementById('textarea').value = html
+            },
+            MENU_CONF: {}
+        }
+
+        // 图片上传配置
+        editorConfig.MENU_CONF['uploadImage'] = {
+            base64LimitSize: 1024 * 1024 * 5,// 5M
+            SERVER: "http://127.0.0.1:6521/api/Image/UploadImage"
         }
 
         const editor = createEditor({
@@ -50,7 +57,16 @@
             mode: 'default', // or 'simple'
         })
 
-        const toolbarConfig = {}
+        const toolbarConfig = {
+        }
+
+        toolbarConfig.excludeKeys = [
+            "fullScreen",
+            // 屏蔽上传视频
+            "uploadVideo",
+        ]
+
+
 
         const toolbar = createToolbar({
             editor,
@@ -58,6 +74,9 @@
             config: toolbarConfig,
             mode: 'default', // or 'simple'
         })
+
+        // 默认全屏
+        editor.fullScreen()
     </script>
 
 
