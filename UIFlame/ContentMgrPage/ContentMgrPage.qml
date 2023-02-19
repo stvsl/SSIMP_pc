@@ -2,6 +2,7 @@ import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Material
+import QtQuick.Dialogs
 import QtQuick.Layouts
 import QtWebEngine
 import Service.Employee 1.0
@@ -28,14 +29,13 @@ Item {
     Flow {
         anchors.fill: parent
         anchors.margins: 10
-        anchors.topMargin: 0
         layer.smooth: true
         antialiasing: true
         spacing: 15
 
         Text {
             width: parent.width
-            height: 40
+            height: 30
             color: "#8E99A5"
             text: qsTr("内容管理")
             font.styleName: "Demibold"
@@ -46,7 +46,7 @@ Item {
         Rectangle {
             id: leftarea
 
-            width: 400
+            width: 350
             height: parent.height - 50
             layer.enabled: true
             radius: 10
@@ -373,8 +373,9 @@ Item {
         id: carouselmgrpanel
 
         width: parent.width
-        y: 35
-        height: 200
+        y: 32
+
+        height: 175
         radius: 10
         layer.enabled: true
         color: "white"
@@ -507,49 +508,51 @@ Rectangle {
         anchors.right: parent.right
         anchors.leftMargin: 10
         anchors.rightMargin: 10
-        clip: true
-        // 标题, 封面, 简介, 页面大图, 文章状态
-        ScrollView{
+        // 标题和简介
+        Rectangle{
+            id: bottompanelcontent1
             anchors.fill: parent
-            anchors.rightMargin: parent.width*0.4
+            anchors.rightMargin: parent.width*0.44
 
             // 标题
             Row{
-                height:35
+                height:40
                 width: parent.width
                 Text{
-                    width: 95
+                    width: 80
+                    height: parent.height-15
                     text: qsTr("文章标题:")
                     color: "#AA201F1F"
                     font.styleName: "Medium"
-                    font.pointSize: 14
+                    font.pointSize: 12
+                    verticalAlignment: Text.AlignVCenter
                 }
                 TextField{
                     id:articletitle
                     width: parent.width - 105
-                    height: 35
+                    height: 38
                     placeholderText: qsTr("请输入文章标题~")
+                    verticalAlignment: TextInput.AlignBottom
                     font.styleName: "Normal"
-                    font.pointSize: 12
+                    font.pointSize: 10
                     color: "#082342"
-                    horizontalAlignment: Text.AlignCenter
-                    verticalAlignment: Text.AlignVCenter
-                    anchors.verticalCenter: parent.verticalTop
                     focus: true
                 }
             }
             // 多行支持的简介
             Row{
-                height:parent.height - 30
+                height:parent.height - 35
                 width: parent.width
                 anchors.bottom: parent.bottom
 
                 Text{
-                    width: 95
+                    width: 80
+                    height: 25
                     text: qsTr("文章简介:")
                     color: "#AA201F1F"
                     font.styleName: "Medium"
-                    font.pointSize: 14
+                    font.pointSize: 12
+                    verticalAlignment: Text.AlignBottom
                 }
                 Rectangle{
                     width: parent.width - 105
@@ -586,9 +589,9 @@ Rectangle {
                             anchors.bottomMargin: 10
                             anchors.rightMargin: 5
                             text: articlesummary.text.length + "/200"
-                            color: "#AA201F1F"
+                            color: "#A0201F1F"
                             font.styleName: "Medium"
-                            font.pointSize: 8
+                            font.pointSize: 6
                         }
 
                     }
@@ -596,9 +599,208 @@ Rectangle {
 
             }
         }
+        // 封面
+        Rectangle{
+            id: cover
+            anchors.left: bottompanelcontent1.right
+            anchors.right: parent.right
+            anchors.rightMargin: parent.width*0.3
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            color: "transparent"
+
+            Text{
+                id:covertitle
+                width: parent.width/2-50
+                height: 25
+                text: qsTr("封面:")
+                color: "#AA201F1F"
+                font.styleName: "Medium"
+                font.pointSize: 12
+                verticalAlignment: Text.AlignBottom
+            }
+
+            // 封面图片
+            Rectangle{
+                anchors.top: covertitle.bottom
+                anchors.topMargin: 5
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 10
+                radius: 5
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    cached: true
+                    color: "#90849292"
+                    horizontalOffset: 3
+                    verticalOffset: 3
+                    radius: 10
+                    samples: 2 * radius + 1
+                }
+                Text{
+                    anchors.centerIn: parent
+                    text: qsTr("点击选择封面")
+                    color: "#A0201F1F"
+                    font.styleName: "Medium"
+                    font.pointSize: 14
+                }
+                Image{
+                    id:coverimage
+                    anchors.fill: parent
+                    fillMode: Image.PreserveAspectFit
+                    visible: source != ""
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        fileDialog.open();
+                    }
+                }
+                // 文件选择窗口
+                FileDialog {
+                    id: fileDialog
+                    title: qsTr("选择封面图片")
+                    nameFilters: [qsTr("Images (*.png *.jpeg *.jpg)")]
+                    fileMode: FileDialog.OpenFile
+                    onAccepted: coverimage.source = selectedFile
+                }
+            }
+        }
+        // 页面大图
+        Rectangle{
+            id:page
+            anchors.left: cover.right
+            anchors.leftMargin: 10
+            anchors.right: parent.right
+            anchors.rightMargin: parent.width*0.12
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            color: "transparent"
+            // 页面大图
+            Text{
+                id:pagetitle
+                width: parent.width/2-50
+                height: 25
+                text: qsTr("页面大图:")
+                color: "#AA201F1F"
+                font.styleName: "Medium"
+                font.pointSize: 12
+                verticalAlignment: Text.AlignBottom
+            }
+
+            // 页面大图图片
+            Rectangle{
+                anchors.top: pagetitle.bottom
+                anchors.topMargin: 5
+                anchors.left: parent.left
+                anchors.right: parent.right
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 10
+                radius: 5
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    cached: true
+                    color: "#90849292"
+                    horizontalOffset: 3
+                    verticalOffset: 3
+                    radius: 10
+                    samples: 2 * radius + 1
+                }
+                Text{
+                    anchors.centerIn: parent
+                    text: qsTr("点击选择页面大图")
+                    color: "#A0201F1F"
+                    font.styleName: "Medium"
+                    font.pointSize: 14
+                }
+                Image{
+                    id:pageimage
+                    anchors.fill: parent
+                    fillMode: Image.PreserveAspectFit
+                    visible: source != ""
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        fileDialog2.open();
+                    }
+                }
+                // 文件选择窗口
+                FileDialog {
+                    id: fileDialog2
+                    title: qsTr("选择页面大图")
+                    nameFilters: [qsTr("Images (*.png *.jpeg *.jpg)")]
+                    fileMode: FileDialog.OpenFile
+                    onAccepted: pageimage.source = selectedFile
+                }
+            }
+        }
+        //状态
+        Rectangle{
+            anchors.left:page.right
+            anchors.leftMargin: 10
+            anchors.right: parent.right
+            anchors.top: parent.top
+            anchors.bottom: parent.bottom
+            color: "transparent"
+            Text{
+                id:statustitle
+                height: 25
+                text: qsTr("状态:")
+                color: "#AA201F1F"
+                font.styleName: "Medium"
+                font.pointSize: 12
+                verticalAlignment: Text.AlignBottom
+            }
+            // 状态
+            // 下拉菜单
+            ComboBox{
+                id:status
+                anchors.top: statustitle.bottom
+                anchors.topMargin: 10
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: parent.height*0.4
+                width: parent.width/1.2
+                model: ["已发布", "草稿", "私密"]
+                currentIndex: 0
+            }
+            // 保存按钮
+            Rectangle{
+                id: savebutton
+                anchors.top: status.bottom
+                anchors.topMargin: parent.height*0.05
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: parent.height*0.1
+                width: parent.width/1.2
+                anchors.horizontalCenter: parent.horizontalCenter
+                radius: 5
+                color: "#1791FF"
+                Text{
+                    anchors.centerIn: parent
+                    text: qsTr("保存")
+                    color: "white"
+                    font.styleName: "Medium"
+                    font.pointSize: 12
+                }
+                MouseArea{
+                    anchors.fill: parent
+                    cursorShape: Qt.PointingHandCursor
+                    onClicked: {
+                        // 保存文章
+                    }
+                }
+            }
+        }
+
+
     }
 }
 }
 }
 }
+
 
