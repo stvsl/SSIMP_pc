@@ -6,3 +6,4 @@ CMakeLists.txt.user.qtds
 .vscode
 .VSCodeCounter
 Plugins/lib/libcrypto.so
+CMakeLists.txt.user
