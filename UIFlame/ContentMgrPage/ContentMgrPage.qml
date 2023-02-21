@@ -19,6 +19,7 @@ Item {
         running: true
         repeat: false
         onTriggered: {
+
         }
     }
 
@@ -52,17 +53,16 @@ Item {
             radius: 10
 
             ListView {
-                id: employeelist
+                id: contentlist
 
                 anchors.fill: parent
                 anchors.margins: 8
-                anchors.bottomMargin: 300
+                anchors.bottomMargin: 133
                 spacing: 3
-                model: employeedata
+                // model: employeedata
                 onOpacityChanged: {
                     if (opacity === 0)
-                        listView.currentIndex = index;
-
+                        listView.currentIndex = index
                 }
 
                 populate: Transition {
@@ -72,7 +72,6 @@ Item {
                         to: 1
                         duration: 200
                     }
-
                 }
 
                 add: Transition {
@@ -89,9 +88,7 @@ Item {
                             from: 0
                             duration: 200
                         }
-
                     }
-
                 }
 
                 displaced: Transition {
@@ -101,7 +98,6 @@ Item {
                         damping: 0.1
                         epsilon: 0.25
                     }
-
                 }
 
                 remove: Transition {
@@ -117,10 +113,7 @@ Item {
                             to: 0
                             duration: 120
                         }
-
                     }
-                    //remove Transition is end
-
                 }
 
                 delegate: Item {
@@ -130,13 +123,13 @@ Item {
                     Rectangle {
                         anchors.fill: parent
                         // 判断是否选中
-                        color: employeelist.currentIndex === index ? "#F5F5F5" : "transparent"
+                        color: contentlist.currentIndex === index ? "#F5F5F5" : "transparent"
                         radius: 10
 
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
-                                employeelist.currentIndex = index;
+                                contentlist.currentIndex = index
                             }
                         }
 
@@ -162,9 +155,7 @@ Item {
                                     position: 1
                                     color: "#FFFFFF"
                                 }
-
                             }
-
                         }
 
                         Item {
@@ -215,13 +206,17 @@ Item {
                                 anchors.rightMargin: 20
                                 anchors.verticalCenter: parent.verticalCenter
                             }
-
                         }
-
                     }
-
                 }
-
+            }
+            // 分界线
+            Rectangle{
+                width: parent.width *0.92
+                height: 1
+                anchors.top:contentlist.bottom
+                color: "#EEEEEE"
+                anchors.horizontalCenter: parent.horizontalCenter
             }
 
             // 功能区
@@ -229,106 +224,165 @@ Item {
                 id: functionarea
 
                 width: parent.width
-                height: 150
+                anchors.top: contentlist.bottom
+                anchors.topMargin:5
                 anchors.bottom: parent.bottom
-                anchors.bottomMargin: 0
-                color: "#F5F5F5"
-                radius: 10
+                anchors.bottomMargin: 5
+                anchors.left: parent.left
+                anchors.leftMargin: 15
+                anchors.right: parent.right
+                anchors.rightMargin: 15
+                clip: true
 
-                RowLayout {
+                ColumnLayout {
                     anchors.fill: parent
-                    anchors.margins: 10
-                    anchors.bottomMargin: 0
-                    spacing: 10
-
-                    ColumnLayout {
+                    Row {
                         spacing: 10
+                        width: parent.width
+                        height: 40
 
                         Text {
-                            text: "任务委派"
+                            width: 50
+                            height: parent.height
+                            text: qsTr("搜索:")
                             color: "#8E99A5"
                             font.styleName: "Demibold"
-                            font.pointSize: 15
+                            font.pointSize: 12
+                            verticalAlignment: Text.AlignVCenter
                         }
 
-                        Text {
-                            text: "任务委派"
-                            color: "#8E99A5"
+                        TextField {
+                            id: searchfield
+                            width: 250
+                            height: parent.height
+                            placeholderText: qsTr("请输入文章标题以搜索")
+                            font.pointSize: 10
                             font.styleName: "Demibold"
-                            font.pointSize: 15
-                        }
-
-                        Text {
-                            text: "任务委派"
                             color: "#8E99A5"
-                            font.styleName: "Demibold"
-                            font.pointSize: 15
                         }
-
                     }
 
-                    ColumnLayout {
-                        spacing: 10
-
+                    Row {
+                        height: 35
                         Text {
-                            text: "任务委派"
+                            width: 50
+                            height: parent.height
+                            text: "排序:"
                             color: "#8E99A5"
                             font.styleName: "Demibold"
-                            font.pointSize: 15
+                            font.pointSize: 12
+                            verticalAlignment: Text.AlignVCenter
+                        }
+
+                        ComboBox {
+                            width: 116
+                            id: sortcombobox
+                            anchors.left: parent.left
+                            anchors.leftMargin: 60
+                            height: 35
+                            font.pointSize: 10
+                            model: ["按时间排序", "按标题排序", "按作者排序"]
+                            currentIndex: 0
+                        }
+
+                        Switch {
+                            anchors.left: sortcombobox.right
+                            anchors.leftMargin: 10
+                            id: sortswitch
+                            width: 35
+                            height: 35
+                            scale: 0.75
+                            // rotation: 270
+                            checked: true
                         }
 
                         Text {
-                            text: "任务委派"
+                            width: 50
+                            height: 35
+                            anchors.left: sortswitch.right
+                            text: sortswitch.checked ? qsTr("升序排列") : qsTr("降序排列")
                             color: "#8E99A5"
                             font.styleName: "Demibold"
-                            font.pointSize: 15
+                            font.pointSize: 12
+                            verticalAlignment: Text.AlignVCenter
                         }
-
-                        Text {
-                            text: "任务委派"
-                            color: "#8E99A5"
-                            font.styleName: "Demibold"
-                            font.pointSize: 15
-                        }
-
                     }
 
-                    ColumnLayout {
+                    Row{
                         spacing: 10
-
-                        Text {
-                            text: "任务委派"
+                        height: 38
+                        Text{
+                            width: 50
+                            height: parent.height
+                            text: "选项:"
                             color: "#8E99A5"
                             font.styleName: "Demibold"
-                            font.pointSize: 15
+                            font.pointSize: 12
+                            verticalAlignment: Text.AlignVCenter
                         }
 
-                        Text {
-                            text: "任务委派"
-                            color: "#8E99A5"
-                            font.styleName: "Demibold"
-                            font.pointSize: 15
+                        //新建文章按钮和删除按钮
+                        Rectangle {
+                            id: newarticlebtn
+                            width: 116
+                            height: 25
+                            radius: 5
+                            color: "#1791FF"
+                            anchors.verticalCenter: parent.verticalCenter
+
+                            Text {
+                                text: "新建文章"
+                                font.styleName: "Demibold"
+                                color: "white"
+                                font.pointSize: 10
+                                verticalAlignment: Text.AlignVCenter
+                                anchors.centerIn: parent
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    // 新建文章
+                                    articlemgr.newArticle()
+                                }
+                            }
                         }
 
-                        Text {
-                            text: "任务委派"
-                            color: "#8E99A5"
-                            font.styleName: "Demibold"
-                            font.pointSize: 15
+                        Rectangle {
+                            id: deletearticlebtn
+                            width: 116
+                            height: 25
+                            radius: 5
+                            color: "#FF516B"
+                            anchors.verticalCenter: parent.verticalCenter
+
+                            Text {
+                                text: "删除文章"
+                                color: "white"
+                                font.styleName: "Demibold"
+                                font.pointSize: 10
+                                verticalAlignment: Text.AlignVCenter
+                                anchors.centerIn: parent
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
+                                onClicked: {
+                                    // 删除文章
+                                    articlemgr.deleteArticle()
+                                }
+                            }
                         }
+
 
                     }
-
                 }
-
             }
 
-            // 宽度变化时动画
             Behavior on width {
             NumberAnimation {
                 duration: 200
             }
-
         }
 
         layer.effect: DropShadow {
@@ -339,7 +393,6 @@ Item {
             radius: 10
             samples: 2 * radius + 1
         }
-
     }
 
     Rectangle {
@@ -363,9 +416,7 @@ Item {
             NumberAnimation {
                 duration: 200
             }
-
         }
-
     }
 
     // 轮播系统设置面板
@@ -384,7 +435,6 @@ Item {
         NumberAnimation {
             duration: 400
         }
-
     }
 
     layer.effect: DropShadow {
@@ -395,7 +445,6 @@ Item {
         radius: 10
         samples: 2 * radius + 1
     }
-
 }
 
 Rectangle {
@@ -436,27 +485,25 @@ Rectangle {
             onClicked: {
                 if (leftarea.visible)
                 {
-                    leftarea.visible = false;
-                    carouselmgrpanel.height = 0;
-                    carouselmgrpanel.y = 0;
-                    carouselmgrtitle.height = 0;
-                    carouselmgrtitle.visible = false;
-                    carouselmgrpanel.visible = false;
-                    leftarea.width = 0;
+                    leftarea.visible = false
+                    carouselmgrpanel.height = 0
+                    carouselmgrpanel.y = 0
+                    carouselmgrtitle.height = 0
+                    carouselmgrtitle.visible = false
+                    carouselmgrpanel.visible = false
+                    leftarea.width = 0
                 } else {
-                leftarea.visible = true;
-                carouselmgrpanel.height = 200;
-                carouselmgrpanel.y = 35;
-                carouselmgrtitle.height = 25;
-                carouselmgrtitle.visible = true;
-                carouselmgrpanel.visible = true;
-                leftarea.width = 400;
+                leftarea.visible = true
+                carouselmgrpanel.height = 200
+                carouselmgrpanel.y = 35
+                carouselmgrtitle.height = 25
+                carouselmgrtitle.visible = true
+                carouselmgrpanel.visible = true
+                leftarea.width = 400
             }
         }
     }
-
 }
-
 }
 
 // 内容编辑器
@@ -483,7 +530,7 @@ Rectangle {
         id: webview
         anchors.fill: parent
         anchors.margins: 10
-        anchors.bottomMargin: parent.height/5
+        anchors.bottomMargin: parent.height / 5
         url: "qrc:/htmlpage/htmlpage/contentedit.html"
     }
     // 分割线
@@ -497,38 +544,38 @@ Rectangle {
         anchors.bottomMargin: 3
     }
     // 底部信息编辑面板
-    Rectangle{
+    Rectangle {
         id: bottompanel
 
         width: parent.width
         anchors.top: webview.bottom
         anchors.topMargin: 10
         anchors.bottom: parent.bottom
-        anchors.left:parent.left
+        anchors.left: parent.left
         anchors.right: parent.right
         anchors.leftMargin: 10
         anchors.rightMargin: 10
         // 标题和简介
-        Rectangle{
+        Rectangle {
             id: bottompanelcontent1
             anchors.fill: parent
-            anchors.rightMargin: parent.width*0.44
+            anchors.rightMargin: parent.width * 0.44
 
             // 标题
-            Row{
-                height:40
+            Row {
+                height: 40
                 width: parent.width
-                Text{
+                Text {
                     width: 80
-                    height: parent.height-15
+                    height: parent.height - 15
                     text: qsTr("文章标题:")
                     color: "#AA201F1F"
                     font.styleName: "Medium"
                     font.pointSize: 12
                     verticalAlignment: Text.AlignVCenter
                 }
-                TextField{
-                    id:articletitle
+                TextField {
+                    id: articletitle
                     width: parent.width - 105
                     height: 38
                     placeholderText: qsTr("请输入文章标题~")
@@ -540,12 +587,12 @@ Rectangle {
                 }
             }
             // 多行支持的简介
-            Row{
-                height:parent.height - 35
+            Row {
+                height: parent.height - 35
                 width: parent.width
                 anchors.bottom: parent.bottom
 
-                Text{
+                Text {
                     width: 80
                     height: 25
                     text: qsTr("文章简介:")
@@ -554,11 +601,11 @@ Rectangle {
                     font.pointSize: 12
                     verticalAlignment: Text.AlignBottom
                 }
-                Rectangle{
+                Rectangle {
                     width: parent.width - 105
                     height: parent.height
-                    TextArea{
-                        id:articlesummary
+                    TextArea {
+                        id: articlesummary
                         anchors.fill: parent
                         placeholderText: qsTr("请输入文章简介~")
                         font.styleName: "Normal"
@@ -571,19 +618,20 @@ Rectangle {
                             // 最大3行, 200字
                             if (text.length > 200)
                             {
-                                text = text.substring(0, 200);
-                            } var lines = text.split("\n");
+                                text = text.substring(0, 200)
+                            }
+                            var lines = text.split("\n")
                             if (lines.length > 3)
                             {
-                                lines = lines.slice(0, 3);
-                                text = lines.join("\n");
+                                lines = lines.slice(0, 3)
+                                text = lines.join("\n")
                             }
                         }
                         wrapMode: TextEdit.Wrap
 
                         // 右下角字数指示器 当前/最大
-                        Text{
-                            id:wordcount
+                        Text {
+                            id: wordcount
                             anchors.bottom: parent.bottom
                             anchors.right: parent.right
                             anchors.bottomMargin: 10
@@ -593,25 +641,23 @@ Rectangle {
                             font.styleName: "Medium"
                             font.pointSize: 6
                         }
-
                     }
                 }
-
             }
         }
         // 封面
-        Rectangle{
+        Rectangle {
             id: cover
             anchors.left: bottompanelcontent1.right
             anchors.right: parent.right
-            anchors.rightMargin: parent.width*0.3
+            anchors.rightMargin: parent.width * 0.3
             anchors.top: parent.top
             anchors.bottom: parent.bottom
             color: "transparent"
 
-            Text{
-                id:covertitle
-                width: parent.width/2-50
+            Text {
+                id: covertitle
+                width: parent.width / 2 - 50
                 height: 25
                 text: qsTr("封面:")
                 color: "#AA201F1F"
@@ -621,7 +667,7 @@ Rectangle {
             }
 
             // 封面图片
-            Rectangle{
+            Rectangle {
                 anchors.top: covertitle.bottom
                 anchors.topMargin: 5
                 anchors.left: parent.left
@@ -638,169 +684,168 @@ Rectangle {
                     radius: 10
                     samples: 2 * radius + 1
                 }
-                Text{
+                Text {
                     anchors.centerIn: parent
                     text: qsTr("点击选择封面")
                     color: "#A0201F1F"
                     font.styleName: "Medium"
                     font.pointSize: 14
                 }
-                Image{
-                    id:coverimage
+                Image {
+                    id: coverimage
                     anchors.fill: parent
                     fillMode: Image.PreserveAspectFit
                     visible: source != ""
                 }
-                MouseArea{
+                MouseArea {
                     anchors.fill: parent
                     cursorShape: Qt.PointingHandCursor
                     onClicked: {
-                        fileDialog.open();
+                        fileDialog.open()
                     }
                 }
                 // 文件选择窗口
                 FileDialog {
                     id: fileDialog
                     title: qsTr("选择封面图片")
-                    nameFilters: [qsTr("Images (*.png *.jpeg *.jpg)")]
-                    fileMode: FileDialog.OpenFile
-                    onAccepted: coverimage.source = selectedFile
-                }
-            }
-        }
-        // 页面大图
-        Rectangle{
-            id:page
-            anchors.left: cover.right
-            anchors.leftMargin: 10
-            anchors.right: parent.right
-            anchors.rightMargin: parent.width*0.12
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            color: "transparent"
-            // 页面大图
-            Text{
-                id:pagetitle
-                width: parent.width/2-50
-                height: 25
-                text: qsTr("页面大图:")
-                color: "#AA201F1F"
-                font.styleName: "Medium"
-                font.pointSize: 12
-                verticalAlignment: Text.AlignBottom
-            }
-
-            // 页面大图图片
-            Rectangle{
-                anchors.top: pagetitle.bottom
-                anchors.topMargin: 5
-                anchors.left: parent.left
-                anchors.right: parent.right
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: 10
-                radius: 5
-                layer.enabled: true
-                layer.effect: DropShadow {
-                    cached: true
-                    color: "#90849292"
-                    horizontalOffset: 3
-                    verticalOffset: 3
-                    radius: 10
-                    samples: 2 * radius + 1
-                }
-                Text{
-                    anchors.centerIn: parent
-                    text: qsTr("点击选择页面大图")
-                    color: "#A0201F1F"
-                    font.styleName: "Medium"
-                    font.pointSize: 14
-                }
-                Image{
-                    id:pageimage
-                    anchors.fill: parent
-                    fillMode: Image.PreserveAspectFit
-                    visible: source != ""
-                }
-                MouseArea{
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: {
-                        fileDialog2.open();
+                    nameFilters: [qsTr(
+                        "Images (*.png *.jpeg *.jpg)")]
+                        fileMode: FileDialog.OpenFile
+                        onAccepted: coverimage.source = selectedFile
                     }
                 }
-                // 文件选择窗口
-                FileDialog {
-                    id: fileDialog2
-                    title: qsTr("选择页面大图")
-                    nameFilters: [qsTr("Images (*.png *.jpeg *.jpg)")]
-                    fileMode: FileDialog.OpenFile
-                    onAccepted: pageimage.source = selectedFile
-                }
             }
-        }
-        //状态
-        Rectangle{
-            anchors.left:page.right
-            anchors.leftMargin: 10
-            anchors.right: parent.right
-            anchors.top: parent.top
-            anchors.bottom: parent.bottom
-            color: "transparent"
-            Text{
-                id:statustitle
-                height: 25
-                text: qsTr("状态:")
-                color: "#AA201F1F"
-                font.styleName: "Medium"
-                font.pointSize: 12
-                verticalAlignment: Text.AlignBottom
-            }
-            // 状态
-            // 下拉菜单
-            ComboBox{
-                id:status
-                anchors.top: statustitle.bottom
-                anchors.topMargin: 10
-                anchors.horizontalCenter: parent.horizontalCenter
+            // 页面大图
+            Rectangle {
+                id: page
+                anchors.left: cover.right
+                anchors.leftMargin: 10
+                anchors.right: parent.right
+                anchors.rightMargin: parent.width * 0.12
+                anchors.top: parent.top
                 anchors.bottom: parent.bottom
-                anchors.bottomMargin: parent.height*0.4
-                width: parent.width/1.2
-                model: ["已发布", "草稿", "私密"]
-                currentIndex: 0
-            }
-            // 保存按钮
-            Rectangle{
-                id: savebutton
-                anchors.top: status.bottom
-                anchors.topMargin: parent.height*0.05
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: parent.height*0.1
-                width: parent.width/1.2
-                anchors.horizontalCenter: parent.horizontalCenter
-                radius: 5
-                color: "#1791FF"
-                Text{
-                    anchors.centerIn: parent
-                    text: qsTr("保存")
-                    color: "white"
+                color: "transparent"
+                // 页面大图
+                Text {
+                    id: pagetitle
+                    width: parent.width / 2 - 50
+                    height: 25
+                    text: qsTr("页面大图:")
+                    color: "#AA201F1F"
                     font.styleName: "Medium"
                     font.pointSize: 12
+                    verticalAlignment: Text.AlignBottom
                 }
-                MouseArea{
-                    anchors.fill: parent
-                    cursorShape: Qt.PointingHandCursor
-                    onClicked: {
-                        // 保存文章
+
+                // 页面大图图片
+                Rectangle {
+                    anchors.top: pagetitle.bottom
+                    anchors.topMargin: 5
+                    anchors.left: parent.left
+                    anchors.right: parent.right
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 10
+                    radius: 5
+                    layer.enabled: true
+                    layer.effect: DropShadow {
+                        cached: true
+                        color: "#90849292"
+                        horizontalOffset: 3
+                        verticalOffset: 3
+                        radius: 10
+                        samples: 2 * radius + 1
+                    }
+                    Text {
+                        anchors.centerIn: parent
+                        text: qsTr("点击选择页面大图")
+                        color: "#A0201F1F"
+                        font.styleName: "Medium"
+                        font.pointSize: 14
+                    }
+                    Image {
+                        id: pageimage
+                        anchors.fill: parent
+                        fillMode: Image.PreserveAspectFit
+                        visible: source != ""
+                    }
+                    MouseArea {
+                        anchors.fill: parent
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: {
+                            fileDialog2.open()
+                        }
+                    }
+                    // 文件选择窗口
+                    FileDialog {
+                        id: fileDialog2
+                        title: qsTr("选择页面大图")
+                        nameFilters: [qsTr(
+                            "Images (*.png *.jpeg *.jpg)")]
+                            fileMode: FileDialog.OpenFile
+                            onAccepted: pageimage.source = selectedFile
+                        }
+                    }
+                }
+                //状态
+                Rectangle {
+                    anchors.left: page.right
+                    anchors.leftMargin: 10
+                    anchors.right: parent.right
+                    anchors.top: parent.top
+                    anchors.bottom: parent.bottom
+                    color: "transparent"
+                    Text {
+                        id: statustitle
+                        height: 25
+                        text: qsTr("状态:")
+                        color: "#AA201F1F"
+                        font.styleName: "Medium"
+                        font.pointSize: 12
+                        verticalAlignment: Text.AlignBottom
+                    }
+                    // 状态
+                    // 下拉菜单
+                    ComboBox {
+                        id: status
+                        anchors.top: statustitle.bottom
+                        anchors.topMargin: 10
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: parent.height * 0.4
+                        width: parent.width / 1.2
+                        model: ["已发布", "草稿", "私密"]
+                        currentIndex: 0
+                    }
+                    // 保存按钮
+                    Rectangle {
+                        id: savebutton
+                        anchors.top: status.bottom
+                        anchors.topMargin: parent.height * 0.05
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: parent.height * 0.1
+                        width: parent.width / 1.2
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        radius: 5
+                        color: "#1791FF"
+                        Text {
+                            anchors.centerIn: parent
+                            text: qsTr("保存")
+                            color: "white"
+                            font.styleName: "Medium"
+                            font.pointSize: 12
+                        }
+                        MouseArea {
+                            anchors.fill: parent
+                            cursorShape: Qt.PointingHandCursor
+                            onClicked: {
+
+                                // 保存文章
+                            }
+                        }
                     }
                 }
             }
         }
-
-
     }
 }
 }
-}
-}
-
-
