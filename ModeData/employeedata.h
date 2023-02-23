@@ -32,6 +32,9 @@ public:
   QString imageUrl() const;
   QString photoUrl() const;
   QString tel() const;
+  void UpdateEmployeeData(const QString &name, const QString &idNumber,
+                          const QString &address, const QString &imageUrl,
+                          const QString &photoUrl, const QString &tel);
 
 private:
   QString m_id;

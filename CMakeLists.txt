@@ -28,7 +28,7 @@ add_custom_command(
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/Plugins/lib/libcrypto.so
     COMMAND go build -o Plugins/lib/libcrypto.so -buildmode=c-shared ./Plugins/Encrypt_go_binding/libencryptiongo/main.go
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMENT "******************************编译Go组件******************************"    
+    COMMENT "******************************编译Go组件******************************"
 )
 
 add_custom_target(
@@ -55,10 +55,11 @@ qt_add_executable(appSSIMP_pc
     # 业务逻辑组件封装
     Service/accountservice.h Service/accountservice.cpp
     Service/employeeservice.h Service/employeeservice.cpp
+    Service/articleservice.h Service/articleservice.cpp
     Service/entity.h Service/entity.cpp
 
     ModeData/employeedata.h ModeData/employeedata.cpp
-
+    ModeData/articledata.h ModeData/articledata.cpp
     # 界面辅助代理封装
     Daemon/vctrler.h Daemon/vctrler.cpp
 

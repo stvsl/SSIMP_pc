@@ -35,4 +35,16 @@ QString EmployeeData::photoUrl() const { return m_photoUrl; }
 
 QString EmployeeData::tel() const { return m_tel; }
 
+void EmployeeData::UpdateEmployeeData(const QString &name, const QString &idNumber,
+                                      const QString &address, const QString &imageUrl,
+                                      const QString &photoUrl, const QString &tel)
+{
+  m_name = name;
+  m_idNumber = idNumber;
+  m_address = address;
+  m_imageUrl = imageUrl;
+  m_photoUrl = photoUrl;
+  m_tel = tel;
+}
+
 //  Path: ModeData/employeedata.h

@@ -8,7 +8,7 @@ import QtWebEngine
 import Service.Employee 1.0
 
 Item {
-    id: emlpoyeepage
+    id: contentpage
 
     layer.smooth: true
 
@@ -24,7 +24,7 @@ Item {
     }
 
     ListModel {
-        id: employeedata
+        id: articledata
     }
 
     Flow {

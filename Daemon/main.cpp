@@ -10,6 +10,8 @@
 #include <Service/accountservice.h>
 #include <Service/employeeservice.h>
 #include <ModeData/employeedata.h>
+#include "Service/articleservice.h"
+#include "ModeData/articledata.h"
 
 int main(int argc, char *argv[])
 {
@@ -30,7 +32,9 @@ int main(int argc, char *argv[])
   qmlRegisterType<VerificationCode>("Utils.Verify", 1, 0, "VerificationCode");
   qmlRegisterType<AccountService>("Service.Account", 1, 0, "AccountService");
   qmlRegisterType<EmployeeService>("Service.Employee", 1, 0, "EmployeeService");
+  qmlRegisterType<ArticleService>("Service.Article", 1, 0, "ArticleService");
   qmlRegisterType<EmployeeData>("Data.Employee", 1, 0, "EmployeeData");
+  qmlRegisterType<ArticleData>("Data.Article", 1, 0, "ArticleData");
   // 注册组件
   // TODO
   QTranslator translator;
