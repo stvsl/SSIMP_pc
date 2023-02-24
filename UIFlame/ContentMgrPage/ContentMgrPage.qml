@@ -5,7 +5,8 @@ import QtQuick.Controls.Material
 import QtQuick.Dialogs
 import QtQuick.Layouts
 import QtWebEngine
-import Service.Employee 1.0
+import Service.Article 1.0
+import Data.Article 1.0
 
 Item {
     id: contentpage
@@ -20,6 +21,26 @@ Item {
         repeat: false
         onTriggered: {
 
+        }
+    }
+    ArticleService {
+        id: articleService
+    }
+
+    Component.onCompleted: {
+        // 获取文章列表
+        articleService.getArticleList()
+    }
+
+    Connections {
+        target: articleService
+
+        function onArticleListChanged()
+        {
+            articledata.clear()
+            for (var i = 0; i < articleService.articles().length; i++) {
+                articledata.append(articleService.articles()[i])
+            }
         }
     }
 
@@ -59,10 +80,11 @@ Item {
                 anchors.margins: 8
                 anchors.bottomMargin: 133
                 spacing: 3
-                // model: employeedata
+                model: articledata
+                clip: true
                 onOpacityChanged: {
                     if (opacity === 0)
-                        listView.currentIndex = index
+                        contentlist.currentIndex = index
                 }
 
                 populate: Transition {
@@ -117,7 +139,7 @@ Item {
                 }
 
                 delegate: Item {
-                    height: 70
+                    height: 80
                     width: parent.width
 
                     Rectangle {
@@ -164,9 +186,9 @@ Item {
                             Image {
                                 id: listimage
 
-                                source: "qrc:/icon/EmployeePage/icon/EmployeePage/缺勤率完成率.png"
-                                width: 50
-                                height: 50
+                                source:coverimg
+                                width: 60
+                                height: 60
                                 fillMode: Image.PreserveAspectFit
                                 anchors.verticalCenter: parent.verticalCenter
                                 anchors.left: parent.left
@@ -177,24 +199,36 @@ Item {
                                 id: listname
 
                                 y: 10
-                                text: name
+                                text: title
                                 color: "#292826"
                                 font.styleName: "Medium"
-                                font.pointSize: 15
+                                font.pointSize: 14
                                 anchors.left: listimage.right
-                                anchors.leftMargin: 15
+                                anchors.leftMargin: 10
                             }
 
                             Text {
-                                id: listemployid
-
-                                text: "eid " + employid
+                                id: viewcount
+                                width: 60
+                                text: "阅读量：" + pageviews
                                 color: "#8E99A5"
                                 font.styleName: "Medium"
-                                font.pointSize: 10
+                                font.pointSize: 8
                                 anchors.left: listimage.right
+                                anchors.top: listname.bottom
+                                anchors.leftMargin: 10
+                            }
+
+                            Text {
+                                id: updatetimetext
+
+                                text: qsTr("更新于")+Qt.formatDateTime(updatetime, "yyyy年M月d日hh")
+                                color: "#8E99A5"
+                                font.styleName: "Medium"
+                                font.pointSize: 8
+                                anchors.left: listimage.right
+                                anchors.leftMargin: 10
                                 anchors.bottom: listimage.bottom
-                                anchors.leftMargin: 15
                             }
 
                             Text {
@@ -292,7 +326,6 @@ Item {
                             width: 35
                             height: 35
                             scale: 0.75
-                            // rotation: 270
                             checked: true
                         }
 
@@ -341,99 +374,54 @@ Item {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked: {
-                                    // 新建文章
-                                    articlemgr.newArticle()
-                                }
+                                onClicked:{
+                                    // articledata 添加一条数据
+                                    articledata.insert(0, {
+                                    "aid": 0,
+                                    "title": "新建文章",
+                                    "author": "admin",
+                                    "pageviews": 0,
+                                    "updatetime": new Date(),
+                                    "coverimg": "qrc:/images/coverimg.png"
+                                })
                             }
                         }
-
-                        Rectangle {
-                            id: deletearticlebtn
-                            width: 116
-                            height: 25
-                            radius: 5
-                            color: "#FF516B"
-                            anchors.verticalCenter: parent.verticalCenter
-
-                            Text {
-                                text: "删除文章"
-                                color: "white"
-                                font.styleName: "Demibold"
-                                font.pointSize: 10
-                                verticalAlignment: Text.AlignVCenter
-                                anchors.centerIn: parent
-                            }
-
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked: {
-                                    // 删除文章
-                                    articlemgr.deleteArticle()
-                                }
-                            }
-                        }
-
-
                     }
+
+                    Rectangle {
+                        id: deletearticlebtn
+                        width: 116
+                        height: 25
+                        radius: 5
+                        color: "#FF516B"
+                        anchors.verticalCenter: parent.verticalCenter
+
+                        Text {
+                            text: "删除文章"
+                            color: "white"
+                            font.styleName: "Demibold"
+                            font.pointSize: 10
+                            verticalAlignment: Text.AlignVCenter
+                            anchors.centerIn: parent
+                        }
+
+                        MouseArea {
+                            anchors.fill: parent
+                            onClicked: {
+                                // 删除文章
+                                articlemgr.deleteArticle()
+                            }
+                        }
+                    }
+
+
                 }
             }
-
-            Behavior on width {
-            NumberAnimation {
-                duration: 200
-            }
         }
 
-        layer.effect: DropShadow {
-            cached: true
-            color: "#90849292"
-            horizontalOffset: 3
-            verticalOffset: 3
-            radius: 10
-            samples: 2 * radius + 1
-        }
-    }
-
-    Rectangle {
-        id: rightarea
-
-        width: parent.width - leftarea.width - 20
-        height: leftarea.height
-        radius: 10
-        color: "transparent"
-
-        Text {
-            id: carouselmgrtitle
-
-            text: "轮播设置"
-            height: 25
-            color: "#8E99A5"
-            font.styleName: "Medium"
-            font.pointSize: 18
-
-            Behavior on height {
-            NumberAnimation {
-                duration: 200
-            }
-        }
-    }
-
-    // 轮播系统设置面板
-    Rectangle {
-        id: carouselmgrpanel
-
-        width: parent.width
-        y: 32
-
-        height: 175
-        radius: 10
-        layer.enabled: true
-        color: "white"
-
-        Behavior on height {
+        Behavior on width {
         NumberAnimation {
-            duration: 400
+            duration: 200
         }
     }
 
@@ -445,6 +433,58 @@ Item {
         radius: 10
         samples: 2 * radius + 1
     }
+}
+
+Rectangle {
+    id: rightarea
+
+    width: parent.width - leftarea.width - 20
+    height: leftarea.height
+    radius: 10
+    color: "transparent"
+
+    Text {
+        id: carouselmgrtitle
+
+        text: "轮播设置"
+        height: 25
+        color: "#8E99A5"
+        font.styleName: "Medium"
+        font.pointSize: 18
+
+        Behavior on height {
+        NumberAnimation {
+            duration: 200
+        }
+    }
+}
+
+// 轮播系统设置面板
+Rectangle {
+    id: carouselmgrpanel
+
+    width: parent.width
+    y: 32
+
+    height: 175
+    radius: 10
+    layer.enabled: true
+    color: "white"
+
+    Behavior on height {
+    NumberAnimation {
+        duration: 400
+    }
+}
+
+layer.effect: DropShadow {
+    cached: true
+    color: "#90849292"
+    horizontalOffset: 3
+    verticalOffset: 3
+    radius: 10
+    samples: 2 * radius + 1
+}
 }
 
 Rectangle {

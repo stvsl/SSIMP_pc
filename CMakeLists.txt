@@ -56,7 +56,6 @@ qt_add_executable(appSSIMP_pc
     Service/accountservice.h Service/accountservice.cpp
     Service/employeeservice.h Service/employeeservice.cpp
     Service/articleservice.h Service/articleservice.cpp
-    Service/entity.h Service/entity.cpp
 
     ModeData/employeedata.h ModeData/employeedata.cpp
     ModeData/articledata.h ModeData/articledata.cpp

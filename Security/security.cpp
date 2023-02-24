@@ -137,10 +137,7 @@ bool Init_State_2()
 
 bool Init_State_3()
 {
-  // 向服务器发送POST请求，获取AES密钥
   QJsonObject json;
-  // qDebug().noquote() << "服务器RSA公钥:\n"
-  //                    << globalsecurity::SERVER_RSA_PUBLIC;
   json.insert("feature", RSA::encryptQ(globalsecurity::FEATURE, globalsecurity::SERVER_RSA_PUBLIC));
   json.insert("pubkey", RSA::encryptQ(globalsecurity::LOCAL_RSA_PUBLIC, globalsecurity::SERVER_RSA_PUBLIC));
   json.insert("aesp", RSA::encryptQ(globalsecurity::AES_KEY, globalsecurity::SERVER_RSA_PUBLIC));
@@ -148,24 +145,19 @@ bool Init_State_3()
   post->setHeader("Content-Type", "application/json");
   post->setBody(json);
   TcpNetUtils *net = new TcpNetUtils(post);
+
   QObject::connect(net, &TcpNetUtils::requestFinished, [=]()
                    {
     QString key2 = net->getResponseBodyJsonDoc()["aesp2"].toString();
     key2 = RSA::decryptQ(key2);
-    // 计算两个密钥的亦或数值
     QString _key3 = XorQ(globalsecurity::AES_KEY, key2);   
-    // 计算MD5值
     globalsecurity::AES_KEY = QCryptographicHash::hash(_key3.toUtf8(), QCryptographicHash::Md5).toHex();
     qDebug().noquote() << "AES协议密钥:" << globalsecurity::AES_KEY; });
 
   QObject::connect(net, &TcpNetUtils::requestErrorHappen, [=]()
                    {
     // 连接vctrl静态类的信号
-    QObject::connect(vctrler::m_vctrler, &vctrler::dialogResult,
-                     [=]()
-                     {
-                       vctrler::emergencyExit();
-                     }); });
+    QObject::connect(vctrler::m_vctrler, &vctrler::dialogResult,[=](){vctrler::emergencyExit();}); });
   net->sendRequest();
   post->deleteLater();
   net->deleteLater();

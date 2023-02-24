@@ -34,6 +34,9 @@ public:
     QDateTime writetime() const;
     QDateTime updatetime() const;
     QString author() const;
+    QString toString() const;
+    QString getWriteTime() const;
+    QString getUpdateTime() const;
     int pageviews() const;
     int status() const;
     void setAid(const QString &aid);

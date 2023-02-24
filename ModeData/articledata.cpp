@@ -58,6 +58,32 @@ QString ArticleData::author() const
     return m_author;
 }
 
+QString ArticleData::toString() const
+{
+    return QString("aid: %1, coverimg: %2, contentimg: %3, title: %4, introduction: %5, text: %6, writetime: %7, updatetime: %8, author: %9, pageviews: %10, status: %11")
+        .arg(m_aid)
+        .arg(m_coverimg)
+        .arg(m_contentimg)
+        .arg(m_title)
+        .arg(m_introduction)
+        .arg(m_text)
+        .arg(m_writetime.toString())
+        .arg(m_updatetime.toString())
+        .arg(m_author)
+        .arg(m_pageviews)
+        .arg(m_status);
+}
+
+QString ArticleData::getWriteTime() const
+{
+    return m_writetime.toString("yyyy-MM-dd hh:mm:ss");
+}
+
+QString ArticleData::getUpdateTime() const
+{
+    return m_updatetime.toString("yyyy-MM-dd hh:mm:ss");
+}
+
 int ArticleData::pageviews() const
 {
     return m_pageviews;

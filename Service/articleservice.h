@@ -12,6 +12,7 @@ public:
     explicit ArticleService(QObject *parent = nullptr);
     Q_INVOKABLE void getArticleList();
     Q_INVOKABLE QQmlListProperty<ArticleData> articles();
+    Q_INVOKABLE void fetchArticle(QString aid, QString coverimg, QString title, QString updatetime, int pageviews);
     Q_INVOKABLE void addArticle(QString aid, QString title, QString content, QString author, QString date);
     Q_INVOKABLE void deleteArticle(QString aid);
     Q_INVOKABLE void deleteAllArticle();
