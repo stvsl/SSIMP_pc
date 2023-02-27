@@ -7,17 +7,17 @@
 class ArticleData : public QObject
 {
     Q_OBJECT
-    Q_PROPERTY(QString aid READ aid WRITE setAid)
-    Q_PROPERTY(QString coverimg READ coverimg WRITE setCoverimg)
-    Q_PROPERTY(QString contentimg READ contentimg WRITE setContentimg)
-    Q_PROPERTY(QString title READ title WRITE setTitle)
-    Q_PROPERTY(QString introduction READ introduction WRITE setIntroduction)
-    Q_PROPERTY(QString text READ text WRITE setText)
-    Q_PROPERTY(QDateTime writetime READ writetime WRITE setWritetime)
-    Q_PROPERTY(QDateTime updatetime READ updatetime WRITE setUpdatetime)
-    Q_PROPERTY(QString author READ author WRITE setAuthor)
-    Q_PROPERTY(int pageviews READ pageviews WRITE setPageviews)
-    Q_PROPERTY(int status READ status WRITE setStatus)
+    Q_PROPERTY(QString aid READ aid WRITE setAid NOTIFY aidChanged)
+    Q_PROPERTY(QString coverimg READ coverimg WRITE setCoverimg NOTIFY coverimgChanged)
+    Q_PROPERTY(QString contentimg READ contentimg WRITE setContentimg NOTIFY contentimgChanged)
+    Q_PROPERTY(QString title READ title WRITE setTitle NOTIFY titleChanged)
+    Q_PROPERTY(QString introduction READ introduction WRITE setIntroduction NOTIFY introductionChanged)
+    Q_PROPERTY(QString text READ text WRITE setText NOTIFY textChanged)
+    Q_PROPERTY(QDateTime writetime READ writetime WRITE setWritetime NOTIFY writetimeChanged)
+    Q_PROPERTY(QDateTime updatetime READ updatetime WRITE setUpdatetime NOTIFY updatetimeChanged)
+    Q_PROPERTY(QString author READ author WRITE setAuthor NOTIFY authorChanged)
+    Q_PROPERTY(int pageviews READ pageviews WRITE setPageviews NOTIFY pageviewsChanged)
+    Q_PROPERTY(int status READ status WRITE setStatus NOTIFY statusChanged)
 
 public:
     explicit ArticleData(QObject *parent = nullptr);
@@ -50,6 +50,19 @@ public:
     void setAuthor(const QString &author);
     void setPageviews(int pageviews);
     void setStatus(int status);
+
+signals:
+    void aidChanged();
+    void coverimgChanged();
+    void contentimgChanged();
+    void titleChanged();
+    void introductionChanged();
+    void textChanged();
+    void writetimeChanged();
+    void updatetimeChanged();
+    void authorChanged();
+    void pageviewsChanged();
+    void statusChanged();
 
 private:
     QString m_aid;

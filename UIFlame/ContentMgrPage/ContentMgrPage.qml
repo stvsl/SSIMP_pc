@@ -7,6 +7,7 @@ import QtQuick.Layouts
 import QtWebEngine
 import Service.Article 1.0
 import Data.Article 1.0
+import "../MessageBox"
 
 Item {
     id: contentpage
@@ -46,6 +47,35 @@ Item {
 
     ListModel {
         id: articledata
+    }
+
+    function isNewArticle()
+    {
+        return articledata.get(contentlist.currentIndex).aid == 0;
+    }
+
+    function hasNewArticle()
+    {
+        // 遍历列表，判断是否有新文章
+        for (var i = 0; i < articledata.count; i++) {
+            if (articledata.get(i).aid == 0)
+                return true;
+        }
+        return false;
+    }
+
+    function nowArticleNum()
+    {
+        // 判断当前文章列表中是否有新文章，如果有则判断当前的文章是否是新文章，如果是则返回0, 如果不是则返回contentlist.currentIndex-1的值，如果没有则返回contentlist.currentIndex的值
+        if (hasNewArticle())
+        {
+            if (isNewArticle())
+                return 0;
+            else
+                return contentlist.currentIndex - 1;
+            } else {
+            return contentlist.currentIndex;
+        }
     }
 
     Flow {
@@ -152,6 +182,7 @@ Item {
                             anchors.fill: parent
                             onClicked: {
                                 contentlist.currentIndex = index
+                                articleService.fetchArticle(aid)
                             }
                         }
 
@@ -221,7 +252,6 @@ Item {
 
                             Text {
                                 id: updatetimetext
-
                                 text: qsTr("更新于")+Qt.formatDateTime(updatetime, "yyyy年M月d日hh")
                                 color: "#8E99A5"
                                 font.styleName: "Medium"
@@ -240,6 +270,7 @@ Item {
                                 anchors.rightMargin: 20
                                 anchors.verticalCenter: parent.verticalCenter
                             }
+
                         }
                     }
                 }
@@ -375,15 +406,26 @@ Item {
                             MouseArea {
                                 anchors.fill: parent
                                 onClicked:{
+                                    if (hasNewArticle() == true)
+                                    {
+                                        errloader.sourceComponent = hasNewArticleNow
+                                        return
+                                    }
                                     // articledata 添加一条数据
                                     articledata.insert(0, {
                                     "aid": 0,
+                                    "coverimg": "",
+                                    "contentimg": "",
                                     "title": "新建文章",
+                                    "introduction": "",
+                                    "text": "",
+                                    "writetime": new Date(),
+                                    "updatetime": new Date(),
                                     "author": "admin",
                                     "pageviews": 0,
-                                    "updatetime": new Date(),
-                                    "coverimg": "qrc:/images/coverimg.png"
+                                    "status": 3,
                                 })
+                                contentlist.currentIndex = 0
                             }
                         }
                     }
@@ -614,8 +656,10 @@ Rectangle {
                     font.pointSize: 12
                     verticalAlignment: Text.AlignVCenter
                 }
+
                 TextField {
                     id: articletitle
+                    text: isNewArticle() ? articledata.get(0).title : articleService.articles()[nowArticleNum()].title
                     width: parent.width - 105
                     height: 38
                     placeholderText: qsTr("请输入文章标题~")
@@ -641,11 +685,13 @@ Rectangle {
                     font.pointSize: 12
                     verticalAlignment: Text.AlignBottom
                 }
+
                 Rectangle {
                     width: parent.width - 105
                     height: parent.height
                     TextArea {
                         id: articlesummary
+                        text: isNewArticle() ? articledata.get(0).introduction : articleService.articles()[nowArticleNum()].introduction
                         anchors.fill: parent
                         placeholderText: qsTr("请输入文章简介~")
                         font.styleName: "Normal"
@@ -733,6 +779,7 @@ Rectangle {
                 }
                 Image {
                     id: coverimage
+                    source: isNewArticle() ? articledata.get(0).coverimg : articleService.articles()[nowArticleNum()].coverimg
                     anchors.fill: parent
                     fillMode: Image.PreserveAspectFit
                     visible: source != ""
@@ -804,6 +851,7 @@ Rectangle {
                     }
                     Image {
                         id: pageimage
+                        source: isNewArticle() ? articledata.get(0).contentimg : articleService.articles()[nowArticleNum()].contentimg
                         anchors.fill: parent
                         fillMode: Image.PreserveAspectFit
                         visible: source != ""
@@ -846,15 +894,15 @@ Rectangle {
                     // 状态
                     // 下拉菜单
                     ComboBox {
-                        id: status
+                        id: statuscombobox
                         anchors.top: statustitle.bottom
                         anchors.topMargin: 10
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.bottom: parent.bottom
                         anchors.bottomMargin: parent.height * 0.4
                         width: parent.width / 1.2
-                        model: ["已发布", "草稿", "私密"]
-                        currentIndex: 0
+                        model: ["已发布", "草稿", "轮播", "私密"]
+                        currentIndex: isNewArticle() ? 1 : articleService.articles()[nowArticleNum()].status
                     }
                     // 保存按钮
                     Rectangle {
@@ -863,7 +911,7 @@ Rectangle {
                         anchors.topMargin: parent.height * 0.05
                         anchors.bottom: parent.bottom
                         anchors.bottomMargin: parent.height * 0.1
-                        width: parent.width / 1.2
+                        width: parent.width *0.8
                         anchors.horizontalCenter: parent.horizontalCenter
                         radius: 5
                         color: "#1791FF"
@@ -880,6 +928,8 @@ Rectangle {
                             onClicked: {
 
                                 // 保存文章
+                                // 判断文章列表当前选中的文章的aid是不是0
+
                             }
                         }
                     }
@@ -887,5 +937,33 @@ Rectangle {
             }
         }
     }
+}
+
+Loader {
+    id: errloader
+
+    anchors.centerIn: parent
+}
+
+Component {
+    id: hasNewArticleNow
+
+    MessageBox {
+        type: "tips"
+        texts: "当前已有正在编辑的文章"
+        helptext: "请先完成当前文章的编辑"
+        conform: true
+        yesorno: false
+        justconform: true
+    }
+}
+
+Connections {
+    function onBtnClicked(x)
+    {
+        errloader.sourceComponent = null
+    }
+
+    target: errloader.item
 }
 }

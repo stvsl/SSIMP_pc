@@ -66,8 +66,6 @@
             "uploadVideo",
         ]
 
-
-
         const toolbar = createToolbar({
             editor,
             selector: '#toolbar-container',
@@ -77,6 +75,16 @@
 
         // 默认全屏
         editor.fullScreen()
+
+        function getHtml() {
+            const html = editor.getHtml()
+            return html
+        }
+
+        function setHtml(html) {
+            editor.setHtml(html)
+        }
+
     </script>
 
 

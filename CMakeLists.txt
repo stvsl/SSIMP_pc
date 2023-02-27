@@ -12,7 +12,7 @@ add_compile_definitions(
     #加密组件调试模式开关 0:关闭 1:开启
     ENCRYPT_ERR_DEBUG=0
     #调试模式开关 0:关闭 1:开启
-    DEV_MODE=0
+    ARTICLE_DEBUG=0
 )
 
 find_package(Qt6 COMPONENTS Quick Qml REQUIRED WebEngineQuick WebEngineCore)
