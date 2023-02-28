@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>内容编辑器</title>
     <link href="qrc:/htmlpage/htmlpage/wangeditor.css" rel="stylesheet">
+    <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
     <style>
         #editor—wrapper {
             z-index: 100;
@@ -76,14 +77,26 @@
         // 默认全屏
         editor.fullScreen()
 
+        let webChannel = null;
+        new QWebChannel(qt.webChannelTransport, function (channel) {
+            webChannel = channel.objects.webChannel;
+            webChannel.print("success");
+            webChannel.setHtml.connect(setHtml);
+            webChannel.getHtml.connect(getHtml);
+        });
+
         function getHtml() {
             const html = editor.getHtml()
+            webChannel.print("getHtml success");
             return html
         }
 
         function setHtml(html) {
             editor.setHtml(html)
+            webChannel.print("setHtml success");
         }
+
+
 
     </script>
 

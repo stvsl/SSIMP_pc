@@ -5,6 +5,7 @@ import QtQuick.Controls.Material
 import QtQuick.Dialogs
 import QtQuick.Layouts
 import QtWebEngine
+import QtWebChannel
 import Service.Article 1.0
 import Data.Article 1.0
 import "../MessageBox"
@@ -43,6 +44,11 @@ Item {
                 articledata.append(articleService.articles()[i])
             }
         }
+
+        function onQueryArticleSuccess()
+        {
+            setHtml(isNewArticle() ? articledata.get(0).text : articleService.articles()[nowArticleNum()].text)
+        }
     }
 
     ListModel {
@@ -76,6 +82,16 @@ Item {
             } else {
             return contentlist.currentIndex;
         }
+    }
+
+    function getHtml()
+    {
+    }
+
+    function setHtml(html)
+    {
+        console.log("setHtml:"+html)
+        webEngineChannel.setHtml(html)
     }
 
     Flow {
@@ -614,7 +630,27 @@ Rectangle {
         anchors.margins: 10
         anchors.bottomMargin: parent.height / 5
         url: "qrc:/htmlpage/htmlpage/contentedit.html"
+        QtObject{
+            id: webEngineChannel
+            WebChannel.id: "webChannel"
+
+            function print(value)
+            {
+                console.log("weboutput:"+value);
+            }
+
+            signal getHtml()
+            signal setHtml(string html)
+        }
+
+        webChannel: WebChannel{
+            registeredObjects:[webEngineChannel]
+        }
+
     }
+
+
+
     // 分割线
     Rectangle {
         width: parent.width

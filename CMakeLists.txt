@@ -15,7 +15,7 @@ add_compile_definitions(
     ARTICLE_DEBUG=0
 )
 
-find_package(Qt6 COMPONENTS Quick Qml REQUIRED WebEngineQuick WebEngineCore)
+find_package(Qt6 COMPONENTS Quick Qml REQUIRED WebEngineQuick WebEngineCore WebChannel)
 find_package(Qt6 REQUIRED Widgets LinguistTools QuickControls2)
 
 ADD_DEFINITIONS(-DTORRENT_LIBRARY)
@@ -126,6 +126,7 @@ target_link_libraries(appSSIMP_pc
     PRIVATE Qt6::Qml
     PRIVATE Qt6::WebEngineQuick
     PRIVATE Qt6::WebEngineCore
+    PRIVATE Qt6::WebChannel
     )
 
 target_link_libraries(appSSIMP_pc PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Plugins/lib/libcrypto.so)
