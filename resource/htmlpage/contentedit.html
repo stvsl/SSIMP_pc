@@ -80,14 +80,14 @@
         let webChannel = null;
         new QWebChannel(qt.webChannelTransport, function (channel) {
             webChannel = channel.objects.webChannel;
-            webChannel.print("success");
+            // webChannel.print("success");
             webChannel.setHtml.connect(setHtml);
             webChannel.getHtml.connect(getHtml);
         });
 
         function getHtml() {
             const html = editor.getHtml()
-            webChannel.print("getHtml success");
+            webChannel.print("getHtml success" + html);
             return html
         }
 

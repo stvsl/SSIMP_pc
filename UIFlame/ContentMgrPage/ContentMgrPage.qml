@@ -86,12 +86,25 @@ Item {
 
     function getHtml()
     {
+        var html = webEngineChannel.getHtml()
+        console.log("getHtml" + html)
+        return html
     }
 
     function setHtml(html)
     {
         console.log("setHtml:"+html)
         webEngineChannel.setHtml(html)
+    }
+
+    function addArticle()
+    {
+        articleService.addArticle(articletitle.text, articlesummary.text, contentpage.getHtml(), coverimage.source, pageimage.source, statuscombox.currentIndex)
+    }
+
+    function updateArticle()
+    {
+        articleService.updateArticle(articledata.get(nowArticleNum()).aid, articletitle.text, articlesummary.text, contentpage.getHtml(), coverimage.source, pageimage.source, statuscombox.currentIndex)
     }
 
     Flow {
@@ -198,7 +211,7 @@ Item {
                             anchors.fill: parent
                             onClicked: {
                                 contentlist.currentIndex = index
-                                articleService.fetchArticle(aid)
+                                isNewArticle()? setHtml(articledata.get(0).text) : articleService.fetchArticle(aid)
                             }
                         }
 
@@ -646,6 +659,9 @@ Rectangle {
         webChannel: WebChannel{
             registeredObjects:[webEngineChannel]
         }
+        onLoadingChanged: {
+            setHtml(articleService.articles()[nowArticleNum()].text)
+        }
 
     }
 
@@ -930,9 +946,9 @@ Rectangle {
                     // 状态
                     // 下拉菜单
                     ComboBox {
-                        id: statuscombobox
+                        id: statuscombox
                         anchors.top: statustitle.bottom
-                        anchors.topMargin: 10
+                        anchors.topMargin: 5
                         anchors.horizontalCenter: parent.horizontalCenter
                         anchors.bottom: parent.bottom
                         anchors.bottomMargin: parent.height * 0.4
@@ -943,11 +959,11 @@ Rectangle {
                     // 保存按钮
                     Rectangle {
                         id: savebutton
-                        anchors.top: status.bottom
-                        anchors.topMargin: parent.height * 0.05
+                        anchors.top: statuscombox.bottom
+                        anchors.topMargin: parent.height * 0.02
                         anchors.bottom: parent.bottom
                         anchors.bottomMargin: parent.height * 0.1
-                        width: parent.width *0.8
+                        width: statuscombox.width
                         anchors.horizontalCenter: parent.horizontalCenter
                         radius: 5
                         color: "#1791FF"
@@ -962,9 +978,9 @@ Rectangle {
                             anchors.fill: parent
                             cursorShape: Qt.PointingHandCursor
                             onClicked: {
-
                                 // 保存文章
-                                // 判断文章列表当前选中的文章的aid是不是0
+                                // 判断文章列表当前选中的文章
+                                isNewArticle() ? addArticle() : updateArticle()
 
                             }
                         }

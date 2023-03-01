@@ -48,6 +48,7 @@ qt_add_executable(appSSIMP_pc
     Utils/nget.h Utils/nget.cpp
     Utils/npost.h Utils/npost.cpp
     Utils/netbase.h Utils/netbase.cpp
+    Utils/imgutils.h Utils/imgutils.cpp
 
     # 安全加密组件封装(Go组件编译绑定)
     Security/encryption.h Security/encryption.cpp

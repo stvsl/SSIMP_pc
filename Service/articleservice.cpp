@@ -129,11 +129,38 @@ void ArticleService::fetchArticle(QString aid)
     post->deleteLater();
 }
 
-void ArticleService::addArticle(QString aid, QString title, QString content, QString author, QString date)
+void ArticleService::addArticle(QString title, QString introduction, QString text, QString coverimgpath, QString contentimgpath, int status)
 {
-    ArticleData *article = new ArticleData(this);
-    m_articles->append(article);
-    emit addArticleSuccess();
+    QString coverimgbase64 = ImgUtils::imgToBase64(coverimgpath);
+    qDebug() << "coverimgbase64:" << coverimgbase64;
+    QString contentimgbase64 = ImgUtils::imgToBase64(contentimgpath);
+    TcpPost *post = new TcpPost("/api/article/add", this);
+    QJsonObject body;
+    post->setHeader("Authorization", globalsecurity::TOKEN);
+    body.insert("title", title);
+    body.insert("introduction", introduction);
+    body.insert("text", text);
+    body.insert("coverimg", coverimgbase64);
+    body.insert("contentimg", contentimgbase64);
+    body.insert("status", status);
+    post->setBody(body);
+    qDebug() << "addArticle（）：" << body;
+    TcpNetUtils *net = new TcpNetUtils(post);
+    connect(net, &TcpNetUtils::requestFinished, this, [=, this]()
+            {
+                         // 获取返回值
+                         QJsonDocument resp = net->getResponseBodyJsonDoc();
+                            if(resp["code"] != "SE200"){
+                            qDebug() << "添加文章失败" << resp["code"].toString();
+                            } 
+                            else {
+                                // 刷新文章列表
+                                getArticleList();
+                                emit addArticleSuccess();
+                            } });
+    net->sendRequest();
+    net->deleteLater();
+    post->deleteLater();
 }
 
 void ArticleService::deleteArticle(QString aid)
@@ -156,30 +183,38 @@ void ArticleService::deleteAllArticle()
     emit deleteArticleSuccess();
 }
 
-void ArticleService::updateArticle(QString aid, QString title, QString content)
+void ArticleService::updateArticle(QString aid, QString title, QString introduction, QString text, QString coverimgpath, QString contentimgpath, int status)
 {
-    // 在列表中查找对应的文章
-    for (int i = 0; i < m_articles->size(); i++)
-    {
-        if (m_articles->at(i)->aid() == aid)
-        {
-            return;
-        }
-    }
-    emit updateArticleFailed();
-}
-
-void ArticleService::queryArticle(QString aid)
-{
-    // 在列表中查找对应的文章
-    for (int i = 0; i < m_articles->size(); i++)
-    {
-        if (m_articles->at(i)->aid() == aid)
-        {
-            return;
-        }
-    }
-    emit queryArticleFailed();
+    QString coverimgbase64 = ImgUtils::imgToBase64(coverimgpath);
+    QString contentimgbase64 = ImgUtils::imgToBase64(contentimgpath);
+    TcpPost *post = new TcpPost("/api/article/update", this);
+    QJsonObject body;
+    post->setHeader("Authorization", globalsecurity::TOKEN);
+    body.insert("aid", aid);
+    body.insert("title", title);
+    body.insert("introduction", introduction);
+    body.insert("text", text);
+    body.insert("coverimg", coverimgbase64);
+    body.insert("contentimg", contentimgbase64);
+    body.insert("status", status);
+    post->setBody(body);
+    // qDebug() << "更新文章" << post->getBody();
+    TcpNetUtils *net = new TcpNetUtils(post);
+    connect(net, &TcpNetUtils::requestFinished, this, [=, this]()
+            {
+                         // 获取返回值
+                         QJsonDocument resp = net->getResponseBodyJsonDoc();
+                            if(resp["code"] != "SE200"){
+                            qDebug() << "更新文章失败" << resp["code"].toString();
+                            } 
+                            else {
+                                // 刷新文章列表
+                                getArticleList();
+                                emit updateArticleSuccess();
+                            } });
+    net->sendRequest();
+    net->deleteLater();
+    post->deleteLater();
 }
 
 // Path: Service/articleservice.h
