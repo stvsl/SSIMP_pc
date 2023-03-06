@@ -28,6 +28,22 @@ void TcpNetUtils::sendRequest()
 {
   // 创建请求
   QNetworkRequest request;
+  // 检查是否有参数
+  if (this->params.size() > 0)
+  {
+    // 拼接参数
+    QString paramsStr = "?";
+    QMapIterator<QString, QString> i(this->params);
+    while (i.hasNext())
+    {
+      i.next();
+      paramsStr += i.key() + "=" + i.value() + "&";
+    }
+    // 去除最后一个&
+    paramsStr = paramsStr.left(paramsStr.length() - 1);
+    // 设置请求地址
+    this->url.setUrl(this->url.toString() + paramsStr);
+  }
   request.setUrl(this->url);
   // 设置请求头
   QMapIterator<QString, QString> i(this->headers);

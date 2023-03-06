@@ -130,7 +130,6 @@ void ArticleData::setIntroduction(const QString &introduction)
 {
     if (m_introduction == introduction)
         return;
-
     m_introduction = introduction;
 }
 

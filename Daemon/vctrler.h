@@ -6,8 +6,10 @@
 #include <QMutex>
 #include <QObject>
 #include <QQmlApplicationEngine>
+#include <QThread>
 
-enum dialogType {
+enum dialogType
+{
   // 提示对话框
   DIALOG_TIP = 0,
   // 消息对话框
@@ -19,7 +21,8 @@ enum dialogType {
 };
 
 /// @brief 对话框按钮类型
-enum dialogBtnType {
+enum dialogBtnType
+{
   // 确定取消对话框
   DIALOG_OK_CANCEL = 0,
   // 是否对话框
@@ -30,7 +33,8 @@ enum dialogBtnType {
 
 /// @brief 界面控制器
 /// @details 用于控制界面的显示
-class vctrler : public QObject {
+class vctrler : public QObject
+{
   Q_OBJECT
 
 public:

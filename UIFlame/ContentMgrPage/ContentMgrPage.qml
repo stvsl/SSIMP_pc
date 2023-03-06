@@ -11,53 +11,106 @@ import Data.Article 1.0
 import "../MessageBox"
 
 Item {
-    id: contentpage
+    property string tmpeditedtext: ""
+        id: contentpage
+        layer.smooth: true
 
-    layer.smooth: true
-
-    Timer {
-        id: timer
-
-        interval: 100
-        running: true
-        repeat: false
-        onTriggered: {
-
+        ArticleService {
+            id: articleService
         }
-    }
-    ArticleService {
-        id: articleService
-    }
 
-    Component.onCompleted: {
-        // 获取文章列表
-        articleService.getArticleList()
-    }
+        Component.onCompleted: {
+            // 获取文章列表
+            articleService.getArticleList()
+        }
 
-    Connections {
-        target: articleService
+        Connections {
+            target: articleService
 
-        function onArticleListChanged()
-        {
-            articledata.clear()
-            for (var i = 0; i < articleService.articles().length; i++) {
-                articledata.append(articleService.articles()[i])
+            function onArticleListChanged()
+            {
+                articledata.clear()
+                carouseldata.clear()
+                for (var i = 0; i < articleService.articles().length; i++) {
+                    articledata.append(articleService.articles()[i])
+                }
+                articleService.reGetCarousel()
+            }
+
+            function onQueryArticleSuccess(article)
+            {
+                if (article.aid === "")
+                {
+                    for (var i = 0; i < articledata.count; i++) {
+                        if (articledata.get(i).aid === "0")
+                        {
+                            articletitle.text = articledata.get(i).title
+                            articlesummary.text = articledata.get(i).introduction
+                            contentpage.setHtml(articledata.get(i).text)
+                            coverimage.source = articledata.get(i).coverimg
+                            pageimage.source = articledata.get(i).contentimg
+                            statuscombox.currentIndex = articledata.get(i).status
+                            break
+                        }
+                    }
+
+                }else{
+                articletitle.text = article.title
+                articlesummary.text = article.introduction
+                contentpage.setHtml(article.text)
+                coverimage.source = article.coverimg
+                pageimage.source = article.contentimg
+                statuscombox.currentIndex = article.status
+            }}
+
+            function onDeleteArticleSuccess()
+            {
+                articledata.remove(contentlist.currentIndex)
+            }
+
+            function onReGetCarouselSuccess(list)
+            {
+                carouseldata.clear()
+                console.log("len"+list.length)
+                for (var i = 0; i < list.length; i++) {
+                    carouseldata.append(list[i])
+                }
+            }
+
+            function onCancelCarouselSuccess()
+            {
+                articleService.reGetCarousel()
             }
         }
 
-        function onQueryArticleSuccess()
-        {
-            setHtml(isNewArticle() ? articledata.get(0).text : articleService.articles()[nowArticleNum()].text)
+        Timer{
+            id: timer
+            interval: 2000
+            repeat: true
+            running: true
+            onTriggered: {
+                contentpage.getHtml()
+            }
         }
+
+        ListModel {
+            id: articledata
+        }
+
+        ListModel{
+            id: carouseldata
+        }
+
+        function getHtml()
+        {
+            webview.runJavaScript("getHtml()", function(result) {
+            tmpeditedtext = result
+        });
     }
 
-    ListModel {
-        id: articledata
-    }
-
-    function isNewArticle()
+    function setHtml(html)
     {
-        return articledata.get(contentlist.currentIndex).aid == 0;
+        webEngineChannel.setHtml(html)
     }
 
     function hasNewArticle()
@@ -65,46 +118,15 @@ Item {
         // 遍历列表，判断是否有新文章
         for (var i = 0; i < articledata.count; i++) {
             if (articledata.get(i).aid == 0)
-                return true;
+                return true
         }
-        return false;
+        return false
     }
 
-    function nowArticleNum()
+    function saveArticle()
     {
-        // 判断当前文章列表中是否有新文章，如果有则判断当前的文章是否是新文章，如果是则返回0, 如果不是则返回contentlist.currentIndex-1的值，如果没有则返回contentlist.currentIndex的值
-        if (hasNewArticle())
-        {
-            if (isNewArticle())
-                return 0;
-            else
-                return contentlist.currentIndex - 1;
-            } else {
-            return contentlist.currentIndex;
-        }
-    }
-
-    function getHtml()
-    {
-        var html = webEngineChannel.getHtml()
-        console.log("getHtml" + html)
-        return html
-    }
-
-    function setHtml(html)
-    {
-        console.log("setHtml:"+html)
-        webEngineChannel.setHtml(html)
-    }
-
-    function addArticle()
-    {
-        articleService.addArticle(articletitle.text, articlesummary.text, contentpage.getHtml(), coverimage.source, pageimage.source, statuscombox.currentIndex)
-    }
-
-    function updateArticle()
-    {
-        articleService.updateArticle(articledata.get(nowArticleNum()).aid, articletitle.text, articlesummary.text, contentpage.getHtml(), coverimage.source, pageimage.source, statuscombox.currentIndex)
+        getHtml()
+        articleService.modifyArticle(articledata.get(contentlist.currentIndex).aid, articletitle.text, articlesummary.text, tmpeditedtext, coverimage.source, pageimage.source, statuscombox.currentIndex)
     }
 
     Flow {
@@ -211,7 +233,7 @@ Item {
                             anchors.fill: parent
                             onClicked: {
                                 contentlist.currentIndex = index
-                                isNewArticle()? setHtml(articledata.get(0).text) : articleService.fetchArticle(aid)
+                                articleService.queryArticle(aid)
                             }
                         }
 
@@ -245,11 +267,10 @@ Item {
 
                             Image {
                                 id: listimage
-
                                 source:coverimg
                                 width: 60
                                 height: 60
-                                fillMode: Image.PreserveAspectFit
+                                fillMode: Image.PreserveAspectCrop
                                 anchors.verticalCenter: parent.verticalCenter
                                 anchors.left: parent.left
                                 anchors.leftMargin: 15
@@ -442,12 +463,12 @@ Item {
                                     }
                                     // articledata 添加一条数据
                                     articledata.insert(0, {
-                                    "aid": 0,
+                                    "aid": "0",
                                     "coverimg": "",
                                     "contentimg": "",
                                     "title": "新建文章",
                                     "introduction": "",
-                                    "text": "",
+                                    "text": "开始编辑内容吧",
                                     "writetime": new Date(),
                                     "updatetime": new Date(),
                                     "author": "admin",
@@ -479,8 +500,8 @@ Item {
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
-                                // 删除文章
-                                articlemgr.deleteArticle()
+                                // 删除文章，如果是新建的文章，直接从articledata中删除，负责调用删除接口
+                                articleService.deleteArticle(articledata.get(contentlist.currentIndex).aid)
                             }
                         }
                     }
@@ -506,6 +527,7 @@ Item {
     }
 }
 
+// 轮播设置面板
 Rectangle {
     id: rightarea
 
@@ -540,23 +562,180 @@ Rectangle {
     height: 175
     radius: 10
     layer.enabled: true
-    color: "white"
 
     Behavior on height {
     NumberAnimation {
         duration: 400
+    }}
+
+    layer.effect: DropShadow {
+        cached: true
+        color: "#90849292"
+        horizontalOffset: 3
+        verticalOffset: 3
+        radius: 10
+        samples: 2 * radius + 1
+    }
+
+    Text{
+        text: "现在还没有轮播图～选择文章作为轮播图吧！"
+        color: "#8E99A5"
+        font.styleName: "Demibold"
+        font.pointSize: 12
+        anchors.centerIn: parent
+        visible: carouseldata.count === 0
+    }
+
+    ListView{
+        id: carousellist
+        orientation: Qt.Horizontal
+        anchors.fill: parent
+        anchors.margins: 10
+        spacing: 10
+        model: carouseldata
+
+        populate: Transition {
+            NumberAnimation {
+                property: "opacity"
+                from: 0
+                to: 1
+                duration: 200
+            }
+        }
+
+        add: Transition {
+            ParallelAnimation {
+                NumberAnimation {
+                    property: "opacity"
+                    from: 0
+                    to: 1
+                    duration: 200
+                }
+
+                NumberAnimation {
+                    property: "y"
+                    from: 0
+                    duration: 200
+                }
+            }
+        }
+
+        displaced: Transition {
+            SpringAnimation {
+                property: "y"
+                spring: 3
+                damping: 0.1
+                epsilon: 0.25
+            }
+        }
+
+        remove: Transition {
+            SequentialAnimation {
+                NumberAnimation {
+                    property: "y"
+                    to: 0
+                    duration: 120
+                }
+
+                NumberAnimation {
+                    property: "opacity"
+                    to: 0
+                    duration: 120
+                }
+            }
+        }
+
+        delegate: Item {
+            width: 250
+            anchors.top: parent.top
+            anchors.topMargin: 5
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 5
+
+            Rectangle{
+                anchors.fill: parent
+                radius: 10
+                layer.enabled:true
+                layer.effect: DropShadow {
+                    cached: true
+                    color: "#90849292"
+                    horizontalOffset: 2
+                    verticalOffset: 2
+                    radius: 10
+                    samples: 2 * radius + 1
+                }
+                Image{
+                    id:carousepanelimg
+                    x: 10
+                    y: 10
+                    height: parent.height * 0.7
+                    width:parent.height *0.7
+                    // 缩放，显示中间部分
+                    fillMode: Image.PreserveAspectCrop
+                    source: coverimg
+                }
+                Text{
+                    text: "aid:"+aid
+                    x:10
+                    anchors.bottom:parent.bottom
+                    anchors.bottomMargin: 10
+                }
+                Text{
+                    id:carousepaneltitle
+                    anchors.top:parent.top
+                    anchors.topMargin: 10
+                    anchors.left:carousepanelimg.right
+                    anchors.leftMargin: 10
+                    anchors.right:parent.right
+                    anchors.rightMargin: 10
+                    text:title
+                    verticalAlignment: Text.AlignVCenter
+                    elide: Text.ElideRight
+                    font.pointSize: 12
+                    font.styleName: "Medium"
+                }
+                Text{
+                    anchors.top:carousepaneltitle.bottom
+                    anchors.topMargin: 10
+                    anchors.left:carousepanelimg.right
+                    anchors.leftMargin: 10
+                    anchors.right:parent.right
+                    anchors.rightMargin: 10
+                    anchors.bottom:parent.bottom
+                    anchors.bottomMargin: 60
+                    wrapMode: Text.WordWrap
+                    text:introduction
+                }
+                Rectangle{
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 10
+                    anchors.left:carousepanelimg.right
+                    anchors.leftMargin: 20
+                    anchors.right: parent.right
+                    anchors.rightMargin: 20
+                    height: 30
+                    color:"#F4A236"
+                    radius: 10
+                    Text{
+                        anchors.centerIn: parent
+                        text: "移除"
+                        color: "white"
+                        font.styleName: "Medium"
+                        font.pointSize: 10
+                    }
+                    MouseArea {
+                        anchors.fill: parent
+                        onClicked: {
+                            articleService.cancelCarousel(aid)
+                        }
+                    }
+                }
+
+            }
+        }
     }
 }
 
-layer.effect: DropShadow {
-    cached: true
-    color: "#90849292"
-    horizontalOffset: 3
-    verticalOffset: 3
-    radius: 10
-    samples: 2 * radius + 1
-}
-}
 
 Rectangle {
     anchors.top: carouselmgrpanel.bottom
@@ -566,6 +745,7 @@ Rectangle {
     color: "transparent"
 
     Text {
+        id: editmgrtip
         text: "内容编辑"
         width: 120
         height: 25
@@ -596,6 +776,7 @@ Rectangle {
             onClicked: {
                 if (leftarea.visible)
                 {
+                    editmgrtip.text = "正在编辑：" + articledata.get(contentlist.currentIndex).title
                     leftarea.visible = false
                     carouselmgrpanel.height = 0
                     carouselmgrpanel.y = 0
@@ -604,6 +785,7 @@ Rectangle {
                     carouselmgrpanel.visible = false
                     leftarea.width = 0
                 } else {
+                editmgrtip.text = "内容编辑"
                 leftarea.visible = true
                 carouselmgrpanel.height = 200
                 carouselmgrpanel.y = 35
@@ -614,8 +796,7 @@ Rectangle {
             }
         }
     }
-}
-}
+}}
 
 // 内容编辑器
 Rectangle {
@@ -658,9 +839,6 @@ Rectangle {
 
         webChannel: WebChannel{
             registeredObjects:[webEngineChannel]
-        }
-        onLoadingChanged: {
-            setHtml(articleService.articles()[nowArticleNum()].text)
         }
 
     }
@@ -711,7 +889,6 @@ Rectangle {
 
                 TextField {
                     id: articletitle
-                    text: isNewArticle() ? articledata.get(0).title : articleService.articles()[nowArticleNum()].title
                     width: parent.width - 105
                     height: 38
                     placeholderText: qsTr("请输入文章标题~")
@@ -743,7 +920,6 @@ Rectangle {
                     height: parent.height
                     TextArea {
                         id: articlesummary
-                        text: isNewArticle() ? articledata.get(0).introduction : articleService.articles()[nowArticleNum()].introduction
                         anchors.fill: parent
                         placeholderText: qsTr("请输入文章简介~")
                         font.styleName: "Normal"
@@ -813,6 +989,7 @@ Rectangle {
                 anchors.bottom: parent.bottom
                 anchors.bottomMargin: 10
                 radius: 5
+                clip: true
                 layer.enabled: true
                 layer.effect: DropShadow {
                     cached: true
@@ -831,9 +1008,9 @@ Rectangle {
                 }
                 Image {
                     id: coverimage
-                    source: isNewArticle() ? articledata.get(0).coverimg : articleService.articles()[nowArticleNum()].coverimg
                     anchors.fill: parent
-                    fillMode: Image.PreserveAspectFit
+                    // 缩放
+                    fillMode: Image.PreserveAspectCrop
                     visible: source != ""
                 }
                 MouseArea {
@@ -863,6 +1040,7 @@ Rectangle {
                 anchors.rightMargin: parent.width * 0.12
                 anchors.top: parent.top
                 anchors.bottom: parent.bottom
+                clip: true
                 color: "transparent"
                 // 页面大图
                 Text {
@@ -903,9 +1081,8 @@ Rectangle {
                     }
                     Image {
                         id: pageimage
-                        source: isNewArticle() ? articledata.get(0).contentimg : articleService.articles()[nowArticleNum()].contentimg
                         anchors.fill: parent
-                        fillMode: Image.PreserveAspectFit
+                        fillMode: Image.PreserveAspectCrop
                         visible: source != ""
                     }
                     MouseArea {
@@ -954,8 +1131,8 @@ Rectangle {
                         anchors.bottomMargin: parent.height * 0.4
                         width: parent.width / 1.2
                         model: ["已发布", "草稿", "轮播", "私密"]
-                        currentIndex: isNewArticle() ? 1 : articleService.articles()[nowArticleNum()].status
                     }
+
                     // 保存按钮
                     Rectangle {
                         id: savebutton
@@ -980,8 +1157,7 @@ Rectangle {
                             onClicked: {
                                 // 保存文章
                                 // 判断文章列表当前选中的文章
-                                isNewArticle() ? addArticle() : updateArticle()
-
+                                contentpage.saveArticle()
                             }
                         }
                     }
