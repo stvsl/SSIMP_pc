@@ -13,6 +13,7 @@ add_compile_definitions(
     ENCRYPT_ERR_DEBUG=0
     #调试模式开关 0:关闭 1:开启
     ARTICLE_DEBUG=0
+    TASKSET_DEBUG=0
 )
 
 find_package(Qt6 COMPONENTS Quick Qml REQUIRED WebEngineQuick WebEngineCore WebChannel)

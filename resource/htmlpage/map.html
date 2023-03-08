@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>Hello, World</title>
+    <style type="text/css">
+        html {
+            height: 100%
+        }
+
+        body {
+            height: 100%;
+            margin: 0px;
+            padding: 0px
+        }
+
+        #button1 {
+            background-color: #81a5ee;
+            color: white;
+            margin: 8px 0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 60px;
+        }
+
+        #container {
+            height: 100%
+        }
+
+        .anchorBL {
+            display: none;
+        }
+
+        .BMap_cpyCtrl {
+            display: none;
+        }
+
+        /* 显示比例尺 */
+        .BMap_scaleCtrl {
+            display: block;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            background: #f1f1f1;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: #00BDFF;
+            padding-bottom: 10px;
+        }
+
+        .container {
+            margin-top: 50px;
+            background: #fff;
+            padding: 50px 20px 50px;
+        }
+
+        .table-ui {
+            width: 100%;
+        }
+
+        .table-ui tr th {
+            height: 30px;
+            padding-left: 5px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .table-ui tr td {
+            height: 30px;
+            padding-left: 5px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .table-ui .url {
+            width: 30%;
+        }
+
+        .table-ui .priority {
+            width: 160px;
+        }
+
+        .table-ui .frequency {
+            width: 150px;
+        }
+
+        .table-ui .change {
+            width: 110px;
+        }
+
+        .table-ui tbody tr:nth-child(even) {
+            background: #f5f5f5;
+        }
+
+        .table-ui tbody tr:nth-child(odd) td {
+            border-left: 3px solid #fff;
+        }
+
+        .table-ui tbody tr:nth-child(even) td {
+            border-left: 3px solid #fff;
+        }
+
+        .table-ui tbody tr:hover {
+            background: #00BDFF;
+            -webkit-transition: all .3s linear;
+            -moz-transition: all .3s linear;
+            -o-transition: all .3s linear;
+            -ms-transition: all .3s linear;
+            transition: all .3s linear;
+        }
+
+        .table-ui tbody tr:hover td {
+            color: #fff;
+        }
+
+        a {
+            text-decoration: none;
+            color: #2d2f30;
+        }
+
+        @media (max-width: 569px) {
+
+            .container {
+                margin-top: 0;
+            }
+
+            .priority {
+                display: none;
+            }
+
+            .frequency {
+                display: none;
+            }
+
+            .table-ui tbody td:nth-child(2) {
+                display: none;
+            }
+
+            .table-ui tbody td:nth-child(3) {
+                display: none;
+            }
+
+        }
+    </style>
+    <!-- 调用qt内部组件完成qt连接器的载入 -->
+    <script src=qrc:///qtwebchannel/qwebchannel.js></script>
+    <script type="text/javascript"
+        src="https://api.map.baidu.com/api?v=1.0&type=webgl&ak=HOeqsdIRwYb4SaOozYyY3yTqxPGxoz6U">
+        </script>
+    <script src="https://unpkg.com/mapvgl/dist/mapvgl.min.js"></script>
+
+    <!-- 如果使用到Three.js相关的图层需要引用 -->
+    <script src="https://unpkg.com/mapvgl/dist/mapvgl.threelayers.min.js"></script>
+</head>
+
+<body>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.js"></script>
+    <div id="container"></div>
+    <script type="text/javascript">
+        // 创建地图实例 
+        var mapGL = new BMapGL.Map("container");
+        // 创建点坐标 
+        var point = new BMapGL.Point(121.72439102324424, 41.61128739424099);
+        // 初始化地图，设置中心点坐标和地图级别 
+        mapGL.centerAndZoom(point, 20);
+        //开启鼠标滚轮缩放
+        mapGL.enableScrollWheelZoom(true);
+        //设置地图显示等级（地图深度）
+        mapGL.setZoom(16);
+        // 添加比例尺控件
+        var scaleCtrl = new BMapGL.ScaleControl();
+        mapGL.addControl(scaleCtrl);
+        // 添加3D控件
+        var navi3DCtrl = new BMapGL.NavigationControl3D();
+        mapGL.addControl(navi3DCtrl);
+        var trans;
+        //qt通信组件实例化
+        new QWebChannel(qt.webChannelTransport, function (channel) {
+            webChannel = channel.objects.webChannel;
+            webChannel.print("success");
+        });
+
+        //设置中央位置
+        function setCenter(x, y) {
+            var point = new BMapGL.Point(x, y);
+            mapGL.centerAndZoom(point, 15);
+            mapGL.setZoom(20);
+        }
+
+        function setPos(i, j) {
+            var point = new BMapGL.Point(i, j);
+            mapGL.centerAndZoom(point, 15);
+            mapGL.setZoom(20);
+        }
+
+        //设置地标文字显示
+        function setPoiText(boo) {
+            mapGL.setDisplayOptions({
+                poiText: boo
+            })
+        }
+
+        //设置地标图标显示
+        function setPoiIcon(boo) {
+            mapGL.setDisplayOptions({
+                poiIcon: boo
+            })
+        }
+
+        //搜索功能
+        function searchP(p) {
+            var myGeo = new BMapGL.Geocoder();
+            //将地址解析结果显示在地图上，并调整地图视野
+            myGeo.getPoint(p, function (point) {
+                if (point) {
+                    mapGL.centerAndZoom(point, 16);
+                    mapGL.setZoom(20);
+                    var marker = new BMapGL.Marker(point);
+                    mapGL.addOverlay(marker);
+                    var geoc = new BMapGL.Geocoder();
+                    geoc.getLocation(pt, function (rs) {
+                        var addComp = rs.addressComponents;
+                        var infop = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber;
+                        var info = infop + "<button id='button1' onclick='sendLocateInfo(\"" + infop + "\"," + point.lng + "," + point.lat + ")'> 确定 </button>";
+                        var infoWindow = new BMapGL.InfoWindow(info);
+                        infoWindow.setTitle("当前地理位置（汇报）");
+                        mapGL.openInfoWindow(infoWindow, pt);
+                    });
+                } else {
+                    alert("error:您的输入无效");
+                }
+            })
+        }
+
+        //卫星地球模式
+        function setMapType() {
+            mapGL.getMapType() == BMAP_EARTH_MAP ? mapGL.setMapType(BMAP_NORMAL_MAP) :
+                mapGL.setMapType(BMAP_EARTH_MAP);
+        }
+
+        //添加结点显示
+        function addPoint(info, x, y) {
+            mapGL.closeInfoWindow();
+            mapGL.clearOverlays();
+            var point = new BMapGL.Point(x, y);
+            var marker = new BMapGL.Marker(point);
+            mapGL.addOverlay(marker);
+            // 点击后显示详情
+            marker.addEventListener("click", function () {
+                // 获取当前点的坐标，计算地理位置
+                var point = marker.getPosition();
+                var gc = new BMapGL.Geocoder();
+                // 获取当前点的坐标，请求地理位置，显示在地图上
+                gc.getLocation(point, function (rs) {
+                    var addComp = rs.addressComponents;
+                    var info = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber;
+                    var infoWindow = new BMapGL.InfoWindow(info);
+                    infoWindow.setTitle("当前地理位置（汇报）");
+                    mapGL.openInfoWindow(infoWindow, point);
+                });
+            });
+            mapGL.addEventListener("click", function () {
+                mapGL.closeInfoWindow();
+            });
+        }
+
+        function enableLinstener() {
+            var geoc = new BMapGL.Geocoder();
+            mapGL.addEventListener("click", function (e) {
+                mapGL.closeInfoWindow();
+                mapGL.clearOverlays();
+                var pt = e.latlng;
+                var marker = new BMapGL.Marker(new BMapGL.Point(pt.lng, pt.lat));
+                mapGL.addOverlay(marker);
+                geoc.getLocation(pt, function (rs) {
+                    var addComp = rs.addressComponents;
+                    var infop = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber;
+                    var info = infop + "<button id='button1' onclick='sendLocateInfo(\"" + infop + "\"," + pt.lng + "," + pt.lat + ")'> 确定 </button>";
+                    var infoWindow = new BMapGL.InfoWindow(info);
+                    infoWindow.setTitle("当前地理位置（汇报）");
+                    mapGL.openInfoWindow(infoWindow, pt);
+                });
+            });
+        }
+
+
+        function disableLinstener() {
+            mapGL.removeEventListener("click");
+        }
+        // TODO
+        function sendLocateInfo(info, x, y) {
+            trans.receiveLocateInfo(info, x, y);
+            disableLinstener();
+        }
+    </script>
+</body>
+
+</html>

@@ -13,11 +13,12 @@ class TaskSetData : public QObject
     Q_PROPERTY(float poslo READ poslo WRITE setPoslo NOTIFY posloChanged)
     Q_PROPERTY(float posli READ posli WRITE setPosli NOTIFY posliChanged)
     Q_PROPERTY(int cycle READ cycle WRITE setCycle NOTIFY cycleChanged)
+    Q_PROPERTY(int state READ state WRITE setState NOTIFY stateChanged)
 public:
     explicit TaskSetData(QObject *parent = nullptr);
     explicit TaskSetData(int tid, const QString &name, const QString &content,
-                      const QString &area, float poslo, float posli,
-                      int cycle, QObject *parent = nullptr);
+                         const QString &area, float poslo, float posli,
+                         int cycle, int state, QObject *parent = nullptr);
 
     int tid() const;
     QString name() const;
@@ -26,6 +27,7 @@ public:
     float poslo() const;
     float posli() const;
     int cycle() const;
+    int state() const;
     void setTid(int tid);
     void setName(const QString &name);
     void setContent(const QString &content);
@@ -33,6 +35,7 @@ public:
     void setPoslo(float poslo);
     void setPosli(float posli);
     void setCycle(int cycle);
+    void setState(int state);
 
 signals:
     void tidChanged();
@@ -42,6 +45,7 @@ signals:
     void posloChanged();
     void posliChanged();
     void cycleChanged();
+    void stateChanged();
 
 private:
     int m_tid;
@@ -51,6 +55,7 @@ private:
     float m_poslo;
     float m_posli;
     int m_cycle;
+    int m_state;
 };
 
 #endif // TASKSETDATA_H

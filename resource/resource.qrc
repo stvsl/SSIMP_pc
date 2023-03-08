@@ -42,5 +42,6 @@
         <file>htmlpage/employeeinfo.html</file>
         <file>htmlpage/contentedit.html</file>
         <file>htmlpage/wangeditor.css</file>
+        <file>htmlpage/map.html</file>
     </qresource>
 </RCC>

@@ -15,6 +15,7 @@ public:
     Q_INVOKABLE QQmlListProperty<TaskSetData> tasksets();
     Q_INVOKABLE void modifyTaskSet(QString tid, QString name, QString content, QString area, float poslo, float posli, int cycle);
     Q_INVOKABLE void deleteTaskSet(QString tid);
+    Q_INVOKABLE QVariant getTaskSet(QString tid);
 
 private:
     void addTaskSet(QString name, QString content, QString area, float poslo, float posli, int cycle);

@@ -7,8 +7,8 @@ TaskSetData::TaskSetData(QObject *parent)
 
 TaskSetData::TaskSetData(int tid, const QString &name, const QString &content,
                          const QString &area, float poslo, float posli,
-                         int cycle, QObject *parent)
-    : QObject{parent}, m_tid{tid}, m_name{name}, m_content{content}, m_area{area}, m_poslo{poslo}, m_posli{posli}, m_cycle{cycle}
+                         int cycle, int state, QObject *parent)
+    : QObject{parent}, m_tid{tid}, m_name{name}, m_content{content}, m_area{area}, m_poslo{poslo}, m_posli{posli}, m_cycle{cycle}, m_state{state}
 {
 }
 
@@ -45,6 +45,11 @@ float TaskSetData::posli() const
 int TaskSetData::cycle() const
 {
     return m_cycle;
+}
+
+int TaskSetData::state() const
+{
+    return m_state;
 }
 
 void TaskSetData::setTid(int tid)
@@ -108,4 +113,13 @@ void TaskSetData::setCycle(int cycle)
 
     m_cycle = cycle;
     emit cycleChanged();
+}
+
+void TaskSetData::setState(int state)
+{
+    if (m_state == state)
+        return;
+
+    m_state = state;
+    emit stateChanged();
 }
