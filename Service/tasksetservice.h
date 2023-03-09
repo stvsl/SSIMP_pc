@@ -19,7 +19,7 @@ public:
 
 private:
     void addTaskSet(QString name, QString content, QString area, float poslo, float posli, int cycle);
-    void updateTaskSet(QString tid);
+    void updateTaskSet(QString tid, QString name, QString content, QString area, float poslo, float posli, int cycle);
 signals:
     void taskSetListChanged(QQmlListProperty<TaskSetData> tasksets);
 

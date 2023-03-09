@@ -4,7 +4,10 @@
 <head>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-    <title>Hello, World</title>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*" />
+    <meta http-equiv="Access-Control-Allow-Methods" content="*" />
+    <meta http-equiv="Access-Control-Allow-Credentials" content="true" />
+    <title>地图处理系统</title>
     <style type="text/css">
         html {
             height: 100%
@@ -168,7 +171,8 @@
 
 <body>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.js"></script>
-    <div id="container"></div>
+    <div id="container">
+    </div>
     <script type="text/javascript">
         // 创建地图实例 
         var mapGL = new BMapGL.Map("container");
@@ -186,7 +190,6 @@
         // 添加3D控件
         var navi3DCtrl = new BMapGL.NavigationControl3D();
         mapGL.addControl(navi3DCtrl);
-        var trans;
         //qt通信组件实例化
         new QWebChannel(qt.webChannelTransport, function (channel) {
             webChannel = channel.objects.webChannel;

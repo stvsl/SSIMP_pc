@@ -43,10 +43,6 @@ void TaskSetService::getTaskSetList()
                 TaskSetData *taskset = new TaskSetData(tid, name, content, area, poslo, posli, cycle,state);
                 m_tasksets->append(taskset);
             }
-            for (int i = 0; i < m_tasksets->size(); i++)
-            {
-                qDebug() << m_tasksets->at(i);
-            }
             emit taskSetListChanged(QQmlListProperty<TaskSetData>(this, m_tasksets));
         } });
     net->sendRequest();
@@ -59,7 +55,17 @@ QQmlListProperty<TaskSetData> TaskSetService::tasksets()
 
 void TaskSetService::modifyTaskSet(QString tid, QString name, QString content, QString area, float poslo, float posli, int cycle)
 {
-    // 修改任务
+    // 判断tid是否为0
+    if (tid == "0")
+    {
+        // 添加任务
+        addTaskSet(name, content, area, poslo, posli, cycle);
+    }
+    else
+    {
+        // 更新任务
+        updateTaskSet(tid, name, content, area, poslo, posli, cycle);
+    }
 }
 
 void TaskSetService::deleteTaskSet(QString tid)
@@ -84,7 +90,7 @@ void TaskSetService::addTaskSet(QString name, QString content, QString area, flo
     // 添加任务
 }
 
-void TaskSetService::updateTaskSet(QString tid)
+void TaskSetService::updateTaskSet(QString tid, QString name, QString content, QString area, float poslo, float posli, int cycle)
 {
     // 更新任务
 }
