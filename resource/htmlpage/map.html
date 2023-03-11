@@ -181,7 +181,8 @@
         // 初始化地图，设置中心点坐标和地图级别 
         mapGL.centerAndZoom(point, 20);
         //开启鼠标滚轮缩放
-        mapGL.enableScrollWheelZoom(true);
+        mapGL.enableScrollWheelZoom(false);
+        mapGL.enableContinuousZoom(false);
         //设置地图显示等级（地图深度）
         mapGL.setZoom(16);
         // 添加比例尺控件
@@ -255,7 +256,7 @@
         }
 
         //添加结点显示
-        function addPoint(info, x, y) {
+        function addPoint(name, x, y) {
             mapGL.closeInfoWindow();
             mapGL.clearOverlays();
             var point = new BMapGL.Point(x, y);
@@ -271,13 +272,18 @@
                     var addComp = rs.addressComponents;
                     var info = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber;
                     var infoWindow = new BMapGL.InfoWindow(info);
-                    infoWindow.setTitle("当前地理位置（汇报）");
+                    infoWindow.setTitle(name);
                     mapGL.openInfoWindow(infoWindow, point);
                 });
             });
             mapGL.addEventListener("click", function () {
                 mapGL.closeInfoWindow();
             });
+        }
+
+        // 移除全部结点
+        function removePoint() {
+            mapGL.clearOverlays();
         }
 
         function enableLinstener() {
