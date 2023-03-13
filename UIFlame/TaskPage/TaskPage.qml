@@ -37,7 +37,8 @@ Item {
     }
 
     Connections {
-        function onEmployeeInfoListChanged() {
+        function onEmployeeInfoListChanged()
+        {
             employeedata.clear();
             for (var j = 0; j < employeeService.employees().length; j++) {
                 var employe = employeeService.employees()[j];
@@ -365,30 +366,9 @@ Item {
             radius: 10
 
             Rectangle {
-                id: overviewarea
-
-                width: parent.width
-                height: 150
-                radius: 10
-                layer.enabled: true
-                color: "white"
-
-                layer.effect: DropShadow {
-                    cached: true
-                    color: "#90849292"
-                    horizontalOffset: 3
-                    verticalOffset: 3
-                    radius: 10
-                    samples: 2 * radius + 1
-                }
-
-            }
-
-            Rectangle {
                 id: mainarea
-
                 width: parent.width
-                anchors.top: overviewarea.bottom
+                anchors.top: parent.top
                 anchors.bottom: parent.bottom
                 anchors.topMargin: 10
                 layer.enabled: true

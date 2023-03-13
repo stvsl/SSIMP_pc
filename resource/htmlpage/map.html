@@ -20,13 +20,17 @@
         }
 
         #button1 {
-            background-color: #81a5ee;
+            background-color: #1791FF;
             color: white;
-            margin: 8px 0;
+            margin: 0;
+            margin-bottom: 15px;
             border: none;
-            border-radius: 8px;
+            /* 居右 */
+            float: right;
+            border-radius: 5px;
             cursor: pointer;
             width: 60px;
+            height: 25px;
         }
 
         #container {
@@ -161,16 +165,11 @@
     <!-- 调用qt内部组件完成qt连接器的载入 -->
     <script src=qrc:///qtwebchannel/qwebchannel.js></script>
     <script type="text/javascript"
-        src="https://api.map.baidu.com/api?v=1.0&type=webgl&ak=HOeqsdIRwYb4SaOozYyY3yTqxPGxoz6U">
+        src="https://api.map.baidu.com/api?v=1.0&type=webgl&ak=oRqbxhmwbE30ZgrbXzzUM19O6kyBjKQD">
         </script>
-    <script src="https://unpkg.com/mapvgl/dist/mapvgl.min.js"></script>
-
-    <!-- 如果使用到Three.js相关的图层需要引用 -->
-    <script src="https://unpkg.com/mapvgl/dist/mapvgl.threelayers.min.js"></script>
 </head>
 
 <body>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.js"></script>
     <div id="container">
     </div>
     <script type="text/javascript">
@@ -201,14 +200,9 @@
         function setCenter(x, y) {
             var point = new BMapGL.Point(x, y);
             mapGL.centerAndZoom(point, 15);
-            mapGL.setZoom(20);
+            mapGL.setZoom(16);
         }
 
-        function setPos(i, j) {
-            var point = new BMapGL.Point(i, j);
-            mapGL.centerAndZoom(point, 15);
-            mapGL.setZoom(20);
-        }
 
         //设置地标文字显示
         function setPoiText(boo) {
@@ -238,7 +232,8 @@
                     geoc.getLocation(pt, function (rs) {
                         var addComp = rs.addressComponents;
                         var infop = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber;
-                        var info = infop + "<button id='button1' onclick='sendLocateInfo(\"" + infop + "\"," + point.lng + "," + point.lat + ")'> 确定 </button>";
+                        // var info = infop + "<button id='button1' onclick='sendLocateInfo(\"" + infop + "\"," + point.lng + "," + point.lat + ")'> 确定 </button>"; 添加显示经纬度信息
+                        var info = "经度:" + point.lng + "纬度:" + point.lat + "&nbsp" + "<button id='button1' onclick='sendLocateInfo(\"" + infop + "\"," + point.lng + "," + point.lat + ")'> 确定 </button>";
                         var infoWindow = new BMapGL.InfoWindow(info);
                         infoWindow.setTitle("当前地理位置（汇报）");
                         mapGL.openInfoWindow(infoWindow, pt);
@@ -258,7 +253,6 @@
         //添加结点显示
         function addPoint(name, x, y) {
             mapGL.closeInfoWindow();
-            mapGL.clearOverlays();
             var point = new BMapGL.Point(x, y);
             var marker = new BMapGL.Marker(point);
             mapGL.addOverlay(marker);
@@ -270,7 +264,7 @@
                 // 获取当前点的坐标，请求地理位置，显示在地图上
                 gc.getLocation(point, function (rs) {
                     var addComp = rs.addressComponents;
-                    var info = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber;
+                    var info = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber + point.lng + point.lat;
                     var infoWindow = new BMapGL.InfoWindow(info);
                     infoWindow.setTitle(name);
                     mapGL.openInfoWindow(infoWindow, point);
@@ -297,7 +291,7 @@
                 geoc.getLocation(pt, function (rs) {
                     var addComp = rs.addressComponents;
                     var infop = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber;
-                    var info = infop + "<button id='button1' onclick='sendLocateInfo(\"" + infop + "\"," + pt.lng + "," + pt.lat + ")'> 确定 </button>";
+                    var info = infop + "<br>" + "经度" + pt.lng + "<br>纬度" + pt.lat + "<button id='button1' onclick='sendLocateInfo(\"" + infop + "\"," + pt.lng + "," + pt.lat + ")'> 确定 </button><br/>";
                     var infoWindow = new BMapGL.InfoWindow(info);
                     infoWindow.setTitle("当前地理位置（汇报）");
                     mapGL.openInfoWindow(infoWindow, pt);
@@ -311,8 +305,9 @@
         }
         // TODO
         function sendLocateInfo(info, x, y) {
-            trans.receiveLocateInfo(info, x, y);
+            webChannel.receiveLocateInfo(info, x, y);
             disableLinstener();
+            mapGL.closeInfoWindow();
         }
     </script>
 </body>
