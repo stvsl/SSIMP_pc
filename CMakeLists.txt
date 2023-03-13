@@ -12,10 +12,11 @@ add_compile_definitions(
     #加密组件调试模式开关 0:关闭 1:开启
     ENCRYPT_ERR_DEBUG=0
     #调试模式开关 0:关闭 1:开启
-    DEV_MODE=0
+    ARTICLE_DEBUG=0
+    TASKSET_DEBUG=0
 )
 
-find_package(Qt6 COMPONENTS Quick Qml REQUIRED WebEngineQuick)
+find_package(Qt6 COMPONENTS Quick Qml REQUIRED WebEngineQuick WebEngineCore WebChannel)
 find_package(Qt6 REQUIRED Widgets LinguistTools QuickControls2)
 
 ADD_DEFINITIONS(-DTORRENT_LIBRARY)
@@ -28,7 +29,7 @@ add_custom_command(
     OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/Plugins/lib/libcrypto.so
     COMMAND go build -o Plugins/lib/libcrypto.so -buildmode=c-shared ./Plugins/Encrypt_go_binding/libencryptiongo/main.go
     WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMENT "******************************编译Go组件******************************"    
+    COMMENT "******************************编译Go组件******************************"
 )
 
 add_custom_target(
@@ -48,6 +49,7 @@ qt_add_executable(appSSIMP_pc
     Utils/nget.h Utils/nget.cpp
     Utils/npost.h Utils/npost.cpp
     Utils/netbase.h Utils/netbase.cpp
+    Utils/imgutils.h Utils/imgutils.cpp
 
     # 安全加密组件封装(Go组件编译绑定)
     Security/encryption.h Security/encryption.cpp
@@ -55,10 +57,12 @@ qt_add_executable(appSSIMP_pc
     # 业务逻辑组件封装
     Service/accountservice.h Service/accountservice.cpp
     Service/employeeservice.h Service/employeeservice.cpp
-    Service/entity.h Service/entity.cpp
+    Service/articleservice.h Service/articleservice.cpp
+    Service/tasksetservice.h Service/tasksetservice.cpp
 
     ModeData/employeedata.h ModeData/employeedata.cpp
-
+    ModeData/articledata.h ModeData/articledata.cpp
+    ModeData/tasksetdata.h ModeData/tasksetdata.cpp
     # 界面辅助代理封装
     Daemon/vctrler.h Daemon/vctrler.cpp
 
@@ -92,14 +96,21 @@ qt_add_qml_module(appSSIMP_pc
 
 )
 
-file(GLOB TS_FILES "${PROJECT_SOURCE_DIR}/*.ts")
+ file(GLOB TS_FILES "${PROJECT_SOURCE_DIR}/*.ts")
 
-qt_create_translation(appQM_FILES
-    ${PROJECT_SOURCE_DIR}
-    ${TS_FILES}
-    OPTIONS -source-language zh_CN -no-obsolete
-    OPTIONS -source-language en_US -no-obsolete
-)
+ qt_create_translation(appSSIMP_pc
+     ${PROJECT_SOURCE_DIR}
+     ${TS_FILES}
+     OPTIONS -source-language zh_CN -no-obsolete
+     OPTIONS -source-language en_US -no-obsolete
+ )
+#qt_add_translations(appSSIMP_pc
+#    TS_FILES
+#    translations/SSIMP_pc_zh_CN.ts
+#    translations/SSIMP_pc_en_US.ts
+#    QM_FILES_OUTPUT_VARIABLE qm_files
+#)
+#install(FILES ${qm_files} DESTINATION "translations")
 
 set_target_properties(appSSIMP_pc PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER stvsljl.com
@@ -118,6 +129,8 @@ target_link_libraries(appSSIMP_pc
     PRIVATE Qt6::QuickControls2
     PRIVATE Qt6::Qml
     PRIVATE Qt6::WebEngineQuick
+    PRIVATE Qt6::WebEngineCore
+    PRIVATE Qt6::WebChannel
     )
 
 target_link_libraries(appSSIMP_pc PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Plugins/lib/libcrypto.so)

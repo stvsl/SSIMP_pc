@@ -9,7 +9,6 @@ void vctrler::setEngine(QQmlApplicationEngine *engine)
     m_engine = engine;
     m_mutex = new QMutex();
     m_vctrler = new vctrler();
-    // 连接内部信号槽 dialogClickedBtn(int x);
     auto r = m_engine->rootObjects().first();
     QObject::connect(r, SIGNAL(dialogClickedBtn(int)), vctrler::m_vctrler,
                      SLOT(receiveDialogResult(int)));
@@ -24,7 +23,11 @@ void vctrler::showDialog(dialogType type, dialogBtnType btntype, QString title,
     }
     // 上锁
     // 尝试锁定，如果锁定失败，则等待
-    m_mutex->lock();
+    // 循环等待，直到锁定成功
+    while (!m_mutex->tryLock())
+    {
+        QThread::msleep(100);
+    }
     auto r = m_engine->rootObjects().first();
     if (type == DIALOG_CUSTOM)
     {
