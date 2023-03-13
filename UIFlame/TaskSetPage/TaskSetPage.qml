@@ -39,10 +39,8 @@ Item {
     Connections {
         target: tasksetservice
 
-        function onTaskSetListChanged(list)
-        {
-            if (tasklistdata.count > 0)
-            {
+        function onTaskSetListChanged(list) {
+            if (tasklistdata.count > 0) {
                 tasklistdata.clear()
             }
             for (var i = 0; i < list.length; i++) {
@@ -51,8 +49,7 @@ Item {
         }
     }
 
-    function showAllTaskSetPoint()
-    {
+    function showAllTaskSetPoint() {
         webview.removeAllPoint()
         // 遍历全部任务点, 获取name, poslo, posli, 调用webview的addPoint方法
         for (var i = 0; i < tasklistdata.count; i++) {
@@ -62,11 +59,9 @@ Item {
             var posli = taskset.posli
             webview.addPoint(name, poslo, posli)
         }
-
     }
 
-    function showCurrentTaskSetPoint()
-    {
+    function showCurrentTaskSetPoint() {
         webview.removeAllPoint()
         var taskset = tasklistdata.get(tasklist.currentIndex)
         var name = taskset.name
@@ -75,18 +70,15 @@ Item {
         webview.addPoint(name, poslo, posli)
     }
 
-    function followMove()
-    {
+    function followMove() {
         var taskset = tasklistdata.get(tasklist.currentIndex)
         var poslo = taskset.poslo
         var posli = taskset.posli
-        webview.runJavaScript("setCenter(" + poslo + ", " + posli + ")");
+        webview.runJavaScript("setCenter(" + poslo + ", " + posli + ")")
     }
 
-    function reflashNearTaskListData()
-    {
-        if (neartasklistdata.count > 0)
-        {
+    function reflashNearTaskListData() {
+        if (neartasklistdata.count > 0) {
             neartasklistdata.clear()
         }
         var taskset = tasklistdata.get(tasklist.currentIndex)
@@ -97,18 +89,17 @@ Item {
             var poslo = taskset.poslo
             var posli = taskset.posli
             var distance = getDistance(poslo, posli, poslo1, posli1)
-            if (distance < 0.0005)
-            {
+            if (distance < 0.0005) {
                 neartasklistdata.append(taskset)
             }
         }
     }
 
-    function getDistance(poslo, posli, poslo1, posli1)
-    {
+    function getDistance(poslo, posli, poslo1, posli1) {
         // 经度差平方+纬度差平方
         // 计算经度差绝对值加纬度差绝对值返回
-        var distance = Math.sqrt(Math.pow(poslo - poslo1, 2) + Math.pow(posli - posli1, 2))
+        var distance = Math.sqrt(Math.pow(poslo - poslo1,
+                                          2) + Math.pow(posli - posli1, 2))
         return distance
     }
 
@@ -246,7 +237,7 @@ Item {
                                 Text {
                                     id: tasksetlistid
                                     y: 10
-                                    text: tid +"/"+ name
+                                    text: tid + "/" + name
                                     color: "#292826"
                                     font.styleName: "Medium"
                                     font.pointSize: 14
@@ -256,7 +247,8 @@ Item {
 
                                 Text {
                                     width: 80
-                                    text: "地理信息：(" + poslo.toFixed(4) + ", " + posli.toFixed(4) + ")"
+                                    text: "地理信息：(" + poslo.toFixed(
+                                              4) + ", " + posli.toFixed(4) + ")"
                                     color: "#8E99A5"
                                     font.styleName: "Medium"
                                     font.pointSize: 8
@@ -291,17 +283,13 @@ Item {
                                 onClicked: {
                                     tasklist.currentIndex = index
                                     // showCurrentTaskSetPoint()判断是否需要调用此方法
-                                    if (mapshowtasktext.text == "显示当前任务坐标")
-                                    {
+                                    if (mapshowtasktext.text == "显示当前任务坐标") {
                                         showCurrentTaskSetPoint()
-                                    }
-                                    else
-                                    {
+                                    } else {
                                         showAllTaskSetPoint()
                                     }
                                     // 判断跟随是否开启
-                                    if (mapfollowtext.text == "取消跟随")
-                                    {
+                                    if (mapfollowtext.text == "取消跟随") {
                                         followMove()
                                     }
                                     reflashNearTaskListData()
@@ -337,7 +325,6 @@ Item {
                 }
             }
         }
-
 
         Rectangle {
             id: rightarea
@@ -387,7 +374,8 @@ Item {
 
                     Text {
                         id: areataskid
-                        text: qsTr("任务编号:  ") + tasklistdata.get(tasklist.currentIndex).tid
+                        text: qsTr("任务编号:  ") + tasklistdata.get(
+                                  tasklist.currentIndex).tid
                         height: 40
                         color: "#8E99A5"
                         font.styleName: "Medium"
@@ -448,13 +436,11 @@ Item {
                         enabled: false
                         onTextChanged: {
                             // 最大3行, 200字
-                            if (text.length > 100)
-                            {
+                            if (text.length > 100) {
                                 text = text.substring(0, 100)
                             }
                             var lines = text.split("\n")
-                            if (lines.length > 3)
-                            {
+                            if (lines.length > 3) {
                                 lines = lines.slice(0, 3)
                                 text = lines.join("\n")
                             }
@@ -520,11 +506,12 @@ Item {
                         width: 140
                         height: 40
                         font.pointSize: 12
-                        currentIndex: tasklistdata.get(tasklist.currentIndex).cycle
+                        currentIndex: tasklistdata.get(
+                                          tasklist.currentIndex).cycle
                         enabled: false
                     }
                     // 任务时长
-                    Text{
+                    Text {
                         id: areataskduration
                         text: qsTr("任务时长: ")
                         height: 40
@@ -548,7 +535,8 @@ Item {
                         height: 40
                         font.pointSize: 12
                         enabled: false
-                        currentIndex: tasklistdata.get(tasklist.currentIndex).duration
+                        currentIndex: tasklistdata.get(
+                                          tasklist.currentIndex).duration
                     }
 
                     Text {
@@ -574,12 +562,16 @@ Item {
                         height: 40
                         font.pointSize: 12
                         enabled: false
-                        currentIndex: tasklistdata.get(tasklist.currentIndex).state
+                        currentIndex: tasklistdata.get(
+                                          tasklist.currentIndex).state
                     }
 
                     Text {
                         id: areatasklocation
-                        text: qsTr("位置信息:  ") + tasklistdata.get(tasklist.currentIndex).poslo.toFixed(4) + " " +tasklistdata.get(tasklist.currentIndex).posli.toFixed(4)
+                        text: qsTr("位置信息:  ") + tasklistdata.get(
+                                  tasklist.currentIndex).poslo.toFixed(
+                                  4) + " " + tasklistdata.get(
+                                  tasklist.currentIndex).posli.toFixed(4)
                         width: parent.width
                         height: 40
                         anchors.top: areataskstatus.bottom
@@ -602,7 +594,7 @@ Item {
                     }
 
                     // 操作中心
-                    Text{
+                    Text {
                         id: areataskoperate
                         text: qsTr("操作中心")
                         height: 40
@@ -617,7 +609,7 @@ Item {
                         anchors.rightMargin: 10
                     }
 
-                    Flow{
+                    Flow {
                         anchors.top: areataskoperate.bottom
                         anchors.left: parent.left
                         anchors.leftMargin: 10
@@ -646,8 +638,7 @@ Item {
                                 font.pointSize: 16
                             }
                             onClicked: {
-                                if (areataskedittext.text == "编辑任务")
-                                {
+                                if (areataskedittext.text == "编辑任务") {
                                     areataskedittext.text = "保存任务"
                                     areatasknameinput.enabled = true
                                     areataskcontentinput.enabled = true
@@ -655,9 +646,7 @@ Item {
                                     areataskstatusbox.enabled = true
                                     areataskdurationbox.enabled = true
                                     areataskcyclebox.enabled = true
-                                }
-                                else
-                                {
+                                } else {
                                     areataskedittext.text = "编辑任务"
                                     areatasknameinput.enabled = false
                                     areataskcontentinput.enabled = false
@@ -665,13 +654,24 @@ Item {
                                     areataskstatusbox.enabled = false
                                     areataskdurationbox.enabled = false
                                     areataskcyclebox.enabled = false
-                                    tasksetservice.modifyTaskSet(tasklistdata.get(tasklist.currentIndex).tid, areatasknameinput.text, areataskcontentinput.text, areataskareainput.text, tasklistdata.get(tasklist.currentIndex).poslo, tasklistdata.get(tasklist.currentIndex).posli, areataskcyclebox.currentIndex, areataskstatusbox.currentIndex, areataskdurationbox.currentIndex)
+                                    tasksetservice.modifyTaskSet(
+                                                tasklistdata.get(
+                                                    tasklist.currentIndex).tid,
+                                                areatasknameinput.text,
+                                                areataskcontentinput.text,
+                                                areataskareainput.text,
+                                                tasklistdata.get(
+                                                    tasklist.currentIndex).poslo,
+                                                tasklistdata.get(
+                                                    tasklist.currentIndex).posli,
+                                                areataskcyclebox.currentIndex,
+                                                areataskstatusbox.currentIndex,
+                                                areataskdurationbox.currentIndex)
                                     // 检查获取定位按钮状态, 如果是取消定位则
-                                    // TODO
-                                    if (maplocatetext.text=="取消定位")
-                                    {
-                                        maplocatetext.text="获取定位"
-                                        webview.runJavaScript("disableLinstener();")
+                                    if (maplocatetext.text == "取消定位") {
+                                        maplocatetext.text = "获取定位"
+                                        webview.runJavaScript(
+                                                    "disableLinstener();")
                                     }
                                 }
                             }
@@ -699,14 +699,15 @@ Item {
                             }
                             onClicked: {
                                 tasklistdata.append({
-                                "tid":"0",
-                                "name": "新任务",
-                                "content": "新任务内容",
-                                "area": "新任务区域",
-                                "state": 0,
-                                "poslo": "0.000000",
-                                "posli": "0.000000"
-                            })}
+                                                        "tid": "0",
+                                                        "name": "新任务",
+                                                        "content": "新任务内容",
+                                                        "area": "新任务区域",
+                                                        "state": 0,
+                                                        "poslo": "0.000000",
+                                                        "posli": "0.000000"
+                                                    })
+                            }
                         }
 
                         // 删除按钮
@@ -731,13 +732,13 @@ Item {
                             }
                             onClicked: {
                                 // 判断tid是不是0, 如果是0直接从列表中删除, 如果不是0则调用删除接口
-                                if (tasklistdata.get(tasklist.currentIndex).tid == "0")
-                                {
+                                if (tasklistdata.get(
+                                            tasklist.currentIndex).tid == "0") {
                                     tasklistdata.remove(tasklist.currentIndex)
-                                }
-                                else
-                                {
-                                    tasksetservice.deleteTaskSet(tasklistdata.get(tasklist.currentIndex).tid)
+                                } else {
+                                    tasksetservice.deleteTaskSet(
+                                                tasklistdata.get(
+                                                    tasklist.currentIndex).tid)
                                 }
                             }
                         }
@@ -772,11 +773,12 @@ Item {
                                 font.pointSize: 16
                             }
                             onClicked: {
-                                tasksetservice.searchTaskSet(areataskfindinput.text)
+                                tasksetservice.searchTaskSet(
+                                            areataskfindinput.text)
                             }
                         }
 
-                        Text{
+                        Text {
                             text: qsTr("地图导航")
                             width: parent.width
                             height: 30
@@ -806,13 +808,10 @@ Item {
                                 font.pointSize: 14
                             }
                             onClicked: {
-                                if (mapmodetext.text == "卫星地图")
-                                {
+                                if (mapmodetext.text == "卫星地图") {
                                     mapmodetext.text = "平面地图"
                                     webview.setMapType()
-                                }
-                                else
-                                {
+                                } else {
                                     mapmodetext.text = "卫星地图"
                                     webview.setMapType()
                                 }
@@ -841,13 +840,11 @@ Item {
                                 font.pointSize: 14
                             }
                             onClicked: {
-                                if (maplocatetext.text == "获取定位")
-                                {
+                                if (maplocatetext.text == "获取定位") {
                                     maplocatetext.text = "取消定位"
                                     webview.runJavaScript("enableLinstener();")
                                     // 判断编辑模式是否开启, 如果没开启z则开启
-                                    if (areataskedittext.text == "编辑任务")
-                                    {
+                                    if (areataskedittext.text == "编辑任务") {
                                         areataskedittext.text = "保存任务"
                                         areatasknameinput.enabled = true
                                         areataskcontentinput.enabled = true
@@ -856,9 +853,7 @@ Item {
                                         areataskdurationbox.enabled = true
                                         areataskcyclebox.enabled = true
                                     }
-                                }
-                                else
-                                {
+                                } else {
                                     maplocatetext.text = "获取定位"
                                     webview.runJavaScript("disableLinstener();")
                                 }
@@ -887,15 +882,14 @@ Item {
                                 font.pointSize: 14
                             }
                             onClicked: {
-                                if (mapzoomtext.text == "允许缩放")
-                                {
+                                if (mapzoomtext.text == "允许缩放") {
                                     mapzoomtext.text = "禁止缩放"
-                                    webview.runJavaScript("mapGL.enableScrollWheelZoom(false);")
-                                }
-                                else
-                                {
+                                    webview.runJavaScript(
+                                                "mapGL.enableScrollWheelZoom(false);")
+                                } else {
                                     mapzoomtext.text = "允许缩放"
-                                    webview.runJavaScript("mapGL.enableScrollWheelZoom(true);")
+                                    webview.runJavaScript(
+                                                "mapGL.enableScrollWheelZoom(true);")
                                 }
                             }
                         }
@@ -922,15 +916,14 @@ Item {
                                 font.pointSize: 14
                             }
                             onClicked: {
-                                if (mapdragtext.text == "允许拖拽")
-                                {
+                                if (mapdragtext.text == "允许拖拽") {
                                     mapdragtext.text = "禁止拖拽"
-                                    webview.runJavaScript("mapGL.enableContinuousZoom(false);")
-                                }
-                                else
-                                {
+                                    webview.runJavaScript(
+                                                "mapGL.enableContinuousZoom(false);")
+                                } else {
                                     mapdragtext.text = "允许拖拽"
-                                    webview.runJavaScript("mapGL.enableContinuousZoom(true);")
+                                    webview.runJavaScript(
+                                                "mapGL.enableContinuousZoom(true);")
                                 }
                             }
                         }
@@ -957,12 +950,9 @@ Item {
                                 font.pointSize: 14
                             }
                             onClicked: {
-                                if (mapshowtasktext.text == "显示当前任务坐标")
-                                {
+                                if (mapshowtasktext.text == "显示当前任务坐标") {
                                     mapshowtasktext.text = "显示全部任务坐标"
-                                }
-                                else
-                                {
+                                } else {
                                     mapshowtasktext.text = "显示当前任务坐标"
                                 }
                             }
@@ -990,7 +980,8 @@ Item {
                                 font.pointSize: 14
                             }
                             onClicked: {
-                                webview.runJavaScript("setCenter(121.72439102324424, 41.61128739424099);")
+                                webview.runJavaScript(
+                                            "setCenter(121.72439102324424, 41.61128739424099);")
                             }
                         }
 
@@ -1016,12 +1007,9 @@ Item {
                                 font.pointSize: 14
                             }
                             onClicked: {
-                                if (mapfollowtext.text == "跟随移动")
-                                {
+                                if (mapfollowtext.text == "跟随移动") {
                                     mapfollowtext.text = "取消跟随"
-                                }
-                                else
-                                {
+                                } else {
                                     mapfollowtext.text = "跟随移动"
                                 }
                             }
@@ -1057,338 +1045,328 @@ Item {
                                 // 文字提示清理成功, 3秒后变回
                                 mapclearcachetext.text = "清除成功"
                                 // 3秒后变回
-                                var timer = Qt.createQmlObject("import QtQuick 2.0; Timer { interval: 1200; running: true; repeat: false }", mapclearcache, "timer")
-                                timer.triggered.connect(function() {
-                                mapclearcachetext.text = "清除缓存"
-                            })
-                        }
-                    }
-
-                }
-            }
-
-            // 边框右边线条
-            Rectangle {
-                width: 1
-                height: parent.height / 1.2
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                anchors.rightMargin: 0
-                color: "#EEEEEE"
-            }
-
-            // 地图导航
-            Rectangle {
-                id: maparea
-                anchors.right: parent.right
-                anchors.rightMargin: 10
-                anchors.left: correnttaskarea.right
-                anchors.leftMargin: 10
-                anchors.top: parent.top
-                anchors.topMargin: 10
-                anchors.bottom: parent.bottom
-                anchors.bottomMargin: parent.height / 3
-                layer.enabled: true
-
-                Text {
-                    id: loadingtext
-
-                    z: 0
-                    anchors.centerIn: parent
-                    text: "正在载入地图, 请稍后..."
-                    font.pixelSize: 30
-                    color: "#292826"
-                }
-
-                Timer {
-                    interval: 300
-                    running: true
-                    repeat: true
-                    onTriggered: {
-                        if (webview.loading)
-                        {
-                            if (loadingtext.text == "正在载入地图, 请稍后...")
-                            {
-                                loadingtext.text = "正在载入地图, 请稍后."
-                            }
-                            else if (loadingtext.text == "正在载入地图, 请稍后.")
-                            {
-                                loadingtext.text = "正在载入地图, 请稍后.."
-                            }
-                            else if (loadingtext.text == "正在载入地图, 请稍后..")
-                            {
-                                loadingtext.text = "正在载入地图, 请稍后..."
+                                var timer = Qt.createQmlObject(
+                                            "import QtQuick 2.0; Timer { interval: 1200; running: true; repeat: false }",
+                                            mapclearcache, "timer")
+                                timer.triggered.connect(function () {
+                                    mapclearcachetext.text = "清除缓存"
+                                })
                             }
                         }
-                        else{
-                            loadingtext.text = "载入完成"
-                            // 停止计时器
-                            stop()
-                        }
                     }
                 }
 
-
-                WebEngineView {
-                    id: webview
-                    anchors.fill: parent
-                    anchors.topMargin: 10
-                    url: "qrc:/htmlpage/htmlpage/map.html"
-                    // 允许跨域
-                    QtObject {
-                        id: webEngineChannel
-                        WebChannel.id: "webChannel"
-
-                        function print(value)
-                        {
-                            console.log("weboutput:" + value)
-                        }
-
-                        function receiveLocateInfo(info, x, y)
-                        {
-                            console.log("weboutput:" + info + " " + x + " " + y)
-                            // 使用xy数据更新tasksetlist中的数据
-                            tasklistdata.setProperty(tasklist.currentIndex, "poslo", x)
-                            tasklistdata.setProperty(tasklist.currentIndex, "posli", y)
-                        }
-                    }
-
-                    webChannel: WebChannel {
-                        registeredObjects: [webEngineChannel]
-                    }
-
-                    function enableListener()
-                    {
-                        webview.runJavaScript("enableLinstener()")
-                    }
-
-                    function disableListener()
-                    {
-                        webview.runJavaScript("disableLinstener()")
-                    }
-
-                    function setMapType()
-                    {
-                        webview.runJavaScript("setMapType()")
-                    }
-
-                    function addPoint(name, x, y)
-                    {
-                        webview.runJavaScript("addPoint('" + name + "', " + x + ", " + y + ")")
-                    }
-
-                    function removeAllPoint()
-                    {
-                        webview.runJavaScript("removePoint()")
-                    }
-                }
-            }
-
-            // 分割线
-            Rectangle {
-                width: maparea.width / 1.2
-                //  相对于maparea水平居中
-                anchors.horizontalCenter: maparea.horizontalCenter
-                height: 1
-                anchors.top: maparea.bottom
-                anchors.topMargin: 5
-                color: "#EEEEEE"
-            }
-
-            // 区域可选任务列表
-            Rectangle {
-                id: tasklistarea
-                anchors.right: parent.right
-                anchors.left: maparea.left
-                anchors.top: maparea.bottom
-                anchors.topMargin: 10
-                anchors.bottom: parent.bottom
-
-                Text {
-                    id: neartasklisttitle
-                    text: qsTr("附近任务")
-                    anchors.top: parent.top
-                    anchors.topMargin: 10
-                    anchors.left: parent.left
-                    anchors.leftMargin: 10
-                    font.pointSize: 18
-                    color: "#8E99A5"
+                // 边框右边线条
+                Rectangle {
+                    width: 1
+                    height: parent.height / 1.2
+                    anchors.verticalCenter: parent.verticalCenter
+                    anchors.right: parent.right
+                    anchors.rightMargin: 0
+                    color: "#EEEEEE"
                 }
 
-                ListView{
-                    id: neartask
-                    anchors.top: neartasklisttitle.bottom
-                    anchors.topMargin: 10
-                    anchors.left: parent.left
-                    anchors.leftMargin: 10
+                // 地图导航
+                Rectangle {
+                    id: maparea
                     anchors.right: parent.right
                     anchors.rightMargin: 10
+                    anchors.left: correnttaskarea.right
+                    anchors.leftMargin: 10
+                    anchors.top: parent.top
+                    anchors.topMargin: 10
                     anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 10
-                    model: neartasklistdata
+                    anchors.bottomMargin: parent.height / 3
+                    layer.enabled: true
 
-                    populate: Transition {
-                        NumberAnimation {
-                            property: "opacity"
-                            from: 0
-                            to: 1
-                            duration: 200
+                    Text {
+                        id: loadingtext
+
+                        z: 0
+                        anchors.centerIn: parent
+                        text: "正在载入地图, 请稍后..."
+                        font.pixelSize: 30
+                        color: "#292826"
+                    }
+
+                    Timer {
+                        interval: 300
+                        running: true
+                        repeat: true
+                        onTriggered: {
+                            if (webview.loading) {
+                                if (loadingtext.text == "正在载入地图, 请稍后...") {
+                                    loadingtext.text = "正在载入地图, 请稍后."
+                                } else if (loadingtext.text == "正在载入地图, 请稍后.") {
+                                    loadingtext.text = "正在载入地图, 请稍后.."
+                                } else if (loadingtext.text == "正在载入地图, 请稍后..") {
+                                    loadingtext.text = "正在载入地图, 请稍后..."
+                                }
+                            } else {
+                                loadingtext.text = "载入完成"
+                                // 停止计时器
+                                stop()
+                            }
                         }
                     }
 
-                    add: Transition {
-                        ParallelAnimation {
+                    WebEngineView {
+                        id: webview
+                        anchors.fill: parent
+                        anchors.topMargin: 10
+                        url: "qrc:/htmlpage/htmlpage/map.html"
+                        // 允许跨域
+                        QtObject {
+                            id: webEngineChannel
+                            WebChannel.id: "webChannel"
+
+                            function print(value) {
+                                console.log("weboutput:" + value)
+                            }
+
+                            function receiveLocateInfo(info, x, y) {
+                                console.log("weboutput:" + info + " " + x + " " + y)
+                                // 使用xy数据更新tasksetlist中的数据
+                                tasklistdata.setProperty(tasklist.currentIndex,
+                                                         "poslo", x)
+                                tasklistdata.setProperty(tasklist.currentIndex,
+                                                         "posli", y)
+                            }
+                        }
+
+                        webChannel: WebChannel {
+                            registeredObjects: [webEngineChannel]
+                        }
+
+                        function enableListener() {
+                            webview.runJavaScript("enableLinstener()")
+                        }
+
+                        function disableListener() {
+                            webview.runJavaScript("disableLinstener()")
+                        }
+
+                        function setMapType() {
+                            webview.runJavaScript("setMapType()")
+                        }
+
+                        function addPoint(name, x, y) {
+                            webview.runJavaScript(
+                                        "addPoint('" + name + "', " + x + ", " + y + ")")
+                        }
+
+                        function removeAllPoint() {
+                            webview.runJavaScript("removePoint()")
+                        }
+                    }
+                }
+
+                // 分割线
+                Rectangle {
+                    width: maparea.width / 1.2
+                    //  相对于maparea水平居中
+                    anchors.horizontalCenter: maparea.horizontalCenter
+                    height: 1
+                    anchors.top: maparea.bottom
+                    anchors.topMargin: 5
+                    color: "#EEEEEE"
+                }
+
+                // 区域可选任务列表
+                Rectangle {
+                    id: tasklistarea
+                    anchors.right: parent.right
+                    anchors.left: maparea.left
+                    anchors.top: maparea.bottom
+                    anchors.topMargin: 10
+                    anchors.bottom: parent.bottom
+
+                    Text {
+                        id: neartasklisttitle
+                        text: qsTr("附近任务")
+                        anchors.top: parent.top
+                        anchors.topMargin: 10
+                        anchors.left: parent.left
+                        anchors.leftMargin: 10
+                        font.pointSize: 18
+                        color: "#8E99A5"
+                    }
+
+                    ListView {
+                        id: neartask
+                        anchors.top: neartasklisttitle.bottom
+                        anchors.topMargin: 10
+                        anchors.left: parent.left
+                        anchors.leftMargin: 10
+                        anchors.right: parent.right
+                        anchors.rightMargin: 10
+                        anchors.bottom: parent.bottom
+                        anchors.bottomMargin: 10
+                        model: neartasklistdata
+
+                        populate: Transition {
                             NumberAnimation {
                                 property: "opacity"
                                 from: 0
                                 to: 1
                                 duration: 200
                             }
+                        }
 
-                            NumberAnimation {
+                        add: Transition {
+                            ParallelAnimation {
+                                NumberAnimation {
+                                    property: "opacity"
+                                    from: 0
+                                    to: 1
+                                    duration: 200
+                                }
+
+                                NumberAnimation {
+                                    property: "y"
+                                    from: 0
+                                    duration: 200
+                                }
+                            }
+                        }
+
+                        displaced: Transition {
+                            SpringAnimation {
                                 property: "y"
-                                from: 0
-                                duration: 200
+                                spring: 3
+                                damping: 0.1
+                                epsilon: 0.25
                             }
                         }
-                    }
 
-                    displaced: Transition {
-                        SpringAnimation {
-                            property: "y"
-                            spring: 3
-                            damping: 0.1
-                            epsilon: 0.25
-                        }
-                    }
+                        remove: Transition {
+                            SequentialAnimation {
+                                NumberAnimation {
+                                    property: "y"
+                                    to: 0
+                                    duration: 120
+                                }
 
-                    remove: Transition {
-                        SequentialAnimation {
-                            NumberAnimation {
-                                property: "y"
-                                to: 0
-                                duration: 120
+                                NumberAnimation {
+                                    property: "opacity"
+                                    to: 0
+                                    duration: 120
+                                }
                             }
-
-                            NumberAnimation {
-                                property: "opacity"
-                                to: 0
-                                duration: 120
-                            }
+                            //remove Transition is end
                         }
-                        //remove Transition is end
-                    }
 
-                    delegate: Item {
-                        height: 80
-                        width: parent.width
+                        delegate: Item {
+                            height: 80
+                            width: parent.width
 
-                        Rectangle {
-                            anchors.fill: parent
-                            // 判断是否选中
-                            color: tasklist.currentIndex === index ? "#F5F5F5" : "transparent"
-                            radius: 10
-
-                            Item {
+                            Rectangle {
                                 anchors.fill: parent
+                                // 判断是否选中
+                                color: tasklist.currentIndex === index ? "#F5F5F5" : "transparent"
+                                radius: 10
 
-                                Text {
-                                    id: tasksetlistid
-                                    y: 10
-                                    text: "任务编号：" + tid
-                                    color: "#292826"
-                                    font.styleName: "Medium"
-                                    font.pointSize: 14
-                                    anchors.left: parent.left
-                                    anchors.leftMargin: 10
+                                Item {
+                                    anchors.fill: parent
+
+                                    Text {
+                                        id: tasksetlistid
+                                        y: 10
+                                        text: "任务编号：" + tid
+                                        color: "#292826"
+                                        font.styleName: "Medium"
+                                        font.pointSize: 14
+                                        anchors.left: parent.left
+                                        anchors.leftMargin: 10
+                                    }
+
+                                    Text {
+                                        width: 80
+                                        text: "地理信息：(" + poslo.toFixed(
+                                                  4) + ", " + posli.toFixed(
+                                                  4) + ")"
+                                        color: "#8E99A5"
+                                        font.styleName: "Medium"
+                                        font.pointSize: 8
+                                        anchors.left: parent.left
+                                        anchors.leftMargin: 10
+                                        y: 40
+                                    }
+
+                                    Text {
+                                        text: "任务地点: " + area
+                                        color: "#8E99A5"
+                                        font.styleName: "Medium"
+                                        font.pointSize: 8
+                                        anchors.left: parent.left
+                                        anchors.leftMargin: 10
+                                        y: 60
+                                    }
+
+                                    Text {
+                                        text: "显示详情 >"
+                                        color: "#AA8E99A5"
+                                        font.styleName: "Medium"
+                                        font.pointSize: 10
+                                        anchors.right: parent.right
+                                        anchors.rightMargin: 20
+                                        anchors.verticalCenter: parent.verticalCenter
+                                    }
                                 }
 
-                                Text {
-                                    width: 80
-                                    text: "地理信息：(" + poslo.toFixed(4) + ", " + posli.toFixed(4) + ")"
-                                    color: "#8E99A5"
-                                    font.styleName: "Medium"
-                                    font.pointSize: 8
-                                    anchors.left: parent.left
-                                    anchors.leftMargin: 10
-                                    y: 40
-                                }
-
-                                Text {
-                                    text: "任务地点: " + area
-                                    color: "#8E99A5"
-                                    font.styleName: "Medium"
-                                    font.pointSize: 8
-                                    anchors.left: parent.left
-                                    anchors.leftMargin: 10
-                                    y: 60
-                                }
-
-                                Text {
-                                    text: "显示详情 >"
-                                    color: "#AA8E99A5"
-                                    font.styleName: "Medium"
-                                    font.pointSize: 10
-                                    anchors.right: parent.right
-                                    anchors.rightMargin: 20
-                                    anchors.verticalCenter: parent.verticalCenter
-                                }
-                            }
-
-                            MouseArea {
-                                anchors.fill: parent
-                                onClicked: {
-                                    // 在主列表中选中当前任务
-                                    // 查找名字
-                                    for (var i = 0; i < tasklistdata.count; i++) {
-                                        if (tasklistdata.get(i).tid === tid)
-                                        {
-                                            tasklist.currentIndex = i
-                                            break
+                                MouseArea {
+                                    anchors.fill: parent
+                                    onClicked: {
+                                        // 在主列表中选中当前任务
+                                        // 查找名字
+                                        for (var i = 0; i < tasklistdata.count; i++) {
+                                            if (tasklistdata.get(
+                                                        i).tid === tid) {
+                                                tasklist.currentIndex = i
+                                                break
+                                            }
                                         }
                                     }
                                 }
-                            }
 
-                            // 底部分割线
-                            Rectangle {
-                                width: parent.width / 1.2
-                                height: 1
-                                anchors.horizontalCenter: parent.horizontalCenter
-                                anchors.bottom: parent.bottomk
+                                // 底部分割线
+                                Rectangle {
+                                    width: parent.width / 1.2
+                                    height: 1
+                                    anchors.horizontalCenter: parent.horizontalCenter
+                                    anchors.bottom: parent.bottomk
 
-                                gradient: Gradient {
-                                    GradientStop {
-                                        position: 0
-                                        color: "#FFFFFF"
-                                    }
+                                    gradient: Gradient {
+                                        GradientStop {
+                                            position: 0
+                                            color: "#FFFFFF"
+                                        }
 
-                                    GradientStop {
-                                        position: 0.5
-                                        color: "#EEEEEE"
-                                    }
+                                        GradientStop {
+                                            position: 0.5
+                                            color: "#EEEEEE"
+                                        }
 
-                                    GradientStop {
-                                        position: 1
-                                        color: "#FFFFFF"
+                                        GradientStop {
+                                            position: 1
+                                            color: "#FFFFFF"
+                                        }
                                     }
                                 }
                             }
                         }
                     }
                 }
+            }
 
+            layer.effect: DropShadow {
+                cached: true
+                color: "#90849292"
+                horizontalOffset: 3
+                verticalOffset: 3
+                radius: 10
+                samples: 2 * radius + 1
             }
         }
-
-        layer.effect: DropShadow {
-            cached: true
-            color: "#90849292"
-            horizontalOffset: 3
-            verticalOffset: 3
-            radius: 10
-            samples: 2 * radius + 1
-        }
     }
-}
 }

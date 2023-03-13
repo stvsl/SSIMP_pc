@@ -1,6 +1,11 @@
 #include "Daemon/global.h"
+#include "ModeData/articledata.h"
+#include "Service/articleservice.h"
 #include "Utils/verificationcode.h"
 #include "vctrler.h"
+#include <ModeData/employeedata.h>
+#include <ModeData/taskdata.h>
+#include <ModeData/tasksetdata.h>
 #include <QFontDatabase>
 #include <QGuiApplication>
 #include <QLocale>
@@ -9,14 +14,10 @@
 #include <QTranslator>
 #include <Service/accountservice.h>
 #include <Service/employeeservice.h>
+#include <Service/taskservice.h>
 #include <Service/tasksetservice.h>
-#include "Service/articleservice.h"
-#include <ModeData/employeedata.h>
-#include "ModeData/articledata.h"
-#include <ModeData/tasksetdata.h>
 
-int main(int argc, char *argv[])
-{
+int main(int argc, char *argv[]) {
   QGuiApplication app(argc, argv);
   // js读写文件授权
   qputenv("QML_XHR_ALLOW_FILE_READ", QByteArray("1"));
@@ -39,15 +40,11 @@ int main(int argc, char *argv[])
   qmlRegisterType<EmployeeData>("Data.Employee", 1, 0, "EmployeeData");
   qmlRegisterType<ArticleData>("Data.Article", 1, 0, "ArticleData");
   qmlRegisterType<TaskSetData>("Data.Taskset", 1, 0, "TaskSetData");
-  // 注册组件
-  // TODO
   QTranslator translator;
   const QStringList uiLanguages = QLocale::system().uiLanguages();
-  for (const QString &locale : uiLanguages)
-  {
+  for (const QString &locale : uiLanguages) {
     const QString baseName = "SSIMP_pc_" + QLocale(locale).name();
-    if (translator.load(":/i18n/" + baseName))
-    {
+    if (translator.load(":/i18n/" + baseName)) {
       app.installTranslator(&translator);
       break;
     }
@@ -57,8 +54,7 @@ int main(int argc, char *argv[])
       QStringLiteral("qrc:/font/fonts/NotoSans-Regular.ttf"));
   QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
   qDebug() << "fontfamilies:" << fontFamilies;
-  if (fontFamilies.size() > 0)
-  {
+  if (fontFamilies.size() > 0) {
     QFont font;
     font.setFamily(fontFamilies[0]); // 设置全局字体
     app.setFont(font);
@@ -68,8 +64,7 @@ int main(int argc, char *argv[])
   const QUrl url(u"qrc:/SSIMP_pc/Daemon/daemon.qml"_qs);
   QObject::connect(
       &engine, &QQmlApplicationEngine::objectCreated, &app,
-      [url](const QObject *obj, const QUrl &objUrl)
-      {
+      [url](const QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)
           QCoreApplication::exit(-1);
       },
