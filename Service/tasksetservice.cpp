@@ -143,6 +143,18 @@ QVariant TaskSetService::getTaskSet(QString tid)
     return QVariant();
 }
 
+TaskSetData *TaskSetService::getTaskSetListByTid(int tid)
+{
+    for (int i = 0; i < m_tasksets->size(); i++)
+    {
+        if (m_tasksets->at(i)->tid() == tid)
+        {
+            return m_tasksets->at(i);
+        }
+    }
+    return nullptr;
+}
+
 void TaskSetService::addTaskSet(QString name, QString content, QString area, float poslo, float posli, int cycle, int state, int duration)
 {
     TcpPost *post = new TcpPost("/api/taskset/add", this);

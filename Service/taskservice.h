@@ -4,6 +4,8 @@
 #include <QObject>
 #include <QQmlListProperty>
 #include "ModeData/taskdata.h"
+#include "ModeData/tasksetdata.h"
+#include <QQmlListProperty>
 
 class TaskService : public QObject
 {
@@ -11,16 +13,19 @@ class TaskService : public QObject
 public:
     explicit TaskService(QObject *parent = nullptr);
 
-    Q_INVOKABLE void getTaskList();
+    Q_INVOKABLE void getTaskListByEid(QString eid);
     Q_INVOKABLE void addTask(QString eid, int tid);
     Q_INVOKABLE void deleteTask(QString eid, int tid);
     Q_INVOKABLE void updateTask(QString eid, int tid, int newtid);
 
 signals:
-    void getTaskListChanged(QQmlListProperty<TaskData> tasks);
+    void employeeTaskListChanged(QQmlListProperty<TaskSetData> taskList);
     void addTaskSuccess();
     void deleteTaskSuccess();
     void updateTaskSuccess();
+
+private:
+    static QList<TaskSetData *> *tasksetList;
 };
 
 #endif // TASKSERVICE_H

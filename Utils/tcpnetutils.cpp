@@ -8,6 +8,7 @@ TcpNetUtils::TcpNetUtils(TcpPost *post) : QObject(post)
   this->timeout = post->getTimeout();
   this->url = post->getUrl();
   this->headers = post->getHeaders();
+  this->params = post->getParams();
   this->body = post->getBody();
   this->statusCode = -1;
 }
@@ -51,6 +52,7 @@ void TcpNetUtils::sendRequest()
   {
     i.next();
     request.setRawHeader(i.key().toUtf8(), i.value().toUtf8());
+    request.setRawHeader("Content-Type", "application/json");
   }
   // 创建请求管理器
   QNetworkAccessManager *manager = new QNetworkAccessManager();

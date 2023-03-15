@@ -17,7 +17,8 @@
 #include <Service/taskservice.h>
 #include <Service/tasksetservice.h>
 
-int main(int argc, char *argv[]) {
+int main(int argc, char *argv[])
+{
   QGuiApplication app(argc, argv);
   // js读写文件授权
   qputenv("QML_XHR_ALLOW_FILE_READ", QByteArray("1"));
@@ -37,14 +38,18 @@ int main(int argc, char *argv[]) {
   qmlRegisterType<EmployeeService>("Service.Employee", 1, 0, "EmployeeService");
   qmlRegisterType<ArticleService>("Service.Article", 1, 0, "ArticleService");
   qmlRegisterType<TaskSetService>("Service.Taskset", 1, 0, "TaskSetService");
+  qmlRegisterType<TaskService>("Service.Task", 1, 0, "TaskService");
   qmlRegisterType<EmployeeData>("Data.Employee", 1, 0, "EmployeeData");
   qmlRegisterType<ArticleData>("Data.Article", 1, 0, "ArticleData");
   qmlRegisterType<TaskSetData>("Data.Taskset", 1, 0, "TaskSetData");
+  qmlRegisterType<TaskData>("Data.Task", 1, 0, "TaskData");
   QTranslator translator;
   const QStringList uiLanguages = QLocale::system().uiLanguages();
-  for (const QString &locale : uiLanguages) {
+  for (const QString &locale : uiLanguages)
+  {
     const QString baseName = "SSIMP_pc_" + QLocale(locale).name();
-    if (translator.load(":/i18n/" + baseName)) {
+    if (translator.load(":/i18n/" + baseName))
+    {
       app.installTranslator(&translator);
       break;
     }
@@ -54,7 +59,8 @@ int main(int argc, char *argv[]) {
       QStringLiteral("qrc:/font/fonts/NotoSans-Regular.ttf"));
   QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
   qDebug() << "fontfamilies:" << fontFamilies;
-  if (fontFamilies.size() > 0) {
+  if (fontFamilies.size() > 0)
+  {
     QFont font;
     font.setFamily(fontFamilies[0]); // 设置全局字体
     app.setFont(font);
@@ -64,7 +70,8 @@ int main(int argc, char *argv[]) {
   const QUrl url(u"qrc:/SSIMP_pc/Daemon/daemon.qml"_qs);
   QObject::connect(
       &engine, &QQmlApplicationEngine::objectCreated, &app,
-      [url](const QObject *obj, const QUrl &objUrl) {
+      [url](const QObject *obj, const QUrl &objUrl)
+      {
         if (!obj && url == objUrl)
           QCoreApplication::exit(-1);
       },

@@ -62,7 +62,14 @@ void TcpGet::addParam(const QString &key, const QString &value)
 
 void TcpGet::setParam(const QString &key, const QString &value)
 {
-    this->params.insert(key, value);
+    if (this->params.contains(key))
+    {
+        this->params[key] = value;
+    }
+    else
+    {
+        this->params.insert(key, value);
+    }
 }
 
 void TcpGet::setTimeout(int timeout)
