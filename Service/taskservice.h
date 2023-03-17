@@ -16,7 +16,6 @@ public:
     Q_INVOKABLE void getTaskListByEid(QString eid);
     Q_INVOKABLE void addTask(QString eid, int tid);
     Q_INVOKABLE void deleteTask(QString eid, int tid);
-    Q_INVOKABLE void updateTask(QString eid, int tid, int newtid);
 
 signals:
     void employeeTaskListChanged(QQmlListProperty<TaskSetData> taskList);

@@ -54,6 +54,43 @@ void TaskSetService::getTaskSetList()
     post->deleteLater();
 }
 
+QQmlListProperty<TaskSetData> TaskSetService::tasksets()
+{
+    if (m_tasksets->size() == 0)
+    {
+        getTaskSetList();
+    }
+    emit taskSetListChanged(QQmlListProperty<TaskSetData>(this, m_tasksets));
+    return QQmlListProperty<TaskSetData>(this, m_tasksets);
+}
+
+QQmlListProperty<TaskSetData> TaskSetService::tasksets(QString keyname, float poslo, float posli)
+{
+    // 生成临时列表
+    // 判断是否为空
+    if (m_tasksets->size() == 0)
+    {
+        getTaskSetList();
+    }
+    QList<TaskSetData *> *temp = new QList<TaskSetData *>();
+    // 查找名字不是keyname的,经纬度在半径0.02范围内的
+    for (int i = 0; i < m_tasksets->size(); i++)
+    {
+        if (m_tasksets->at(i)->name() != keyname)
+        {
+            if (m_tasksets->at(i)->poslo() > poslo - 0.002 && m_tasksets->at(i)->poslo() < poslo + 0.002)
+            {
+                if (m_tasksets->at(i)->posli() > posli - 0.002 && m_tasksets->at(i)->posli() < posli + 0.002)
+                {
+                    temp->append(m_tasksets->at(i));
+                }
+            }
+        }
+    }
+    emit taskSetListChanged(QQmlListProperty<TaskSetData>(this, temp));
+    return QQmlListProperty<TaskSetData>(this, temp);
+}
+
 void TaskSetService::searchTaskSet(QString keyname)
 {
     // 生成临时列表
@@ -76,11 +113,6 @@ void TaskSetService::searchTaskSet(QString keyname)
         }
     }
     emit taskSetListChanged(QQmlListProperty<TaskSetData>(this, temp));
-}
-
-QQmlListProperty<TaskSetData> TaskSetService::tasksets()
-{
-    return QQmlListProperty<TaskSetData>(this, m_tasksets);
 }
 
 void TaskSetService::modifyTaskSet(QString tid, QString name, QString content, QString area, float poslo, float posli, int cycle, int state, int duration)

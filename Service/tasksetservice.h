@@ -12,9 +12,9 @@ public:
     explicit TaskSetService(QObject *parent = nullptr);
 
     Q_INVOKABLE void getTaskSetList();
-    // 搜索任务,这将会刷新列表
-    Q_INVOKABLE void searchTaskSet(QString keyname);
     Q_INVOKABLE QQmlListProperty<TaskSetData> tasksets();
+    Q_INVOKABLE QQmlListProperty<TaskSetData> tasksets(QString keyname, float poslo, float posli);
+    Q_INVOKABLE void searchTaskSet(QString keyname);
     Q_INVOKABLE void modifyTaskSet(QString tid, QString name, QString content, QString area, float poslo, float posli, int cycle, int state, int duration);
     Q_INVOKABLE void deleteTaskSet(QString tid);
     Q_INVOKABLE QVariant getTaskSet(QString tid);

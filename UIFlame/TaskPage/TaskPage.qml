@@ -21,6 +21,7 @@ Item {
     Component.onCompleted: {
         employeeService.getEmployeeInfoList()
         tasksetService.getTaskSetList()
+        timer.start()
     }
 
     EmployeeService {
@@ -43,21 +44,89 @@ Item {
         id: employeetasksetdata
     }
 
+    ListModel {
+        id: tasksetdata
+    }
+
+    function cycleToString(cycle)
+    {
+        //"每天", "一周一次", "一周两次", "一周三次", "一周四次", "一周五次", "一周六次", "一月一次", "一月两次"
+        switch (cycle) {
+            case 0:
+            return "每天"
+            case 1:
+            return "一周一次"
+            case 2:
+            return "一周两次"
+            case 3:
+            return "一周三次"
+            case 4:
+            return "一周四次"
+            case 5:
+            return "一周五次"
+            case 6:
+            return "一周六次"
+            case 7:
+            return "一月一次"
+            case 8:
+            return "一月两次"
+            default:
+            return "未知"
+        }
+    }
+
+    function isNotInEmployeeTaskList(id)
+    {
+        for (var i = 0; i < employeetasksetdata.count; i++) {
+            if (employeetasksetdata.get(i).tid === id)
+            {
+                return false
+            }
+        }
+        return true
+    }
+
     Connections {
         function onEmployeeInfoListChanged()
         {
             employeedata.clear()
-            for (var j = 0; j < employeeService.employees().length; j++) {
-                var employe = employeeService.employees()[j]
-                employeedata.append(employe)
+            var list = employeeService.employees()
+            for (var j = 0; j < list.length; j++) {
+                employeedata.append(list[j])
             }
         }
         target: employeeService
     }
 
-    Connections{
+    Timer {
+        id: timer
+        interval: 1000
+        running: false
+        repeat: false
+        onTriggered: {
+            taskService.getTaskListByEid(employeedata.get(0).employid)
+        }
+    }
+
+    Connections {
+        target: tasksetService
+
+        function onTaskSetListChanged(list)
+        {
+            if (tasksetdata.count > 0)
+            {
+                tasksetdata.clear()
+            }
+            for (var i = 0; i < list.length; i++) {
+                tasksetdata.append(list[i])
+            }
+        }
+    }
+
+    Connections {
         function onEmployeeTaskListChanged(list)
         {
+            console.log(list.length)
             if (employeetasksetdata.count > 0)
             {
                 employeetasksetdata.clear()
@@ -65,6 +134,8 @@ Item {
             for (var i = 0; i < list.length; i++) {
                 employeetasksetdata.append(list[i])
             }
+            webview.showCurrentPoint(list)
+
         }
         target: taskService
     }
@@ -103,6 +174,7 @@ Item {
                 anchors.bottomMargin: 150
                 spacing: 3
                 model: employeedata
+
                 onOpacityChanged: {
                     if (opacity === 0)
                         listView.currentIndex = index
@@ -157,7 +229,6 @@ Item {
                             duration: 120
                         }
                     }
-                    //remove Transition is end
                 }
 
                 delegate: Item {
@@ -314,7 +385,7 @@ Item {
                             color: "#4A90E2"
                             radius: 5
                         }
-                        Text{
+                        Text {
                             text: qsTr("搜索")
                             color: "white"
                             anchors.centerIn: parent
@@ -339,15 +410,18 @@ Item {
                             color: "#4A90E2"
                             radius: 5
                         }
-                        Text{
+                        Text {
                             text: qsTr("搜索")
                             color: "white"
                             anchors.centerIn: parent
                             font.pointSize: 14
                         }
+                        onClicked: {
+                            tasksetService.searchTaskSet(tasksearchtext.text)
+                        }
                     }
 
-                    Text{
+                    Text {
                         text: qsTr("排序方式")
                         color: "#535060"
                         height: 40
@@ -411,8 +485,7 @@ Item {
                             id: currentemployeetaskitem
 
                             width: parent.width
-                            height: 50
-                            color: "red"
+                            height: 150
                             radius: 10
                             layer.enabled: true
                             layer.effect: DropShadow {
@@ -426,10 +499,10 @@ Item {
 
                             Text {
                                 id: currentemployeetaskname
-
-                                anchors.verticalCenter: parent.verticalCenter
                                 anchors.left: parent.left
                                 anchors.leftMargin: 20
+                                anchors.top:parent.top
+                                anchors.topMargin: 10
                                 text: name
                                 color: "#292826"
                                 font.styleName: "Medium"
@@ -437,15 +510,64 @@ Item {
                             }
 
                             Text {
-                                id: currentemployeetaskstatus
+                                id: currentemployeetaskcontent
 
-                                anchors.verticalCenter: parent.verticalCenter
-                                anchors.right: parent.right
-                                anchors.rightMargin: 20
-                                text: status
+                                anchors.left: parent.left
+                                anchors.leftMargin: 20
+                                anchors.top:currentemployeetaskname.bottom
+                                anchors.topMargin: 10
+                                text: content
                                 color: "#292826"
                                 font.styleName: "Medium"
-                                font.pointSize: 15
+                                font.pointSize: 13
+                            }
+                            Text {
+                                id: currentemployeetaskarea
+
+                                anchors.left: parent.left
+                                anchors.leftMargin: 20
+                                anchors.bottom: parent.bottom
+                                anchors.bottomMargin: 10
+                                text:qsTr("时长")+duration + qsTr("小时")
+                                color: "#292826"
+                                font.styleName: "Medium"
+                                font.pointSize: 13
+                            }
+
+                            // 在时长的后面显示周期
+                            Text {
+                                id: currentemployeetaskcycle
+
+                                anchors.left: currentemployeetaskarea.right
+                                anchors.leftMargin: 10
+                                anchors.bottom: parent.bottom
+                                anchors.bottomMargin: 10
+                                text: qsTr("任务周期:") + cycleToString(cycle)
+                                color: "#292826"
+                                font.styleName: "Medium"
+                                font.pointSize: 13
+                            }
+
+                            // 右下角取消任务按钮
+                            Button {
+                                id: currentemployeetaskcancelbutton
+
+                                width: 100
+                                height: 50
+                                anchors.right: parent.right
+                                anchors.rightMargin: 10
+                                anchors.bottom: parent.bottom
+                                anchors.bottomMargin: 5
+                                background: Rectangle {
+                                    color: "#FF516B"
+                                    radius: 5
+                                }
+                                Text {
+                                    text: qsTr("取消委派")
+                                    color: "white"
+                                    anchors.centerIn: parent
+                                    font.pointSize: 14
+                                }
                             }
                         }
                     }
@@ -465,7 +587,7 @@ Item {
                 Rectangle {
                     id: maparea
 
-                    height: parent.height *0.6 - 10
+                    height: parent.height *0.52 - 10
                     anchors.right: parent.right
                     anchors.rightMargin: 10
                     anchors.left: currentemployeetaskarea.right
@@ -493,6 +615,7 @@ Item {
                                 }
                             } else {
                             loadingtext.text = "载入完成"
+                            webview.showAllPoint()
                             stop()
                         }
                     }
@@ -503,7 +626,6 @@ Item {
                     anchors.fill: parent
                     anchors.topMargin: 10
                     url: "qrc:/htmlpage/htmlpage/map.html"
-                    // 允许跨域
                     QtObject {
                         id: webEngineChannel
                         WebChannel.id: "webChannel"
@@ -513,14 +635,20 @@ Item {
                             console.log("weboutput:" + value)
                         }
 
-                        function receiveLocateInfo(info, x, y)
+                        function nowIs(name, x, y)
                         {
-                            console.log("weboutput:" + info + " " + x + " " + y)
-                            tasklistdata.setProperty(tasklist.currentIndex,
-                            "poslo", x)
-                            tasklistdata.setProperty(tasklist.currentIndex,
-                            "posli", y)
+                            tasksetService.tasksets(name, x, y)
                         }
+
+                    }
+
+                    function receiveLocateInfo(info, x, y)
+                    {
+                        console.log("weboutput:" + info + " " + x + " " + y)
+                        tasklistdata.setProperty(tasklist.currentIndex,
+                        "poslo", x)
+                        tasklistdata.setProperty(tasklist.currentIndex,
+                        "posli", y)
                     }
 
                     webChannel: WebChannel {
@@ -544,51 +672,314 @@ Item {
 
                     function addPoint(name, x, y)
                     {
-                        webview.runJavaScript(
-                            "addPoint('" + name + "', " + x + ", " + y + ")")
-                        }
+                        webview.runJavaScript("addPoint('" + name + "', " + x + ", " + y + ")")
+                    }
 
-                        function removeAllPoint()
+                    function removeAllPoint()
+                    {
+                        webview.runJavaScript("removePoint()")
+                    }
+                    function showAllPoint()
+                    {
+                        webview.removeAllPoint()
+                        var tasksets = tasksetService.tasksets();
+                        for (var i = 0; i < tasksets.length; i++)
                         {
-                            webview.runJavaScript("removePoint()")
+                            var taskset = tasksets[i];
+                            webview.addPoint(taskset.name, taskset.poslo, taskset.posli);
                         }
                     }
+                    function showCurrentPoint(list)
+                    {
+                        webview.removeAllPoint();
+                        for (var i = 0; i < list.length; i++)
+                        {
+                            var taskset = list[i];
+                            webview.addPoint(taskset.name, taskset.poslo, taskset.posli);
+                        }
+
+                    }
+                }
+            }
+
+            // 分割线
+            Rectangle {
+                width: maparea.width / 1.2
+                //  相对于maparea水平居中
+                anchors.horizontalCenter: maparea.horizontalCenter
+                height: 1
+                anchors.top: maparea.bottom
+                anchors.topMargin: 5
+                color: "#EEEEEE"
+            }
+            Text {
+                id: tasklisttitle
+
+                anchors.top: maparea.bottom
+                anchors.topMargin: 5
+                anchors.left: maparea.left
+                anchors.leftMargin: 10
+                text: qsTr("可用任务列表")
+                color: "#949494"
+                font.styleName: "Medium"
+                font.pointSize: 16
+            }
+            // 右侧显示全部任务列表按钮和显示全部任务坐标按钮
+            Button {
+                id: showalltaskposbutton
+
+                width: 150
+                height: 40
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                anchors.top: tasklisttitle.top
+                background: Rectangle {
+                    color: "#4A90E2"
+                    radius: 5
+                }
+                Text {
+                    text: qsTr("显示全部任务坐标")
+                    color: "white"
+                    anchors.centerIn: parent
+                    font.pointSize: 12
+                }
+                onClicked: {
+                    webview.showAllPoint()
+                }
+            }
+            Button {
+                id: showalltaskbutton
+
+                width: 110
+                height: 40
+                anchors.right: showalltaskposbutton.left
+                anchors.rightMargin: 10
+                anchors.top: tasklisttitle.top
+                background: Rectangle {
+                    color: "#4A90E2"
+                    radius: 5
+                }
+                Text {
+                    text: qsTr("显示全部任务")
+                    color: "white"
+                    anchors.centerIn: parent
+                    font.pointSize: 12
+                }
+                onClicked: {
+                    tasklistdata = tasksetService.tasksets()
                 }
 
-                // 分割线
-                Rectangle {
-                    width: maparea.width / 1.2
-                    //  相对于maparea水平居中
-                    anchors.horizontalCenter: maparea.horizontalCenter
-                    height: 1
-                    anchors.top: maparea.bottom
-                    anchors.topMargin: 5
-                    color: "#EEEEEE"
-                }
+            }
 
-                // 区域可选任务列表
-                Rectangle {
-                    id: tasklistarea
 
-                    anchors.right: parent.right
-                    anchors.rightMargin: 10
-                    anchors.left: currentemployeetaskarea.right
-                    anchors.leftMargin: 10
-                    anchors.top: maparea.bottom
-                    anchors.topMargin: 10
-                    anchors.bottom: parent.bottom
-                    anchors.bottomMargin: 10
-                }
+            // 区域可选任务列表
+            Rectangle {
+                id: tasklistarea
 
-                layer.effect: DropShadow {
-                    cached: true
-                    color: "#90849292"
-                    horizontalOffset: 3
-                    verticalOffset: 3
-                    radius: 10
-                    samples: 2 * radius + 1
+                anchors.right: parent.right
+                anchors.rightMargin: 10
+                anchors.left: currentemployeetaskarea.right
+                anchors.leftMargin: 10
+                anchors.top: maparea.bottom
+                anchors.topMargin: 45
+                anchors.bottom: parent.bottom
+                anchors.bottomMargin: 10
+                // 可用任务列表
+                ListView {
+                    id: tasklist
+
+                    anchors.fill: parent
+                    model: tasksetdata
+                    spacing: 10
+                    onOpacityChanged: {
+                        if (opacity === 0)
+                            listView.currentIndex = index
+                    }
+
+                    populate: Transition {
+                        NumberAnimation {
+                            property: "opacity"
+                            from: 0
+                            to: 1
+                            duration: 200
+                        }
+                    }
+
+                    add: Transition {
+                        ParallelAnimation {
+                            NumberAnimation {
+                                property: "opacity"
+                                from: 0
+                                to: 1
+                                duration: 200
+                            }
+
+                            NumberAnimation {
+                                property: "y"
+                                from: 0
+                                duration: 200
+                            }
+                        }
+                    }
+
+                    displaced: Transition {
+                        SpringAnimation {
+                            property: "y"
+                            spring: 3
+                            damping: 0.1
+                            epsilon: 0.25
+                        }
+                    }
+
+                    remove: Transition {
+                        SequentialAnimation {
+                            NumberAnimation {
+                                property: "y"
+                                to: 0
+                                duration: 120
+                            }
+
+                            NumberAnimation {
+                                property: "opacity"
+                                to: 0
+                                duration: 120
+                            }
+                        }
+                        //remove Transition is end
+                    }
+                    delegate: Rectangle {
+                        id: tasklistitem
+
+                        width: parent.width
+                        height: 90
+                        radius: 10
+                        layer.enabled: true
+                        layer.effect: DropShadow {
+                            cached: true
+                            color: "#90849292"
+                            horizontalOffset: 3
+                            verticalOffset: 3
+                            radius: 10
+                            samples: 2 * radius + 1
+                        }
+
+                        Text {
+                            id: tasklistitemname
+                            anchors.left: parent.left
+                            anchors.leftMargin: 20
+                            anchors.top:parent.top
+                            anchors.topMargin: 10
+                            text: name
+                            color: "#292826"
+                            font.styleName: "Medium"
+                            font.pointSize: 12
+                        }
+
+                        Text {
+                            id: tasklistitemarea
+
+                            anchors.left: parent.left
+                            anchors.leftMargin: 20
+                            anchors.top: tasklistitemname.bottom
+                            anchors.topMargin: 5
+                            text: content
+                            color: "#292826"
+                            font.pointSize: 10
+                        }
+                        Text {
+                            id: tasklistitemduration
+
+                            anchors.left: parent.left
+                            anchors.leftMargin: 20
+                            anchors.bottom: parent.bottom
+                            anchors.bottomMargin: 10
+                            text:qsTr("时长")+duration + qsTr("小时")
+                            color: "#292826"
+                            font.pointSize: 10
+                        }
+
+                        // 在时长的后面显示周期
+                        Text {
+                            id: tasklistitemcycle
+
+                            anchors.left: tasklistitemduration.right
+                            anchors.leftMargin: 10
+                            anchors.bottom: parent.bottom
+                            anchors.bottomMargin: 10
+                            text: qsTr("任务周期:") + cycleToString(cycle)
+                            color: "#292826"
+                            font.pointSize: 10
+                        }
+
+                        // 任务地点
+                        Text {
+                            id: tasklistitempos
+                            anchors.left: tasklistitemcycle.right
+                            anchors.leftMargin: 10
+                            anchors.bottom: parent.bottom
+                            anchors.bottomMargin: 10
+                            text: qsTr("任务地点:") + area
+                            color: "#292826"
+                            font.pointSize: 10
+                        }
+
+                        Button {
+                            id: currentemployeetaskdelegatebutton
+                            width: 100
+                            height: 50
+                            visible: isNotInEmployeeTaskList(tid)
+                            anchors.right: parent.right
+                            anchors.rightMargin: 10
+                            anchors.verticalCenter: parent.verticalCenter
+                            background: Rectangle {
+                                color: "#28D33F"
+                                radius: 5
+                            }
+                            Text {
+                                text: qsTr("委派任务")
+                                color: "white"
+                                anchors.centerIn: parent
+                                font.pointSize: 14
+                            }
+                        }
+
+                        // 取消任务按钮
+                        Button {
+                            id: currentemployeetaskdelegatecancelbutton
+                            width: 100
+                            height: 50
+                            visible: !isNotInEmployeeTaskList(tid)
+                            anchors.right: parent.right
+                            anchors.rightMargin: 10
+                            anchors.verticalCenter: parent.verticalCenter
+                            background: Rectangle {
+                                color: "#D33F3F"
+                                radius: 5
+                            }
+                            Text {
+                                text: qsTr("取消委派")
+                                color: "white"
+                                anchors.centerIn: parent
+                                font.pointSize: 14
+                            }
+                            onClicked: {
+
+                            }
+                        }
+                    }
+
                 }
+            }
+
+            layer.effect: DropShadow {
+                cached: true
+                color: "#90849292"
+                horizontalOffset: 3
+                verticalOffset: 3
+                radius: 10
+                samples: 2 * radius + 1
             }
         }
     }
+}
 }

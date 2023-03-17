@@ -53,10 +53,6 @@ void TaskService::deleteTask(QString eid, int tid)
 {
 }
 
-void TaskService::updateTask(QString eid, int tid, int newtid)
-{
-}
-
 QList<TaskSetData *> *TaskService::tasksetList = new QList<TaskSetData *>();
 
 // Path: Service/taskservice.h
