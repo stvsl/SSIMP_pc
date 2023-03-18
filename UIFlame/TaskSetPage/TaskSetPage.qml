@@ -1130,7 +1130,7 @@ Item {
                                             id: webEngineChannel
                                             WebChannel.id: "webChannel"
 
-                                            function print(value)
+                                            function sprint(value)
                                             {
                                                 console.log("weboutput:" + value)
                                             }

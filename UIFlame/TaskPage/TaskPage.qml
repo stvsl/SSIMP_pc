@@ -126,7 +126,6 @@ Item {
     Connections {
         function onEmployeeTaskListChanged(list)
         {
-            console.log(list.length)
             if (employeetasksetdata.count > 0)
             {
                 employeetasksetdata.clear()
@@ -481,6 +480,7 @@ Item {
 
                         anchors.fill: parent
                         model: employeetasksetdata
+                        spacing: 10
                         delegate: Rectangle {
                             id: currentemployeetaskitem
 
@@ -568,6 +568,9 @@ Item {
                                     anchors.centerIn: parent
                                     font.pointSize: 14
                                 }
+                                onClicked: {
+                                    taskService.deleteTask(employeedata.get(employeelist.currentIndex).employid, tid)
+                                }
                             }
                         }
                     }
@@ -630,7 +633,7 @@ Item {
                         id: webEngineChannel
                         WebChannel.id: "webChannel"
 
-                        function print(value)
+                        function sprint(value)
                         {
                             console.log("weboutput:" + value)
                         }
@@ -941,6 +944,9 @@ Item {
                                 anchors.centerIn: parent
                                 font.pointSize: 14
                             }
+                            onClicked: {
+                                taskService.addTask(employeedata.get(employeelist.currentIndex).employid, tid)
+                            }
                         }
 
                         // 取消任务按钮
@@ -963,7 +969,7 @@ Item {
                                 font.pointSize: 14
                             }
                             onClicked: {
-
+                                taskService.removeTask(employeedata.get(employeelist.currentIndex).employid, tid)
                             }
                         }
                     }
