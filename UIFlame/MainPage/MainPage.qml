@@ -1,6 +1,6 @@
 /*##^##
 Designer {
-    D{i:0;formeditorColor:"#c0c0c0";formeditorZoom:0.5;height:1080;width:1920}
+    D {i:0;formeditorColor:"#c0c0c0";formeditorZoom:0.5;height:1080;width:1920}
 }
 ##^##*/
 
@@ -11,6 +11,7 @@ import "../LsKyPage"
 import "../Menu"
 import "../TaskPage"
 import "../TaskSetPage"
+import "../GlobalOverviewPage"
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -115,10 +116,7 @@ Window {
         Component {
             id: globaloverview
 
-            Rectangle {
-                width: 200
-                height: 100
-                color: "blue"
+            GlobalOverviewPage {
             }
 
         }

@@ -43,5 +43,6 @@
         <file>htmlpage/contentedit.html</file>
         <file>htmlpage/wangeditor.css</file>
         <file>htmlpage/map.html</file>
+        <file>htmlpage/mainscreenview.html</file>
     </qresource>
 </RCC>
