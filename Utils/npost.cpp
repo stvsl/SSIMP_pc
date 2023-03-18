@@ -32,6 +32,29 @@ void TcpPost::setUrl(const QUrl &url)
     this->url = url;
 }
 
+void TcpPost::setParams(const QMap<QString, QString> &params)
+{
+    this->params = params;
+}
+
+void TcpPost::addParam(const QString &key, const QString &value)
+{
+    this->params.insert(key, value);
+}
+
+void TcpPost::setParam(const QString &key, const QString &value)
+{
+    // 如果存在则替换，否则追加
+    if (this->params.contains(key))
+    {
+        this->params[key] = value;
+    }
+    else
+    {
+        this->params.insert(key, value);
+    }
+}
+
 void TcpPost::setHeader(const QString &key, const QString &value)
 {
     this->headers.insert(key, value);
@@ -86,6 +109,11 @@ QMap<QString, QString> &TcpPost::getHeaders()
 QByteArray &TcpPost::getBody()
 {
     return this->body;
+}
+
+QMap<QString, QString> &TcpPost::getParams()
+{
+    return this->params;
 }
 
 int &TcpPost::getTimeout()

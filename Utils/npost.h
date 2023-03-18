@@ -16,6 +16,12 @@ public:
     ~TcpPost();
     // 设置请求URL
     void setUrl(const QUrl &url);
+    // 设置请求参数
+    void setParams(const QMap<QString, QString> &params);
+    // 追加请求参数
+    void addParam(const QString &key, const QString &value);
+    // 设置请求参数
+    void setParam(const QString &key, const QString &value);
     // 设置header
     void setHeader(const QString &key, const QString &value);
     // 设置headers
@@ -40,12 +46,16 @@ public:
     QMap<QString, QString> &getHeaders();
     // 获取请求体
     QByteArray &getBody();
+    // 获取请求参数
+    QMap<QString, QString> &getParams();
     // 获取请求超时时间
     int &getTimeout();
 
 private:
     // 请求URL
     QUrl url;
+    // 请求参数
+    QMap<QString, QString> params;
     // 请求头
     QMap<QString, QString> headers;
     // 请求体

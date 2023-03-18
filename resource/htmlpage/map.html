@@ -193,7 +193,7 @@
         //qt通信组件实例化
         new QWebChannel(qt.webChannelTransport, function (channel) {
             webChannel = channel.objects.webChannel;
-            webChannel.print("success");
+            // webChannel.sprint("success");
         });
 
         //设置中央位置
@@ -267,6 +267,7 @@
                     var info = addComp.province + addComp.city + addComp.district + addComp.street + addComp.streetNumber + point.lng + point.lat;
                     var infoWindow = new BMapGL.InfoWindow(info);
                     infoWindow.setTitle(name);
+                    webChannel.nowIs(name, point.lng, point.lat);
                     mapGL.openInfoWindow(infoWindow, point);
                 });
             });

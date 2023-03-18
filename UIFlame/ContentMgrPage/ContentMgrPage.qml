@@ -54,7 +54,7 @@ Item {
                         }
                     }
 
-                }else{
+                }else {
                 articletitle.text = article.title
                 articlesummary.text = article.introduction
                 contentpage.setHtml(article.text)
@@ -83,7 +83,7 @@ Item {
             }
         }
 
-        Timer{
+        Timer {
             id: timer
             interval: 2000
             repeat: true
@@ -97,7 +97,7 @@ Item {
             id: articledata
         }
 
-        ListModel{
+        ListModel {
             id: carouseldata
         }
 
@@ -326,7 +326,7 @@ Item {
                 }
             }
             // 分界线
-            Rectangle{
+            Rectangle {
                 width: parent.width *0.92
                 height: 1
                 anchors.top:contentlist.bottom
@@ -422,10 +422,10 @@ Item {
                         }
                     }
 
-                    Row{
+                    Row {
                         spacing: 10
                         height: 38
-                        Text{
+                        Text {
                             width: 50
                             height: parent.height
                             text: "选项:"
@@ -455,7 +455,7 @@ Item {
 
                             MouseArea {
                                 anchors.fill: parent
-                                onClicked:{
+                                onClicked: {
                                     if (hasNewArticle() == true)
                                     {
                                         errloader.sourceComponent = hasNewArticleNow
@@ -577,7 +577,7 @@ Rectangle {
         samples: 2 * radius + 1
     }
 
-    Text{
+    Text {
         text: "现在还没有轮播图～选择文章作为轮播图吧！"
         color: "#8E99A5"
         font.styleName: "Demibold"
@@ -586,7 +586,7 @@ Rectangle {
         visible: carouseldata.count === 0
     }
 
-    ListView{
+    ListView {
         id: carousellist
         orientation: Qt.Horizontal
         anchors.fill: parent
@@ -652,7 +652,7 @@ Rectangle {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 5
 
-            Rectangle{
+            Rectangle {
                 anchors.fill: parent
                 radius: 10
                 layer.enabled:true
@@ -664,7 +664,7 @@ Rectangle {
                     radius: 10
                     samples: 2 * radius + 1
                 }
-                Image{
+                Image {
                     id:carousepanelimg
                     x: 10
                     y: 10
@@ -674,13 +674,13 @@ Rectangle {
                     fillMode: Image.PreserveAspectCrop
                     source: coverimg
                 }
-                Text{
+                Text {
                     text: "aid:"+aid
                     x:10
                     anchors.bottom:parent.bottom
                     anchors.bottomMargin: 10
                 }
-                Text{
+                Text {
                     id:carousepaneltitle
                     anchors.top:parent.top
                     anchors.topMargin: 10
@@ -694,7 +694,7 @@ Rectangle {
                     font.pointSize: 12
                     font.styleName: "Medium"
                 }
-                Text{
+                Text {
                     anchors.top:carousepaneltitle.bottom
                     anchors.topMargin: 10
                     anchors.left:carousepanelimg.right
@@ -706,7 +706,7 @@ Rectangle {
                     wrapMode: Text.WordWrap
                     text:introduction
                 }
-                Rectangle{
+                Rectangle {
                     anchors.bottom: parent.bottom
                     anchors.bottomMargin: 10
                     anchors.left:carousepanelimg.right
@@ -716,7 +716,7 @@ Rectangle {
                     height: 30
                     color:"#F4A236"
                     radius: 10
-                    Text{
+                    Text {
                         anchors.centerIn: parent
                         text: "移除"
                         color: "white"
@@ -824,11 +824,11 @@ Rectangle {
         anchors.margins: 10
         anchors.bottomMargin: parent.height / 5
         url: "qrc:/htmlpage/htmlpage/contentedit.html"
-        QtObject{
+        QtObject {
             id: webEngineChannel
             WebChannel.id: "webChannel"
 
-            function print(value)
+            function sprint(value)
             {
                 console.log("weboutput:"+value);
             }
@@ -837,8 +837,8 @@ Rectangle {
             signal setHtml(string html)
         }
 
-        webChannel: WebChannel{
-            registeredObjects:[webEngineChannel]
+        webChannel: WebChannel {
+            registeredObjects: [webEngineChannel]
         }
 
     }
