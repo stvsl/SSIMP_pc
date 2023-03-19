@@ -24,6 +24,7 @@
         <file>jsaddon/file.js</file>
         <file>jsaddon/echarts.min.js</file>
         <file>jsaddon/wangeditor5.1.23.js</file>
+        <file>jsaddon/vue2.js</file>
     </qresource>
     <qresource prefix="/login">
         <file>Login/background.jpg</file>
