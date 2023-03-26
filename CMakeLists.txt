@@ -60,11 +60,14 @@ qt_add_executable(appSSIMP_pc
     Service/articleservice.h Service/articleservice.cpp
     Service/tasksetservice.h Service/tasksetservice.cpp
     Service/taskservice.h Service/taskservice.cpp
+    Service/attendanceservice.h Service/attendanceservice.cpp
 
     ModeData/employeedata.h ModeData/employeedata.cpp
     ModeData/articledata.h ModeData/articledata.cpp
     ModeData/tasksetdata.h ModeData/tasksetdata.cpp
     ModeData/taskdata.h ModeData/taskdata.cpp
+    ModeData/attendancedata.h ModeData/attendancedata.cpp
+
     # 界面辅助代理封装
     Daemon/vctrler.h Daemon/vctrler.cpp
 
@@ -82,6 +85,7 @@ qt_add_qml_module(appSSIMP_pc
     QML_FILES UIFlame/LoadPage/LoadPage.qml
     QML_FILES UIFlame/MainPage/MainPage.qml
     QML_FILES UIFlame/GlobalOverviewPage/GlobalOverviewPage.qml
+    QML_FILES UIFlame/DataMonitorPage/DataMonitorPage.qml
     QML_FILES UIFlame/EmployeePage/EmployeePage.qml
     QML_FILES UIFlame/TaskPage/TaskPage.qml
     QML_FILES UIFlame/ContentMgrPage/ContentMgrPage.qml

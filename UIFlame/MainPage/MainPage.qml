@@ -12,6 +12,7 @@ import "../Menu"
 import "../TaskPage"
 import "../TaskSetPage"
 import "../GlobalOverviewPage"
+import "../DataMonitorPage"
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -123,13 +124,8 @@ Window {
 
         Component {
             id: datamonitoring
-
-            Rectangle {
-                width: 200
-                height: 100
-                color: "blue"
+            DataMonitorPage {
             }
-
         }
 
         Component {

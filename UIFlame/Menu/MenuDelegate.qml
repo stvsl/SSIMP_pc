@@ -1,6 +1,6 @@
 /*##^##
 Designer {
-    D{i:0;formeditorColor:"#c0c0c0";formeditorZoom:2;height:60;width:300}
+    D {i:0;formeditorColor:"#c0c0c0";formeditorZoom:2;height:60;width:300}
 }
 ##^##*/
 
@@ -18,115 +18,116 @@ Item {
 
     property bool isHover: false
 
-    width: ListView.view.width
-    height: 60
-    states: [
-        State {
-            name: "Highlighted"
-            when: delegate.ListView.isCurrentItem
+        width: ListView.view.width
+        height: 60
+        states: [
+            State {
+                name: "Highlighted"
+                when: delegate.ListView.isCurrentItem
 
-            PropertyChanges {
-                target: label
-                color: "#323643"
-                anchors.topMargin: 30
+                PropertyChanges {
+                    target: label
+                    color: "#323643"
+                    anchors.topMargin: 30
+                }
+
+                PropertyChanges {
+                    target: rectangle
+                    visible: false
+                }
+
             }
+        ]
 
-            PropertyChanges {
-                target: rectangle
-                visible: false
-            }
+        Rectangle {
+            id: rectangle
 
-        }
-    ]
-
-    Rectangle {
-        id: rectangle
-
-        anchors.fill: parent
-        visible: true
-        color: isHover == true ? "#F7F7F7" : "white"
-        state: isHover
-
-        Shape {
             anchors.fill: parent
+            visible: true
+            color: isHover == true ? "#F7F7F7" : "white"
+            state: isHover
 
-            ShapePath {
-                strokeWidth: 0
-                strokeColor: "#EEEEEE"
-                strokeStyle: ShapePath.SolidLine
-                startX: 20
-                startY: 59
+            Shape {
+                anchors.fill: parent
 
-                PathLine {
-                    x: parent.width - 20
-                    y: 59
+                ShapePath {
+                    strokeWidth: 0
+                    strokeColor: "#EEEEEE"
+                    strokeStyle: ShapePath.SolidLine
+                    startX: 20
+                    startY: 59
+
+                    PathLine {
+                        x: parent.width - 20
+                        y: 59
+                    }
+
                 }
 
             }
 
         }
 
-    }
+        Text {
+            id: label
 
-    Text {
-        id: label
-
-        color: "#343434"
-        text: name
-        anchors.verticalCenter: parent.verticalCenter
-        anchors.margins: 2
-        horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
-        anchors.horizontalCenter: parent.horizontalCenter
-    }
-
-    Timer {
-        id: menutimer
-
-        interval: 150
-        onTriggered: {
-            if (name === qsTr("全局概要"))
-                mainstack.push(globaloverview, {
-            });
-            else if (name === qsTr("数据监控"))
-                mainstack.push(datamonitoring, {
-            });
-            else if (name === qsTr("员工管理"))
-                mainstack.push(staffmanagement, {
-            });
-            else if (name === qsTr("工作任务"))
-                mainstack.push(worktask, {
-            });
-            else if (name === qsTr("内容管理"))
-                mainstack.push(contentmanagement, {
-            });
-            else if (name === qsTr("图床管理"))
-                mainstack.push(lskymanagement, {
-            });
-            else if (name === qsTr("任务设置"))
-                mainstack.push(taskset, {
-            });
-            else if (name === qsTr("软件设置"))
-                mainstack.push(settings, {
-            });
-            else if (name === qsTr("关       于"))
-                mainstack.push(about, {
-            });
+            color: "#343434"
+            text: name
+            anchors.verticalCenter: parent.verticalCenter
+            anchors.margins: 2
+            horizontalAlignment: Text.AlignHCenter
+            verticalAlignment: Text.AlignVCenter
+            anchors.horizontalCenter: parent.horizontalCenter
         }
-    }
 
-    MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            if (delegate.ListView.view.currentIndex !== index) {
-                delegate.ListView.view.currentIndex = index;
-                mainstack.pop();
-                menutimer.start();
+        Timer {
+            id: menutimer
+
+            interval: 150
+            onTriggered: {
+                if (name === qsTr("全局概要"))
+                mainstack.push(globaloverview, {
+                });
+                else if (name === qsTr("数据监控"))
+                    mainstack.push(datamonitoring, {
+                });
+                else if (name === qsTr("员工管理"))
+                    mainstack.push(staffmanagement, {
+                });
+                else if (name === qsTr("工作任务"))
+                    mainstack.push(worktask, {
+                });
+                else if (name === qsTr("内容管理"))
+                    mainstack.push(contentmanagement, {
+                });
+                else if (name === qsTr("图床管理"))
+                    mainstack.push(lskymanagement, {
+                });
+                else if (name === qsTr("任务设置"))
+                    mainstack.push(taskset, {
+                });
+                else if (name === qsTr("软件设置"))
+                    mainstack.push(settings, {
+                });
+                else if (name === qsTr("关       于"))
+                    mainstack.push(about, {
+                });
             }
         }
-        hoverEnabled: true
-        onEntered: isHover = true
-        onExited: isHover = false
-    }
 
-}
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                if (delegate.ListView.view.currentIndex !== index)
+                {
+                    delegate.ListView.view.currentIndex = index;
+                    mainstack.pop();
+                    menutimer.start();
+                }
+            }
+            hoverEnabled: true
+            onEntered: isHover = true
+            onExited: isHover = false
+        }
+
+    }
