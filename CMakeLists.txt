@@ -81,6 +81,7 @@ qt_add_qml_module(appSSIMP_pc
     QML_FILES UIFlame/Menu/MenuModel.qml
     QML_FILES UIFlame/LoadPage/LoadPage.qml
     QML_FILES UIFlame/MainPage/MainPage.qml
+    QML_FILES UIFlame/GlobalOverviewPage/GlobalOverviewPage.qml
     QML_FILES UIFlame/EmployeePage/EmployeePage.qml
     QML_FILES UIFlame/TaskPage/TaskPage.qml
     QML_FILES UIFlame/ContentMgrPage/ContentMgrPage.qml

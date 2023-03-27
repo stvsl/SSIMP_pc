@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>数据大屏</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+    <style>
+      #button1 {
+        background-color: #1791ff;
+        color: white;
+        margin: 0;
+        margin-bottom: 15px;
+        border: none;
+        /* 居右 */
+        float: right;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 60px;
+        height: 25px;
+      }
+
+      #container {
+        height: 100%;
+      }
+
+      .anchorBL {
+        display: none;
+      }
+
+      .BMap_cpyCtrl {
+        display: none;
+      }
+
+      /* 显示比例尺 */
+      .BMap_scaleCtrl {
+        display: block;
+      }
+
+      h2 {
+        font-size: 20px;
+        color: #00bdff;
+        padding-bottom: 10px;
+      }
+
+      .table-ui {
+        width: 100%;
+      }
+
+      .table-ui tr th {
+        height: 30px;
+        padding-left: 5px;
+        font-size: 14px;
+        color: #333;
+      }
+
+      .table-ui tr td {
+        height: 30px;
+        padding-left: 5px;
+        font-size: 14px;
+        color: #333;
+      }
+
+      .table-ui .url {
+        width: 30%;
+      }
+
+      .table-ui .priority {
+        width: 160px;
+      }
+
+      .table-ui .frequency {
+        width: 150px;
+      }
+
+      .table-ui .change {
+        width: 110px;
+      }
+
+      .table-ui tbody tr:nth-child(even) {
+        background: #f5f5f5;
+      }
+
+      .table-ui tbody tr:nth-child(odd) td {
+        border-left: 3px solid #fff;
+      }
+
+      .table-ui tbody tr:nth-child(even) td {
+        border-left: 3px solid #fff;
+      }
+
+      .table-ui tbody tr:hover {
+        background: #00bdff;
+        -webkit-transition: all 0.3s linear;
+        -moz-transition: all 0.3s linear;
+        -o-transition: all 0.3s linear;
+        -ms-transition: all 0.3s linear;
+        transition: all 0.3s linear;
+      }
+
+      .table-ui tbody tr:hover td {
+        color: #fff;
+      }
+
+      a {
+        text-decoration: none;
+        color: #2d2f30;
+      }
+
+      @media (max-width: 569px) {
+        .container {
+          margin-top: 0;
+        }
+
+        .priority {
+          display: none;
+        }
+
+        .frequency {
+          display: none;
+        }
+
+        .table-ui tbody td:nth-child(2) {
+          display: none;
+        }
+
+        .table-ui tbody td:nth-child(3) {
+          display: none;
+        }
+      }
+      html {
+        height: 100%;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
+        height: 100%;
+        background-color: #0000;
+      }
+
+      .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        height: calc(100% - 23px);
+        padding: 20px;
+        padding-top: 3px;
+        padding-left: 10px;
+      }
+
+      .data-container {
+        display: flex;
+        flex-direction: column;
+        flex-basis: 100%;
+        border-radius: 5px;
+        height: 100%;
+      }
+
+      .data-content {
+        display: flex;
+        justify-content: space-between;
+        flex-grow: 1;
+        padding-bottom: 20px;
+        padding-inline: 60px;
+      }
+
+      .main-content {
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        flex-grow: 2;
+        padding-top: 0;
+      }
+
+      .main-content .data-item {
+        flex-basis: calc(38% - 10px);
+        display: flex;
+        flex-direction: column;
+      }
+
+      .main-content .main-content-left {
+        display: flex;
+        flex-basis: calc(62% - 5px);
+        flex-direction: row;
+        justify-content: space-between;
+        box-shadow: 2px 2px 10px #90849292;
+        border-radius: 10px;
+      }
+
+      .mini-content {
+        flex-basis: calc(100% - 10px);
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 20px;
+      }
+
+      .mini-content .data-item {
+        flex-basis: 49%;
+        margin-bottom: 10px;
+        box-shadow: none;
+        border-radius: 0;
+        height: 60%;
+      }
+
+      .mini-content .data-item.full {
+        flex-basis: 100%;
+        height: 40%;
+      }
+
+      .data-item {
+        flex-basis: calc(24% - 10px);
+        box-shadow: 2px 2px 10px #90849292;
+        display: flex;
+        border-radius: 10px;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: #666666;
+        text-align: center;
+      }
+      svg {
+        width: 50px;
+        height: 50px;
+        margin-right: 35px;
+        fill: #04fe19;
+      }
+      h3 {
+        line-height: 10px;
+        font-size: 24px;
+      }
+    </style>
+    <script
+      type="text/javascript"
+      src="qrc:/jsaddon/jsaddon/echarts.min.js"
+    ></script>
+  </head>
+  <body>
+    <div class="container" id="app">
+      <div class="data-container">
+        <div class="data-content">
+          <div class="data-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path
+                d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z"
+              />
+            </svg>
+            <div>
+              <h3>员工总数</h3>
+              <h3>{{staffCount}}&nbsp人</h3>
+            </div>
+          </div>
+          <div class="data-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+              <path
+                d="M366.4 18.3L310.7 74.1 435.9 199.3l55.7-55.7c21.9-21.9 21.9-57.3 0-79.2L445.6 18.3c-21.9-21.9-57.3-21.9-79.2 0zM286 94.6l-9.2 2.8L132.7 140.6c-19.9 6-35.7 21.2-42.3 41L1.8 445.8c-3.8 11.3-1 23.9 7.3 32.4L162.7 324.7c-3-6.3-4.7-13.3-4.7-20.7c0-26.5 21.5-48 48-48s48 21.5 48 48s-21.5 48-48 48c-7.4 0-14.4-1.7-20.7-4.7L31.7 500.9c8.6 8.3 21.1 11.2 32.4 7.3l264.3-88.6c19.7-6.6 35-22.4 41-42.3l43.2-144.1 2.8-9.2L286 94.6z"
+              />
+            </svg>
+            <div>
+              <h3>文章总数</h3>
+              <h3>{{articleCount}}&nbsp篇</h3>
+            </div>
+          </div>
+          <div class="data-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
+              <path
+                d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM144 256a144 144 0 1 1 288 0 144 144 0 1 1 -288 0zm144-64c0 35.3-28.7 64-64 64c-7.1 0-13.9-1.2-20.3-3.3c-5.5-1.8-11.9 1.6-11.7 7.4c.3 6.9 1.3 13.8 3.2 20.7c13.7 51.2 66.4 81.6 117.6 67.9s81.6-66.4 67.9-117.6c-11.1-41.5-47.8-69.4-88.6-71.1c-5.8-.2-9.2 6.1-7.4 11.7c2.1 6.4 3.3 13.2 3.3 20.3z"
+              />
+            </svg>
+            <div>
+              <h3>新增浏览</h3>
+              <h3>{{yesterdayViewCount}}&nbsp次</h3>
+            </div>
+          </div>
+          <div class="data-item">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+              <path
+                d="M159.3 5.4c7.8-7.3 19.9-7.2 27.7 .1c27.6 25.9 53.5 53.8 77.7 84c11-14.4 23.5-30.1 37-42.9c7.9-7.4 20.1-7.4 28 .1c34.6 33 63.9 76.6 84.5 118c20.3 40.8 33.8 82.5 33.8 111.9C448 404.2 348.2 512 224 512C98.4 512 0 404.1 0 276.5c0-38.4 17.8-85.3 45.4-131.7C73.3 97.7 112.7 48.6 159.3 5.4zM225.7 416c25.3 0 47.7-7 68.8-21c42.1-29.4 53.4-88.2 28.1-134.4c-4.5-9-16-9.6-22.5-2l-25.2 29.3c-6.6 7.6-18.5 7.4-24.7-.5c-16.5-21-46-58.5-62.8-79.8c-6.3-8-18.3-8.1-24.7-.1c-33.8 42.5-50.8 69.3-50.8 99.4C112 375.4 162.6 416 225.7 416z"
+              />
+            </svg>
+            <div>
+              <h3>任务完成率</h3>
+              <h3>{{yesterdayTaskRate}}&nbsp%</h3>
+            </div>
+          </div>
+        </div>
+        <div class="main-content">
+          <div class="main-content-left">
+            <div class="mini-content">
+              <div class="data-item" id="WebStatus"></div>
+              <div class="data-item" id="Eas"></div>
+              <div class="data-item full" id="SystemStatus"></div>
+            </div>
+          </div>
+          <div class="data-item">
+            <span
+              style="
+                width: 95%;
+                text-align: left;
+                font: 18px normal sans-serif;
+                color: #000;
+                margin-bottom: 5px;
+              "
+              >在线员工位置信息</span
+            >
+            <div style="width: 98%; height: 95%" id="container"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
+<script src="qrc:/jsaddon/jsaddon/vue2.js"></script>
+<script
+  type="text/javascript"
+  src="https://api.map.baidu.com/api?v=1.0&type=webgl&ak=oRqbxhmwbE30ZgrbXzzUM19O6kyBjKQD"
+></script>
+<script>
+  var app = new Vue({
+    el: "#app",
+    data: {
+      staffCount: 0,
+      articleCount: 0,
+      yesterdayViewCount: 0,
+      yesterdayTaskRate: 0,
+    },
+  });
+</script>
+<script type="text/javascript">
+  var dom = document.getElementById("Eas");
+  var myChart = echarts.init(dom, null, {
+    renderer: "canvas",
+    useDirtyRect: false,
+  });
+  var app0 = {};
+
+  var option;
+
+  option = {
+    title: {
+      text: "员工出勤情况统计",
+      left: "left",
+    },
+    legend: {
+      orient: "horizontal",
+      bottom: "bottom",
+    },
+    series: [
+      {
+        name: "员工出勤情况统计",
+        type: "pie",
+        radius: "60%",
+        data: [
+          { value: 1048, name: "工作中" },
+          { value: 735, name: "已工作完成" },
+          { value: 580, name: "缺勤" },
+          { value: 484, name: "未完成任务" },
+        ],
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowOffsetY: 10,
+            shadowColor: "rgba(0, 0, 0, 0.5)",
+          },
+        },
+      },
+    ],
+  };
+
+  if (option && typeof option === "object") {
+    myChart.setOption(option);
+  }
+
+  window.addEventListener("resize", myChart.resize);
+</script>
+<script type="text/javascript">
+  var dom1 = document.getElementById("WebStatus");
+  var myChart1 = echarts.init(dom1, null, {
+    renderer: "canvas",
+    useDirtyRect: false,
+  });
+  var app1 = {};
+
+  var option1;
+
+  option1 = {
+    color: ["#80FFA5", "#00DDFF"],
+    title: {
+      text: "网站活跃情况",
+    },
+    tooltip: {
+      trigger: "axis",
+      axisPointer: {
+        type: "cross",
+        label: {
+          backgroundColor: "#6a7985",
+        },
+      },
+    },
+    legend: {
+      data: ["网站访问量", "文章浏览量"],
+    },
+    grid: {
+      left: "3%",
+      right: "4%",
+      bottom: "3%",
+      containLabel: true,
+    },
+    xAxis: [
+      {
+        type: "category",
+        boundaryGap: false,
+        data: ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+      },
+    ],
+    yAxis: [
+      {
+        type: "value",
+      },
+    ],
+    series: [
+      {
+        name: "网站访问量",
+        type: "line",
+        stack: "Total",
+        smooth: true,
+        lineStyle: {
+          width: 0,
+        },
+        showSymbol: false,
+        areaStyle: {
+          opacity: 0.8,
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: "rgb(128, 255, 165)",
+            },
+            {
+              offset: 1,
+              color: "rgb(1, 191, 236)",
+            },
+          ]),
+        },
+        emphasis: {
+          focus: "series",
+        },
+        data: [140, 232, 101, 264, 90, 340, 250],
+      },
+      {
+        name: "文章浏览量",
+        type: "line",
+        stack: "Total",
+        smooth: true,
+        lineStyle: {
+          width: 0,
+        },
+        showSymbol: false,
+        areaStyle: {
+          opacity: 0.8,
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: "rgb(0, 221, 255)",
+            },
+            {
+              offset: 1,
+              color: "rgb(77, 119, 255)",
+            },
+          ]),
+        },
+        emphasis: {
+          focus: "series",
+        },
+        data: [120, 282, 111, 234, 220, 340, 310],
+      },
+    ],
+  };
+
+  if (option1 && typeof option1 === "object") {
+    myChart1.setOption(option1);
+  }
+
+  window.addEventListener("resize", myChart1.resize);
+</script>
+<script type="text/javascript">
+  var dom2 = document.getElementById("SystemStatus");
+  var myChart2 = echarts.init(dom2, null, {
+    renderer: "canvas",
+    useDirtyRect: false,
+  });
+  var app2 = {};
+
+  var option2;
+
+  function randomData() {
+    now = new Date(+now + oneSecond * 1000);
+    const delta = Math.random() * 20 - 10;
+    value = Math.abs(value + delta);
+    return {
+      name: now.toString(),
+      value: [
+        [now.getFullYear(), now.getMonth() + 1, now.getDate()].join("/") +
+          " " +
+          [now.getHours(), now.getMinutes(), now.getSeconds()].join(":"),
+        Math.round(value),
+      ],
+    };
+  }
+  let data = [];
+  let now = new Date();
+  let oneSecond = 1000;
+  let value = 20;
+  data.push(randomData());
+  option2 = {
+    title: {
+      text: "服务器资源占用",
+    },
+    tooltip: {
+      trigger: "axis",
+      formatter: function (params) {
+        params = params[0];
+        var date = new Date(params.name);
+        return (
+          //  xx时xx分xx秒
+          date.getHours() +
+          "时" +
+          date.getMinutes() +
+          "分" +
+          date.getSeconds() +
+          "秒" +
+          " : " +
+          params.value[1]
+        );
+      },
+      axisPointer: {
+        animation: false,
+      },
+    },
+    xAxis: {
+      type: "time",
+      splitLine: {
+        show: false,
+      },
+    },
+    yAxis: {
+      type: "value",
+      boundaryGap: [0, "100%"],
+      splitLine: {
+        show: false,
+      },
+    },
+    series: [
+      {
+        name: "性能使用率",
+        type: "line",
+        showSymbol: false,
+        smooth: true,
+        data: data,
+      },
+    ],
+  };
+  setInterval(function () {
+    // data.shift();
+    data.push(randomData());
+    myChart2.setOption({
+      series: [
+        {
+          data: data,
+        },
+      ],
+    });
+  }, 1000);
+
+  if (option2 && typeof option2 === "object") {
+    myChart2.setOption(option2);
+  }
+
+  window.addEventListener("resize", myChart2.resize);
+</script>
+<script type="text/javascript">
+  // 创建地图实例
+  var mapGL = new BMapGL.Map("container");
+  // 创建点坐标
+  var point = new BMapGL.Point(121.72439102324424, 41.61128739424099);
+  // 初始化地图，设置中心点坐标和地图级别
+  mapGL.centerAndZoom(point, 20);
+  //开启鼠标滚轮缩放
+  mapGL.enableScrollWheelZoom(false);
+  mapGL.enableContinuousZoom(false);
+  //设置地图显示等级（地图深度）
+  mapGL.setZoom(16);
+  // 添加比例尺控件
+  var scaleCtrl = new BMapGL.ScaleControl();
+  mapGL.addControl(scaleCtrl);
+  // 添加3D控件
+  var navi3DCtrl = new BMapGL.NavigationControl3D();
+  mapGL.addControl(navi3DCtrl);
+
+  //设置中央位置
+  function setCenter(x, y) {
+    var point = new BMapGL.Point(x, y);
+    mapGL.centerAndZoom(point, 15);
+    mapGL.setZoom(16);
+  }
+
+  //添加结点显示
+  function addPoint(name, x, y) {
+    mapGL.closeInfoWindow();
+    var point = new BMapGL.Point(x, y);
+    var marker = new BMapGL.Marker(point);
+    mapGL.addOverlay(marker);
+    // 点击后显示详情
+    marker.addEventListener("click", function () {
+      // 获取当前点的坐标，计算地理位置
+      var point = marker.getPosition();
+      var gc = new BMapGL.Geocoder();
+      // 获取当前点的坐标，请求地理位置，显示在地图上
+      gc.getLocation(point, function (rs) {
+        var addComp = rs.addressComponents;
+        var info =
+          addComp.province +
+          addComp.city +
+          addComp.district +
+          addComp.street +
+          addComp.streetNumber +
+          point.lng +
+          point.lat;
+        var infoWindow = new BMapGL.InfoWindow(info);
+        infoWindow.setTitle(name);
+        webChannel.nowIs(name, point.lng, point.lat);
+        mapGL.openInfoWindow(infoWindow, point);
+      });
+    });
+    mapGL.addEventListener("click", function () {
+      mapGL.closeInfoWindow();
+    });
+  }
+
+  // 移除全部结点
+  function removePoint() {
+    mapGL.clearOverlays();
+  }
+</script>

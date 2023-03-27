@@ -30,9 +30,9 @@ ListModel {
         name: qsTr("任务设置")
     }
 
-    ListElement {
-        name: qsTr("软件设置")
-    }
+    // ListElement {
+    //     name: qsTr("软件设置")
+    // }
 
     ListElement {
         name: qsTr("关       于")
