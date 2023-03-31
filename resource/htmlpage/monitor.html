@@ -41,12 +41,43 @@
     16
   ); // 初始化地图,设置中心点坐标和地图级别
   bmap.enableScrollWheelZoom(true); // 开启鼠标滚轮缩放
-  var path = [];
+  // var path = [];
+  var path = [
+    {
+      lng: 121.73822554373047,
+      lat: 41.60952852251172,
+    },
+    {
+      lng: 121.7322465553047,
+      lat: 41.60255316551172,
+    },
+    {
+      lng: 121.7325586173047,
+      lat: 41.60755254756172,
+    },
+    {
+      lng: 121.7386555273047,
+      lat: 41.60255542951172,
+    },
+    {
+      lng: 121.7325655373047,
+      lat: 41.60691451251172,
+    },
+    {
+      lng: 121.7316814573047,
+      lat: 41.60698699765222,
+    },
+    {
+      lng: 121.73168182373047,
+      lat: 41.60698699951172,
+    },
+  ];
   var point = [];
   for (var i = 0; i < path.length; i++) {
     point.push(new BMapGL.Point(path[i].lng, path[i].lat));
   }
   var pl = new BMapGL.Polyline(point);
+  var trackAni;
   function start() {
     trackAni = new BMapGLLib.TrackAnimation(bmap, pl, {
       overallView: true,
@@ -55,5 +86,10 @@
       delay: 300,
     });
     trackAni.start();
+  }
+  // 清除pl,
+  function clear() {
+    trackAni.cancel();
+    bmap.removeOverlay(pl);
   }
 </script>

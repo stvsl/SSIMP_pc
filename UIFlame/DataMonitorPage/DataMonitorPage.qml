@@ -5,12 +5,13 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
 import Service.Employee 1.0
-import Data.Task 1.0
-import Service.Task 1.0
 import Data.Taskset 1.0
 import Service.Taskset 1.0
+import Data.Attendance 1.0
+import Service.Attendance 1.0
 import QtWebEngine
 import QtWebChannel
+import Qt.String 1.0
 
 Item {
     id: taskpage
@@ -20,16 +21,14 @@ Item {
 
     Component.onCompleted: {
         employeeService.getEmployeeInfoList()
-        tasksetService.getTaskSetList()
-        timer.start()
     }
 
     EmployeeService {
         id: employeeService
     }
 
-    TaskSetService {
-        id: tasksetService
+    AttendanceService {
+        id: attendanceService
     }
 
     ListModel {
@@ -37,11 +36,11 @@ Item {
     }
 
     ListModel {
-        id: employeetasksetdata
+        id: timedata
     }
 
     ListModel {
-        id: tasksetdata
+        id: attendancedata
     }
 
     function cycleToString(cycle)
@@ -85,17 +84,32 @@ Item {
     }
 
     Connections {
-        target: tasksetService
+        target: attendanceService
 
-        function onTaskSetListChanged(list)
+        function onAttendanceDayListGet(list)
         {
-            if (tasksetdata.count > 0)
-            {
-                tasksetdata.clear()
-            }
+            // list使用.分割每个日期
+            timedata.clear()
+            var list = list.split("|")
             for (var i = 0; i < list.length; i++) {
-                tasksetdata.append(list[i])
+                if (list[i] === "")
+                    continue
+                timedata.append({"date":list[i]})
             }
+        }
+
+        function onAttendanceListGet(list)
+        {
+            attendancedata.clear()
+            for (var i = 0; i < list.length; i++) {
+                attendancedata.append(list[i])
+            }
+        }
+
+        function onAttendanceDetailGet(data)
+        {
+            webview.reload()
+            console.log(data);
         }
     }
 
@@ -204,7 +218,7 @@ Item {
                             anchors.fill: parent
                             onClicked: {
                                 employeelist.currentIndex = index
-                                taskService.getTaskListByEid(employid)
+                                attendanceService.getAttendanceDayList(employid)
                             }
                         }
 
@@ -376,7 +390,6 @@ Item {
                             font.pointSize: 14
                         }
                         onClicked: {
-                            tasksetService.searchTaskSet(tasksearchtext.text)
                         }
                     }
 
@@ -429,7 +442,7 @@ Item {
                 radius: 10
 
                 Rectangle {
-                    id: currentemployeetaskarea
+                    id: currenttimesessionarea
 
                     width: 400
                     anchors.leftMargin: 10
@@ -439,15 +452,16 @@ Item {
                         id: currentemployeetasklist
 
                         anchors.fill: parent
-                        model: employeetasksetdata
+                        model: timedata
                         spacing: 10
                         delegate: Rectangle {
                             id: currentemployeetaskitem
 
                             width: parent.width
-                            height: 150
+                            height: 75
                             radius: 10
                             layer.enabled: true
+                            color: currentemployeetasklist.currentIndex === index ? "#F5F5F5" : "transparent"
                             layer.effect: DropShadow {
                                 cached: true
                                 color: "#90849292"
@@ -458,80 +472,43 @@ Item {
                             }
 
                             Text {
-                                id: currentemployeetaskname
                                 anchors.left: parent.left
                                 anchors.leftMargin: 20
-                                anchors.top:parent.top
+                                anchors.top: parent.top
                                 anchors.topMargin: 10
-                                text: name
+                                text: "任务时间"
+                            }
+
+                            Text {
+                                id: currenttime
+                                anchors.left: parent.left
+                                anchors.leftMargin: 30
+                                anchors.bottom: parent.bottom
+                                anchors.bottomMargin: 15
+                                text: date
                                 color: "#292826"
                                 font.styleName: "Medium"
                                 font.pointSize: 15
                             }
 
                             Text {
-                                id: currentemployeetaskcontent
-
-                                anchors.left: parent.left
-                                anchors.leftMargin: 20
-                                anchors.top:currentemployeetaskname.bottom
-                                anchors.topMargin: 10
-                                text: content
-                                color: "#292826"
+                                text: "显示详情 >"
+                                color: "#AA8E99A5"
                                 font.styleName: "Medium"
-                                font.pointSize: 13
-                            }
-                            Text {
-                                id: currentemployeetaskarea
-
-                                anchors.left: parent.left
-                                anchors.leftMargin: 20
-                                anchors.bottom: parent.bottom
-                                anchors.bottomMargin: 10
-                                text:qsTr("时长")+duration + qsTr("小时")
-                                color: "#292826"
-                                font.styleName: "Medium"
-                                font.pointSize: 13
-                            }
-
-                            // 在时长的后面显示周期
-                            Text {
-                                id: currentemployeetaskcycle
-
-                                anchors.left: currentemployeetaskarea.right
-                                anchors.leftMargin: 10
-                                anchors.bottom: parent.bottom
-                                anchors.bottomMargin: 10
-                                text: qsTr("任务周期:") + cycleToString(cycle)
-                                color: "#292826"
-                                font.styleName: "Medium"
-                                font.pointSize: 13
-                            }
-
-                            // 右下角取消任务按钮
-                            Button {
-                                id: currentemployeetaskcancelbutton
-
-                                width: 100
-                                height: 50
+                                font.pointSize: 10
                                 anchors.right: parent.right
-                                anchors.rightMargin: 10
-                                anchors.bottom: parent.bottom
-                                anchors.bottomMargin: 5
-                                background: Rectangle {
-                                    color: "#FF516B"
-                                    radius: 5
-                                }
-                                Text {
-                                    text: qsTr("取消委派")
-                                    color: "white"
-                                    anchors.centerIn: parent
-                                    font.pointSize: 14
-                                }
+                                anchors.rightMargin: 20
+                                anchors.verticalCenter: parent.verticalCenter
+                            }
+
+                            MouseArea {
+                                anchors.fill: parent
                                 onClicked: {
-                                    taskService.deleteTask(employeedata.get(employeelist.currentIndex).employid, tid)
+                                    currentemployeetasklist.currentIndex = index
+                                    attendanceService.getAttendanceList(employeedata.get(employeelist.currentIndex).employid, date)
                                 }
                             }
+
                         }
                     }
 
@@ -553,7 +530,7 @@ Item {
                     height: parent.height *0.52 - 10
                     anchors.right: parent.right
                     anchors.rightMargin: 10
-                    anchors.left: currentemployeetaskarea.right
+                    anchors.left: currenttimesessionarea.right
                     anchors.leftMargin: 10
                     Text {
                         id: loadingtext
@@ -602,6 +579,16 @@ Item {
                         registeredObjects: [webEngineChannel]
                     }
 
+                    function clear()
+                    {
+                        webview.runJavaScript("clear()")
+                    }
+
+                    function replay()
+                    {
+                        webview.runJavaScript("start()")
+                    }
+
                 }
             }
 
@@ -647,7 +634,8 @@ Item {
                     font.pointSize: 12
                 }
                 onClicked: {
-                    webview.showAllPoint()
+                    webview.clear()
+                    webview.replay()
                 }
             }
 
@@ -657,7 +645,7 @@ Item {
 
                 anchors.right: parent.right
                 anchors.rightMargin: 10
-                anchors.left: currentemployeetaskarea.right
+                anchors.left: currenttimesessionarea.right
                 anchors.leftMargin: 10
                 anchors.top: maparea.bottom
                 anchors.topMargin: 45
@@ -667,7 +655,7 @@ Item {
                     id: tasklist
 
                     anchors.fill: parent
-                    model: tasksetdata
+                    model: attendancedata
                     spacing: 10
                     onOpacityChanged: {
                         if (opacity === 0)
@@ -729,7 +717,7 @@ Item {
                         id: tasklistitem
 
                         width: parent.width
-                        height: 90
+                        height: 120
                         radius: 10
                         layer.enabled: true
                         layer.effect: DropShadow {
@@ -741,68 +729,65 @@ Item {
                             samples: 2 * radius + 1
                         }
 
+                        // 任务编号
                         Text {
-                            id: tasklistitemname
+                            id: taskidtext
+
                             anchors.left: parent.left
-                            anchors.leftMargin: 20
-                            anchors.top:parent.top
-                            anchors.topMargin: 10
-                            text: name
-                            color: "#292826"
+                            anchors.leftMargin: 10
+                            anchors.top: parent.top
+                            anchors.topMargin: 15
+                            text: qsTr("任务编号: ") + tid
+                            color: "#949494"
                             font.styleName: "Medium"
-                            font.pointSize: 12
+                            font.pointSize: 14
                         }
 
+                        // 开始时间
                         Text {
-                            id: tasklistitemarea
+                            id: starttimetext
 
                             anchors.left: parent.left
-                            anchors.leftMargin: 20
-                            anchors.top: tasklistitemname.bottom
+                            anchors.leftMargin: 15
+                            anchors.top: taskidtext.bottom
                             anchors.topMargin: 5
-                            text: content
-                            color: "#292826"
+                            text: qsTr("开始时间: ") + startTime
+                            color: "#949494"
+                            font.styleName: "Medium"
                             font.pointSize: 10
                         }
+
+                        // 结束时间
                         Text {
-                            id: tasklistitemduration
+                            id: endtimetext
 
                             anchors.left: parent.left
-                            anchors.leftMargin: 20
-                            anchors.bottom: parent.bottom
-                            anchors.bottomMargin: 10
-                            text:qsTr("时长")+duration + qsTr("小时")
-                            color: "#292826"
+                            anchors.leftMargin: 15
+                            anchors.top: starttimetext.bottom
+                            anchors.topMargin: 5
+                            text: qsTr("结束时间: ") + endTime
+                            color: "#949494"
+                            font.styleName: "Medium"
                             font.pointSize: 10
                         }
 
-                        // 在时长的后面显示周期
+                        // 任务状态
                         Text {
-                            id: tasklistitemcycle
+                            id: taskstatustext
 
-                            anchors.left: tasklistitemduration.right
-                            anchors.leftMargin: 10
-                            anchors.bottom: parent.bottom
-                            anchors.bottomMargin: 10
-                            text: qsTr("任务周期:") + cycleToString(cycle)
-                            color: "#292826"
+                            anchors.left: parent.left
+                            anchors.leftMargin: 15
+                            anchors.top: endtimetext.bottom
+                            anchors.topMargin: 5
+                            text: qsTr("任务状态: ") + taskCompletion
+                            color: "#949494"
+                            font.styleName: "Medium"
                             font.pointSize: 10
                         }
 
-                        // 任务地点
-                        Text {
-                            id: tasklistitempos
-                            anchors.left: tasklistitemcycle.right
-                            anchors.leftMargin: 10
-                            anchors.bottom: parent.bottom
-                            anchors.bottomMargin: 10
-                            text: qsTr("任务地点:") + area
-                            color: "#292826"
-                            font.pointSize: 10
-                        }
 
                         Button {
-                            id: currentemployeetaskdelegatebutton
+                            id: viewcurrenttaskbtn
                             width: 100
                             height: 50
                             anchors.right: parent.right
@@ -819,6 +804,8 @@ Item {
                                 font.pointSize: 14
                             }
                             onClicked: {
+                                console.log("info", employid, tid, startTime);
+                                attendanceService.getAttendanceDetail(employid, tid, startTime)
                             }
                         }
                     }

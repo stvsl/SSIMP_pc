@@ -47,6 +47,7 @@ int main(int argc, char *argv[])
   qmlRegisterType<TaskSetData>("Data.Taskset", 1, 0, "TaskSetData");
   qmlRegisterType<TaskData>("Data.Task", 1, 0, "TaskData");
   qmlRegisterType<AttendanceData>("Data.Attendance", 1, 0, "AttendanceData");
+  qmlRegisterType<QString>("Qt.String", 1, 0, "StringData");
   QTranslator translator;
   const QStringList uiLanguages = QLocale::system().uiLanguages();
   for (const QString &locale : uiLanguages)
