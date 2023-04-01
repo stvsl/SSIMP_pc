@@ -108,8 +108,7 @@ Item {
 
         function onAttendanceDetailGet(data)
         {
-            webview.reload()
-            console.log(data);
+            webview.setPathData(data);
         }
     }
 
@@ -543,6 +542,7 @@ Item {
                     }
 
                     Timer {
+                        id: loadingtimer
                         interval: 300
                         running: true
                         repeat: true
@@ -555,7 +555,7 @@ Item {
                                 }
                             } else {
                             loadingtext.text = "载入完成"
-                            stop()
+                            loadingtimer.stop()
                         }
                     }
                 }
@@ -573,20 +573,27 @@ Item {
                         {
                             console.log("weboutput:" + value)
                         }
+
+                        signal setPath(string data)
+
+                        function setPathData(data)
+                        {
+                            setPath(data)
+                        }
                     }
 
                     webChannel: WebChannel {
                         registeredObjects: [webEngineChannel]
                     }
 
-                    function clear()
-                    {
-                        webview.runJavaScript("clear()")
-                    }
-
                     function replay()
                     {
-                        webview.runJavaScript("start()")
+                        webview.runJavaScript("replay()")
+                    }
+
+                    function setPathData(data)
+                    {
+                        webEngineChannel.setPathData(data)
                     }
 
                 }
@@ -628,13 +635,12 @@ Item {
                     radius: 5
                 }
                 Text {
-                    text: qsTr("重播")
+                    text: qsTr("播放/重播")
                     color: "white"
                     anchors.centerIn: parent
                     font.pointSize: 12
                 }
                 onClicked: {
-                    webview.clear()
                     webview.replay()
                 }
             }
@@ -804,7 +810,6 @@ Item {
                                 font.pointSize: 14
                             }
                             onClicked: {
-                                console.log("info", employid, tid, startTime);
                                 attendanceService.getAttendanceDetail(employid, tid, startTime)
                             }
                         }

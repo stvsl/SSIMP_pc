@@ -27,12 +27,21 @@
       src="http://api.map.baidu.com/api?type=webgl&v=1.0&ak=oRqbxhmwbE30ZgrbXzzUM19O6kyBjKQD"
     ></script>
     <title>视角动画</title>
+    <script src=qrc:///qtwebchannel/qwebchannel.js></script>
   </head>
   <body>
     <div id="allmap"></div>
   </body>
 </html>
 <script type="text/javascript">
+  var webChannel;
+    new QWebChannel(qt.webChannelTransport, function (channel) {
+            webChannel = channel.objects.webChannel;
+            webChannel.setPath.connect(function (datas) {
+                setPath(JSON.parse(datas));
+            });
+            webChannel.sprint("OK");
+        });
   // GL版命名空间为BMapGL
   // 按住鼠标右键，修改倾斜角和角度
   var bmap = new BMapGL.Map("allmap"); // 创建Map实例
@@ -41,55 +50,39 @@
     16
   ); // 初始化地图,设置中心点坐标和地图级别
   bmap.enableScrollWheelZoom(true); // 开启鼠标滚轮缩放
-  // var path = [];
-  var path = [
-    {
-      lng: 121.73822554373047,
-      lat: 41.60952852251172,
-    },
-    {
-      lng: 121.7322465553047,
-      lat: 41.60255316551172,
-    },
-    {
-      lng: 121.7325586173047,
-      lat: 41.60755254756172,
-    },
-    {
-      lng: 121.7386555273047,
-      lat: 41.60255542951172,
-    },
-    {
-      lng: 121.7325655373047,
-      lat: 41.60691451251172,
-    },
-    {
-      lng: 121.7316814573047,
-      lat: 41.60698699765222,
-    },
-    {
-      lng: 121.73168182373047,
-      lat: 41.60698699951172,
-    },
-  ];
+  var data = [];
   var point = [];
-  for (var i = 0; i < path.length; i++) {
-    point.push(new BMapGL.Point(path[i].lng, path[i].lat));
-  }
   var pl = new BMapGL.Polyline(point);
   var trackAni;
-  function start() {
+
+  // /开始播放/重播
+  function replay() {
+    webChannel.sprint("replay"+ trackAni);
+    if (trackAni) {
+      trackAni = null;
+    }
+    setPath(data);
     trackAni = new BMapGLLib.TrackAnimation(bmap, pl, {
       overallView: true,
       tilt: 30,
-      duration: 20000,
-      delay: 300,
+      duration: 1000,
+      delay: 100,
+      enableRotation: true
     });
     trackAni.start();
   }
-  // 清除pl,
-  function clear() {
-    trackAni.cancel();
-    bmap.removeOverlay(pl);
+
+  function setPath(datas) {
+    // 清除原有的数据
+    bmap.clearOverlays();
+    point=[];
+    data=[];
+    for (var i = 0; i < datas.length; i++) {
+      data.push({lng: datas[i].lng,lat: datas[i].lat});
+      point.push(new BMapGL.Point(datas[i].lng, datas[i].lat));
+      webChannel.sprint(data[i].lng + "" + data[i].lat);
+    }
+    pl = new BMapGL.Polyline(point);
+    bmap.addOverlay(pl);
   }
 </script>
