@@ -6,6 +6,7 @@
 #include <ModeData/employeedata.h>
 #include <ModeData/taskdata.h>
 #include <ModeData/tasksetdata.h>
+#include <ModeData/attendancedata.h>
 #include <QFontDatabase>
 #include <QGuiApplication>
 #include <QLocale>
@@ -16,6 +17,7 @@
 #include <Service/employeeservice.h>
 #include <Service/taskservice.h>
 #include <Service/tasksetservice.h>
+#include <Service/attendanceservice.h>
 
 int main(int argc, char *argv[])
 {
@@ -39,10 +41,13 @@ int main(int argc, char *argv[])
   qmlRegisterType<ArticleService>("Service.Article", 1, 0, "ArticleService");
   qmlRegisterType<TaskSetService>("Service.Taskset", 1, 0, "TaskSetService");
   qmlRegisterType<TaskService>("Service.Task", 1, 0, "TaskService");
+  qmlRegisterType<AttendanceService>("Service.Attendance", 1, 0, "AttendanceService");
   qmlRegisterType<EmployeeData>("Data.Employee", 1, 0, "EmployeeData");
   qmlRegisterType<ArticleData>("Data.Article", 1, 0, "ArticleData");
   qmlRegisterType<TaskSetData>("Data.Taskset", 1, 0, "TaskSetData");
   qmlRegisterType<TaskData>("Data.Task", 1, 0, "TaskData");
+  qmlRegisterType<AttendanceData>("Data.Attendance", 1, 0, "AttendanceData");
+  qmlRegisterType<QString>("Qt.String", 1, 0, "StringData");
   QTranslator translator;
   const QStringList uiLanguages = QLocale::system().uiLanguages();
   for (const QString &locale : uiLanguages)
