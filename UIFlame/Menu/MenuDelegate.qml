@@ -91,6 +91,9 @@ Item {
                 else if (name === qsTr("数据监控"))
                     mainstack.push(datamonitoring, {
                 });
+                else if (name === qsTr("异常反馈"))
+                    mainstack.push(exceptionfeedback, {
+                });
                 else if (name === qsTr("员工管理"))
                     mainstack.push(staffmanagement, {
                 });

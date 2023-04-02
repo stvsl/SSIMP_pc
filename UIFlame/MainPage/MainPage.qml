@@ -13,6 +13,7 @@ import "../TaskPage"
 import "../TaskSetPage"
 import "../GlobalOverviewPage"
 import "../DataMonitorPage"
+import "../FeedbackPage"
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -125,6 +126,12 @@ Window {
         Component {
             id: datamonitoring
             DataMonitorPage {
+            }
+        }
+
+        Component {
+            id:exceptionfeedback
+            FeedbackPage {
             }
         }
 

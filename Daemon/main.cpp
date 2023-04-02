@@ -7,6 +7,7 @@
 #include <ModeData/taskdata.h>
 #include <ModeData/tasksetdata.h>
 #include <ModeData/attendancedata.h>
+#include <ModeData/feedbackdata.h>
 #include <QFontDatabase>
 #include <QGuiApplication>
 #include <QLocale>
@@ -18,6 +19,7 @@
 #include <Service/taskservice.h>
 #include <Service/tasksetservice.h>
 #include <Service/attendanceservice.h>
+#include <Service/feedbackservice.h>
 
 int main(int argc, char *argv[])
 {
@@ -30,7 +32,7 @@ int main(int argc, char *argv[])
   QCoreApplication::setOrganizationName("stvsljl");
   QCoreApplication::setApplicationName("SSIMP");
   QCoreApplication::setOrganizationDomain("stvsljl.com");
-  QCoreApplication::setApplicationVersion("v0.0.4 alpha");
+  QCoreApplication::setApplicationVersion("v0.0.8 alpha");
   *global::SERVER_URL_STR() = "http://127.0.0.1:6521";
   qDebug() << "SERVER_URL_STR" << *global::SERVER_URL_STR();
 
@@ -48,6 +50,8 @@ int main(int argc, char *argv[])
   qmlRegisterType<TaskData>("Data.Task", 1, 0, "TaskData");
   qmlRegisterType<AttendanceData>("Data.Attendance", 1, 0, "AttendanceData");
   qmlRegisterType<QString>("Qt.String", 1, 0, "StringData");
+  qmlRegisterType<FeedbackService>("Service.Feedback", 1, 0, "FeedbackService");
+  qmlRegisterType<FeedbackData>("Data.Feedback", 1, 0, "FeedbackData");
   QTranslator translator;
   const QStringList uiLanguages = QLocale::system().uiLanguages();
   for (const QString &locale : uiLanguages)

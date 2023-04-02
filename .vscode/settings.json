@@ -75,7 +75,8 @@
     "typeindex": "cpp",
     "typeinfo": "cpp",
     "valarray": "cpp",
-    "variant": "cpp"
+    "variant": "cpp",
+    "qqmllistproperty": "cpp"
   },
   "go.inferGopath": false,
   "C_Cpp.errorSquiggles": "enabled",
