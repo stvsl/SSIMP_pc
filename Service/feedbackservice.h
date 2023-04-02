@@ -21,7 +21,7 @@ signals:
     void feedbackListGet(QQmlListProperty<FeedbackData> feedbacklist);
 
 private:
-    static QList<FeedbackData *> *m_feedbacklist;
+    QList<FeedbackData *> *m_feedbacklist;
 };
 
 #endif // FEEDBACKSERVICE_H

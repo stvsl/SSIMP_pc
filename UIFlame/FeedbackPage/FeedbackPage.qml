@@ -5,6 +5,8 @@ import QtQuick
 import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtQuick.Layouts
+import Data.Feedback
+import Service.Feedback
 
 Item {
     id: taskpage
@@ -13,12 +15,32 @@ Item {
     layer.smooth: true
 
     Component.onCompleted: {
+        feedbackservice.getFeedbackListALL()
+    }
 
+    FeedbackService {
+        id:feedbackservice
     }
 
     ListModel {
         id: feedbackdata
     }
+
+
+    Connections {
+        target: feedbackservice
+
+        function onFeedbackListGet(list)
+        {
+            // feedbackdata.clear() 先判断是否有数据，有则清空
+            if (feedbackdata.count > 0)
+                feedbackdata.clear()
+            for (var i = 0; i < list.length; i++) {
+                feedbackdata.append(list[i])
+            }
+        }
+    }
+
 
     Flow {
         anchors.fill: parent
@@ -110,7 +132,7 @@ Item {
                 }
 
                 delegate: Item {
-                    height: 70
+                    height: 85
                     width: parent.width
 
                     Rectangle {
@@ -122,7 +144,7 @@ Item {
                         MouseArea {
                             anchors.fill: parent
                             onClicked: {
-
+                                feedbacklist.currentIndex = index
                             }
                         }
 
@@ -153,6 +175,43 @@ Item {
 
                         Item {
                             anchors.fill: parent
+
+                            // 反馈编号
+                            Text {
+                                id: fqid
+                                text: qsTr("编号：") + qid
+                                color: "#292826"
+                                font.styleName: "Medium"
+                                font.pointSize: 15
+                                anchors.left: parent.left
+                                anchors.leftMargin: 15
+                                anchors.top: parent.top
+                                anchors.topMargin: 8
+                            }
+
+                            // 反馈标题
+                            Text {
+                                text: qsTr("问题: ") +question
+                                color: "#292826"
+                                font.styleName: "Medium"
+                                font.pointSize: 12
+                                anchors.left: parent.left
+                                anchors.leftMargin: 16
+                                anchors.top: fqid.bottom
+                                anchors.topMargin: 1
+                            }
+
+                            // 反馈时间
+                            Text {
+                                text: create_date
+                                color: "#AA8E99A5"
+                                font.styleName: "Medium"
+                                font.pointSize: 10
+                                anchors.left: parent.left
+                                anchors.leftMargin: 16
+                                anchors.bottom: parent.bottom
+                                anchors.bottomMargin: 4
+                            }
 
                             Text {
                                 text: "显示详情 >"
@@ -210,16 +269,17 @@ Item {
                     spacing: 5
 
                     TextField {
-                        id: feedbacksearchtext
+                        id: searchinput
                         width: parent.width * 0.6
                         height: 40
-                        placeholderText: qsTr("输入员工姓名以搜索")
+                        placeholderText: qsTr("输入反馈者信息以搜索")
                         font.pointSize: 12
                     }
 
                     Button {
-                        id: feedbacksearchbutton
-                        width: parent.width * 0.3
+                        anchors.right: parent.right
+                        anchors.rightMargin: 10
+                        width: parent.width * 0.3-5
                         height: 40
                         font.pointSize: 15
                         background: Rectangle {
@@ -235,16 +295,19 @@ Item {
                     }
 
                     TextField {
-                        id: tasksearchtext
+                        id: searchinput2
+                        anchors.top: searchinput.bottom
                         width: parent.width * 0.6
                         height: 40
-                        placeholderText: qsTr("输入任务名称以搜索")
+                        placeholderText: qsTr("输入问题内容以搜索")
                         font.pointSize: 12
                     }
 
                     Button {
-                        id: tasksearchbutton
-                        width: parent.width * 0.3
+                        anchors.right: parent.right
+                        anchors.rightMargin: 10
+                        anchors.top: searchinput.bottom
+                        width: parent.width * 0.3-5
                         height: 40
                         font.pointSize: 15
                         background: Rectangle {
@@ -258,21 +321,24 @@ Item {
                             font.pointSize: 14
                         }
                         onClicked: {
-                            tasksetService.searchTaskSet(tasksearchtext.text)
                         }
                     }
 
                     Text {
+                        id: sorttext
                         text: qsTr("排序方式")
                         color: "#535060"
                         height: 40
                         font.pointSize: 12
                         verticalAlignment: Text.AlignVCenter
+                        anchors.top: searchinput2.bottom
                         font.weight: Font.Medium
                     }
                     // 升降序
                     Switch {
                         id: feedbacksortswitch
+                        anchors.top: searchinput2.bottom
+                        anchors.left:sorttext.right
                         width: 130
                         height: 40
                         checked: false

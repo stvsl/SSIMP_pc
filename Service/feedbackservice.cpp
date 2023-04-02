@@ -1,10 +1,9 @@
 #include "feedbackservice.h"
 
-QList<FeedbackData *> *FeedbackService::m_feedbacklist;
-
 FeedbackService::FeedbackService(QObject *parent)
     : QObject{parent}
 {
+    m_feedbacklist = new QList<FeedbackData *>();
 }
 
 void FeedbackService::fetchFeedbackListALL()
@@ -26,7 +25,7 @@ void FeedbackService::fetchFeedbackListALL()
             QString datastr = resp["data"].toString();
             // data转换为json数组并遍历
             QJsonArray data = QJsonDocument::fromJson(datastr.toUtf8()).array();
-            m_feedbacklist = new QList<FeedbackData *>();
+            m_feedbacklist->clear();
             for (int i = 0; i < data.size(); i++)
             {
                 QJsonObject obj = data[i].toObject();
@@ -35,7 +34,7 @@ void FeedbackService::fetchFeedbackListALL()
                 feedback->setQuestion(obj["question"].toString());
                 feedback->setDescription(obj["description"].toString());
                 feedback->setPicture(obj["picture"].toString());
-                feedback->setCreate_date(obj["create_date"].toString());
+                feedback->setCreate_date(obj["createDate"].toString().mid(0, 10));
                 feedback->setSponsor(obj["sponsor"].toString());
                 feedback->setTeleinfo(obj["teleinfo"].toString());
                 feedback->setPrincipal(obj["principal"].toString());
@@ -51,8 +50,9 @@ void FeedbackService::fetchFeedbackListALL()
 
 void FeedbackService::getFeedbackListALL()
 {
-    if (m_feedbacklist != nullptr)
+    if (m_feedbacklist->length() > 0)
     {
+        qDebug() << "反馈信息列表已存在，直接返回";
         emit feedbackListGet(QQmlListProperty<FeedbackData>(this, m_feedbacklist));
     }
     else

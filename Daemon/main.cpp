@@ -44,13 +44,13 @@ int main(int argc, char *argv[])
   qmlRegisterType<TaskSetService>("Service.Taskset", 1, 0, "TaskSetService");
   qmlRegisterType<TaskService>("Service.Task", 1, 0, "TaskService");
   qmlRegisterType<AttendanceService>("Service.Attendance", 1, 0, "AttendanceService");
+  qmlRegisterType<FeedbackService>("Service.Feedback", 1, 0, "FeedbackService");
   qmlRegisterType<EmployeeData>("Data.Employee", 1, 0, "EmployeeData");
   qmlRegisterType<ArticleData>("Data.Article", 1, 0, "ArticleData");
   qmlRegisterType<TaskSetData>("Data.Taskset", 1, 0, "TaskSetData");
   qmlRegisterType<TaskData>("Data.Task", 1, 0, "TaskData");
   qmlRegisterType<AttendanceData>("Data.Attendance", 1, 0, "AttendanceData");
   qmlRegisterType<QString>("Qt.String", 1, 0, "StringData");
-  qmlRegisterType<FeedbackService>("Service.Feedback", 1, 0, "FeedbackService");
   qmlRegisterType<FeedbackData>("Data.Feedback", 1, 0, "FeedbackData");
   QTranslator translator;
   const QStringList uiLanguages = QLocale::system().uiLanguages();
