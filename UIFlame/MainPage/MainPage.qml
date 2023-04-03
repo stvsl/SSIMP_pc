@@ -32,6 +32,10 @@ Window {
         Qt.quit();
     }
 
+    Component.onCompleted: {
+        mainstack.push(globaloverview);
+    }
+
     Rectangle {
         anchors.fill: parent
         color: "#fbfcfe"
@@ -111,6 +115,16 @@ Window {
                 height: 800
                 boundsMovement: Flickable.StopAtBounds
                 anchors.horizontalCenter: parent.horizontalCenter
+            }
+
+        }
+
+        Component {
+            id: emptyview
+
+            Rectangle {
+                width: 200
+                height: 100
             }
 
         }

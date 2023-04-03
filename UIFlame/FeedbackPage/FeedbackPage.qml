@@ -16,6 +16,7 @@ Item {
 
     Component.onCompleted: {
         feedbackservice.getFeedbackListALL()
+        feedbacklist.currentIndex = 0
     }
 
     FeedbackService {
@@ -41,17 +42,42 @@ Item {
         }
     }
 
+    function statusToImage(status)
+    {
+        if (status === 0)
+        {
+            return "qrc:/picture/feedbackstatus/picture/feedbackstatus/已提交.png"
+        }
+        if (status === 1)
+        {
+            return "qrc:/picture/feedbackstatus/picture/feedbackstatus/已接受.png"
+        }
 
-    Flow {
+        if (status === 2)
+        {
+            return "qrc:/picture/feedbackstatus/picture/feedbackstatus/未完成.png"
+        }
+
+        if (status === 3)
+        {
+            return "qrc:/picture/feedbackstatus/picture/feedbackstatus/已完成.png"
+        }
+
+        if (status === 4)
+        {
+            return "qrc:/picture/feedbackstatus/picture/feedbackstatus/已废弃.png"
+        }
+        return ""
+    }
+    Rectangle {
         anchors.fill: parent
         anchors.margins: 10
         anchors.topMargin: 0
         layer.smooth: true
         antialiasing: true
-        spacing: 15
 
         Text {
-            width: parent.width
+            width: 200
             height: 40
             color: "#8E99A5"
             text: qsTr("异常反馈")
@@ -62,9 +88,13 @@ Item {
         Rectangle {
             id: leftarea
 
-            width: 300
+            width: 350
             height: parent.height - 50
             layer.enabled: true
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            anchors.top: parent.top
+            anchors.topMargin: 50
             radius: 10
 
             ListView {
@@ -222,6 +252,7 @@ Item {
                                 anchors.rightMargin: 20
                                 anchors.verticalCenter: parent.verticalCenter
                             }
+
                         }
                     }
                 }
@@ -262,89 +293,89 @@ Item {
                 anchors.bottomMargin: 0
                 radius: 10
 
-                Flow {
-                    anchors.fill: parent
-                    anchors.leftMargin: 20
-                    anchors.bottomMargin: 0
-                    spacing: 5
+                TextField {
+                    id: searchinput
+                    width: parent.width * 0.6
+                    anchors.left: parent.left
+                    anchors.leftMargin: 15
+                    height: 40
+                    placeholderText: qsTr("输入反馈者信息以搜索")
+                    font.pointSize: 12
+                }
 
-                    TextField {
-                        id: searchinput
-                        width: parent.width * 0.6
-                        height: 40
-                        placeholderText: qsTr("输入反馈者信息以搜索")
-                        font.pointSize: 12
+                Button {
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10
+                    width: parent.width * 0.3-5
+                    height: 40
+                    font.pointSize: 15
+                    background: Rectangle {
+                        color: "#4A90E2"
+                        radius: 5
                     }
-
-                    Button {
-                        anchors.right: parent.right
-                        anchors.rightMargin: 10
-                        width: parent.width * 0.3-5
-                        height: 40
-                        font.pointSize: 15
-                        background: Rectangle {
-                            color: "#4A90E2"
-                            radius: 5
-                        }
-                        Text {
-                            text: qsTr("搜索")
-                            color: "white"
-                            anchors.centerIn: parent
-                            font.pointSize: 14
-                        }
-                    }
-
-                    TextField {
-                        id: searchinput2
-                        anchors.top: searchinput.bottom
-                        width: parent.width * 0.6
-                        height: 40
-                        placeholderText: qsTr("输入问题内容以搜索")
-                        font.pointSize: 12
-                    }
-
-                    Button {
-                        anchors.right: parent.right
-                        anchors.rightMargin: 10
-                        anchors.top: searchinput.bottom
-                        width: parent.width * 0.3-5
-                        height: 40
-                        font.pointSize: 15
-                        background: Rectangle {
-                            color: "#4A90E2"
-                            radius: 5
-                        }
-                        Text {
-                            text: qsTr("搜索")
-                            color: "white"
-                            anchors.centerIn: parent
-                            font.pointSize: 14
-                        }
-                        onClicked: {
-                        }
-                    }
-
                     Text {
-                        id: sorttext
-                        text: qsTr("排序方式")
-                        color: "#535060"
-                        height: 40
-                        font.pointSize: 12
-                        verticalAlignment: Text.AlignVCenter
-                        anchors.top: searchinput2.bottom
-                        font.weight: Font.Medium
-                    }
-                    // 升降序
-                    Switch {
-                        id: feedbacksortswitch
-                        anchors.top: searchinput2.bottom
-                        anchors.left:sorttext.right
-                        width: 130
-                        height: 40
-                        checked: false
-                        text: checked ? qsTr("升序排序") : qsTr("降序排序")
+                        text: qsTr("搜索")
+                        color: "white"
+                        anchors.centerIn: parent
+                        font.pointSize: 14
                     }
                 }
+
+                TextField {
+                    id: searchinput2
+                    anchors.top: searchinput.bottom
+                    anchors.left: parent.left
+                    anchors.leftMargin: 15
+                    width: parent.width * 0.6
+                    height: 40
+                    placeholderText: qsTr("输入问题内容以搜索")
+                    font.pointSize: 12
+                }
+
+                Button {
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10
+                    anchors.top: searchinput.bottom
+                    width: parent.width * 0.3-5
+                    height: 40
+                    font.pointSize: 15
+                    background: Rectangle {
+                        color: "#4A90E2"
+                        radius: 5
+                    }
+                    Text {
+                        text: qsTr("搜索")
+                        color: "white"
+                        anchors.centerIn: parent
+                        font.pointSize: 14
+                    }
+                    onClicked: {
+                    }
+                }
+
+                Text {
+                    id: sorttext
+                    text: qsTr("排序方式")
+                    color: "#535060"
+                    height: 40
+                    font.pointSize: 12
+                    verticalAlignment: Text.AlignVCenter
+                    anchors.top: searchinput2.bottom
+                    anchors.left: parent.left
+                    anchors.leftMargin: 15
+                    font.weight: Font.Medium
+                }
+                // 升降序
+                Switch {
+                    id: feedbacksortswitch
+                    anchors.top: searchinput2.bottom
+                    anchors.left:sorttext.right
+                    width: 130
+                    height: 40
+                    checked: false
+                    text: checked ? qsTr("升序排序") : qsTr("降序排序")
+                }
+
             }
 
             layer.effect: DropShadow {
@@ -359,21 +390,371 @@ Item {
 
         Rectangle {
             id: rightarea
-
-            width: parent.width - leftarea.width - 20
+            width: parent.width - leftarea.width-10
             height: leftarea.height
+            anchors.top: parent.top
+            anchors.topMargin: 40
+            anchors.left: leftarea.right
+            anchors.leftMargin: 10
             radius: 10
+            color: "transparent"
+
+            Text {
+                id: feedbacktitle
+                text: qsTr("反馈详情")
+                color: "#535060"
+                anchors.top: parent.top
+                anchors.topMargin: 10
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+                font.pointSize: 16
+                font.weight: Font.Medium
+            }
 
             Rectangle {
-                id: mainarea
+                id: feedbackdetail
                 width: parent.width
-                anchors.top: parent.top
-                anchors.bottom: parent.bottom
-                anchors.topMargin: 10
-                layer.enabled: true
-                color: "white"
+                height: 300
+                anchors.top: feedbacktitle.bottom
+                anchors.topMargin: 5
+                anchors.left: parent.left
+                anchors.leftMargin: 10
                 radius: 10
+                layer.enabled: true
+                layer.effect: DropShadow {
+                    cached: true
+                    color: "#90849292"
+                    horizontalOffset: 3
+                    verticalOffset: 3
+                    radius: 10
+                    samples: 2 * radius + 1
+                }
+
+                Text {
+                    id: feedbackdetailid
+                    text: qsTr("反馈编号：")
+                    color: "#292826"
+                    width: 150
+                    anchors.top: parent.top
+                    anchors.topMargin: 10
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    font.pointSize: 18
+                    font.weight: Font.Medium
+                }
+
+                Text {
+                    text: feedbackdata.get(feedbacklist.currentIndex).qid
+                    color: "#292826"
+                    anchors.top: parent.top
+                    anchors.topMargin: 8
+                    anchors.left: feedbackdetailid.right
+                    anchors.leftMargin: 10
+                    font.pointSize: 18
+                    font.weight: Font.Medium
+                }
+
+                Text {
+                    id: feedbackdetailtitle
+                    text: qsTr("反馈标题：")
+                    color: "#292826"
+                    width: 150
+                    anchors.top: feedbackdetailid.bottom
+                    anchors.topMargin: 8
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    font.pointSize: 16
+                }
+
+                Text {
+                    text: feedbackdata.get(feedbacklist.currentIndex).question
+                    color: "#292826"
+                    anchors.top: feedbackdetailid.bottom
+                    anchors.topMargin: 8
+                    anchors.left: feedbackdetailtitle.right
+                    anchors.leftMargin: 10
+                    font.pointSize: 16
+                }
+
+
+                Text {
+                    id: feedbackdetailcontent
+                    text: qsTr("详细内容：")
+                    color: "#292826"
+                    width: 150
+                    anchors.top: feedbackdetailtitle.bottom
+                    anchors.topMargin: 8
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    font.pointSize: 16
+                    elide: Text.ElideRight
+                    maximumLineCount: 2
+                }
+
+                Text {
+                    id: feedbackdetailcontenttext
+                    text: feedbackdata.get(feedbacklist.currentIndex).description
+                    color: "#292826"
+                    anchors.top: feedbackdetailtitle.bottom
+                    anchors.topMargin: 8
+                    anchors.left: feedbackdetailcontent.right
+                    anchors.leftMargin: 10
+                    font.pointSize: feedbackdetailcontenttext.text.length < 25 ? 16 : feedbackdetailcontenttext.text.length < 60 ? 14 : feedbackdetailcontenttext.text.length < 100 ? 12 : 10
+                    wrapMode: Text.WordWrap
+                    elide: Text.ElideRight
+                    maximumLineCount: 3
+                    width: parent.width * 0.4
+                }
+
+                Text {
+                    id: feedbackdetailcreator
+                    text: qsTr("创建人/发起人：")
+                    color: "#292826"
+                    width: 150
+                    anchors.top: feedbackdetailcontenttext.bottom
+                    anchors.topMargin: 8
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    font.pointSize: 16
+                }
+
+                Text {
+                    text: feedbackdata.get(feedbacklist.currentIndex).sponsor
+                    color: "#292826"
+                    anchors.top: feedbackdetailcontenttext.bottom
+                    anchors.topMargin: 8
+                    anchors.left: feedbackdetailcreator.right
+                    anchors.leftMargin: 10
+                    font.pointSize: 16
+                }
+
+                Text {
+                    id: feedbackdetailcontact
+                    text: qsTr("联系方式：")
+                    width: 150
+                    color: "#292826"
+                    anchors.top: feedbackdetailcreator.bottom
+                    anchors.topMargin: 8
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    font.pointSize: 16
+                }
+
+                Text {
+                    text: feedbackdata.get(feedbacklist.currentIndex).teleinfo
+                    color: "#292826"
+                    anchors.top: feedbackdetailcreator.bottom
+                    anchors.topMargin: 8
+                    anchors.left: feedbackdetailcontact.right
+                    anchors.leftMargin: 10
+                    font.pointSize: 16
+                }
+
+                Text {
+                    id: feedbackdetailassign
+                    text: qsTr("委派负责人：")
+                    color: "#292826"
+                    width: 150
+                    anchors.top: feedbackdetailcontact.bottom
+                    anchors.topMargin: 8
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    font.pointSize: 16
+                }
+
+                Text {
+                    text: feedbackdata.get(feedbacklist.currentIndex).principal
+                    color: "#292826"
+                    anchors.top: feedbackdetailcontact.bottom
+                    anchors.topMargin: 8
+                    anchors.left: feedbackdetailassign.right
+                    anchors.leftMargin: 10
+                    font.pointSize: 16
+                }
+
+                Text {
+                    id: feedbackdetailtime
+                    text: qsTr("反馈时间：")
+                    color: "#292826"
+                    width: 150
+                    anchors.top: feedbackdetailassign.bottom
+                    anchors.topMargin: 8
+                    anchors.left: parent.left
+                    anchors.leftMargin: 10
+                    font.pointSize: 16
+                }
+
+                Text {
+                    text: feedbackdata.get(feedbacklist.currentIndex).create_date
+                    color: "#292826"
+                    anchors.top: feedbackdetailassign.bottom
+                    anchors.topMargin: 8
+                    anchors.left: feedbackdetailtime.right
+                    anchors.leftMargin: 10
+                    font.pointSize: 16
+                }
+                Image {
+                    id: status
+                    source: statusToImage(feedbackdata.get(feedbacklist.currentIndex).status)
+                    width: 200
+                    height: 200
+                    anchors.right: parent.right
+                    anchors.rightMargin: 10
+                    anchors.bottom: parent.bottom
+                    anchors.bottomMargin: 10
+                }
             }
+
+            Text {
+                id: operationcenter
+                text: qsTr("操作中心")
+                color: "#535060"
+                anchors.top: feedbackdetail.bottom
+                anchors.topMargin: 10
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+                font.pointSize: 16
+                font.weight: Font.Medium
+            }
+
+            Flow {
+                id: operation
+                anchors.top: operationcenter.bottom
+                anchors.topMargin: 5
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+                width: parent.width - 20
+                spacing: 10
+
+                Button {
+                    id: justaccept
+                    width: 200
+                    height: 55
+
+                    background: Rectangle {
+                        color: "#1791FF"
+                        border.color: "#EEEEEE"
+                        border.width: 1
+                        radius: 5
+                    }
+
+                    Text {
+                        anchors.centerIn: parent
+                        text: qsTr("仅接受反馈")
+                        color: "#FFFFFF"
+                        font.pointSize: 16
+                    }
+                    onClicked: {
+
+                    }
+                }
+
+                Button {
+                    id: acceptandconvert
+                    width: 200
+                    height: 55
+
+                    background: Rectangle {
+                        color: "#1791FF"
+                        border.color: "#EEEEEE"
+                        border.width: 1
+                        radius: 5
+                    }
+
+                    Text {
+                        anchors.centerIn: parent
+                        text: qsTr("接受并转换为任务")
+                        color: "#FFFFFF"
+                        font.pointSize: 16
+                    }
+                    onClicked: {
+
+                    }
+                }
+
+                Button {
+                    id: setascompleted
+                    width: 200
+                    height: 55
+                    background: Rectangle {
+                        color: "#1791FF"
+                        border.color: "#EEEEEE"
+                        border.width: 1
+                        radius: 5
+                    }
+
+                    Text {
+                        anchors.centerIn: parent
+                        text: qsTr("直接设置为已完成")
+                        color: "#FFFFFF"
+                        font.pointSize: 16
+                    }
+                    onClicked: {
+
+                    }
+                }
+
+                Button {
+                    id: rejectanddiscard
+                    width: 200
+                    height: 55
+
+                    background: Rectangle {
+                        color: "#FF516B"
+                        border.color: "#EEEEEE"
+                        border.width: 1
+                        radius: 5
+                    }
+
+                    Text {
+                        anchors.centerIn: parent
+                        text: qsTr("不接受并废弃")
+                        color: "white"
+                        font.pointSize: 16
+                    }
+                    onClicked: {
+
+                    }
+                }
+
+                Button {
+                    id: deletefeedback
+                    width: 200
+                    height: 55
+
+                    background: Rectangle {
+                        color: "#FF516B"
+                        border.color: "#EEEEEE"
+                        border.width: 1
+                        radius: 5
+                    }
+
+                    Text {
+                        anchors.centerIn: parent
+                        text: qsTr("直接删除")
+                        color: "white"
+                        font.pointSize: 16
+                    }
+                    onClicked: {
+
+                    }
+                }
+
+
+            }
+
+            Text {
+                id: feedbackconverttotasktext
+                text: qsTr("任务转化")
+                color: "#535060"
+                anchors.top: operation.bottom
+                anchors.topMargin: 10
+                anchors.left: parent.left
+                anchors.leftMargin: 10
+                font.pointSize: 16
+                font.weight: Font.Medium
+            }
+
         }
     }
 }

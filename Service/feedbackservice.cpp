@@ -37,7 +37,7 @@ void FeedbackService::fetchFeedbackListALL()
                 feedback->setCreate_date(obj["createDate"].toString().mid(0, 10));
                 feedback->setSponsor(obj["sponsor"].toString());
                 feedback->setTeleinfo(obj["teleinfo"].toString());
-                feedback->setPrincipal(obj["principal"].toString());
+                feedback->setPrincipal(obj["principal"].toString() == ""? "暂无": obj["principal"].toString());
                 feedback->setStatus(obj["status"].toInt());
                 m_feedbacklist->append(feedback);
             }
