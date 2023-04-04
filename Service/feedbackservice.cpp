@@ -60,3 +60,174 @@ void FeedbackService::getFeedbackListALL()
         fetchFeedbackListALL();
     }
 }
+
+void FeedbackService::setToOrange(const QString &qid)
+{
+    TcpPost *post = new TcpPost("/api/feedback/set/orange", this);
+    post->addHeader("Authorization", globalsecurity::TOKEN);
+    post->addParam("qid", qid);
+    TcpNetUtils *net = new TcpNetUtils(post);
+    connect(
+        net, &TcpNetUtils::requestFinished, this, [=, this]()
+        {
+        // 获取返回值
+        QJsonDocument resp = net->getResponseBodyJsonDoc();
+        if (resp["code"] != "SE200")
+        {
+            qDebug() << "反馈信息状态修改失败" << resp["code"].toString();
+        }
+        else
+        {
+            fetchFeedbackListALL();
+        } });
+    net->sendRequest();
+    net->deleteLater();
+    post->deleteLater();
+}
+
+void FeedbackService::setToAccept(const QString &qid)
+{
+    TcpPost *post = new TcpPost("/api/feedback/set/accept", this);
+    post->addHeader("Authorization", globalsecurity::TOKEN);
+    post->addParam("qid", qid);
+    TcpNetUtils *net = new TcpNetUtils(post);
+    connect(
+        net, &TcpNetUtils::requestFinished, this, [=, this]()
+        {
+        // 获取返回值
+        QJsonDocument resp = net->getResponseBodyJsonDoc();
+        if (resp["code"] != "SE200")
+        {
+            qDebug() << "反馈信息状态修改失败" << resp["code"].toString();
+        }
+        else
+        {
+            fetchFeedbackListALL();
+        } });
+    net->sendRequest();
+    net->deleteLater();
+    post->deleteLater();
+}
+
+void FeedbackService::setToSolve(const QString &qid)
+{
+    TcpPost *post = new TcpPost("/api/feedback/set/solved", this);
+    post->addHeader("Authorization", globalsecurity::TOKEN);
+    post->addParam("qid", qid);
+    TcpNetUtils *net = new TcpNetUtils(post);
+    connect(
+        net, &TcpNetUtils::requestFinished, this, [=, this]()
+        {
+        // 获取返回值
+        QJsonDocument resp = net->getResponseBodyJsonDoc();
+        if (resp["code"] != "SE200")
+        {
+            qDebug() << "反馈信息状态修改失败" << resp["code"].toString();
+        }
+        else
+        {
+            fetchFeedbackListALL();
+        } });
+    net->sendRequest();
+    net->deleteLater();
+    post->deleteLater();
+}
+
+void FeedbackService::setToDoing(const QString &qid)
+{
+    TcpPost *post = new TcpPost("/api/feedback/set/doing", this);
+    post->addHeader("Authorization", globalsecurity::TOKEN);
+    post->addParam("qid", qid);
+    TcpNetUtils *net = new TcpNetUtils(post);
+    connect(
+        net, &TcpNetUtils::requestFinished, this, [=, this]()
+        {
+        // 获取返回值
+        QJsonDocument resp = net->getResponseBodyJsonDoc();
+        if (resp["code"] != "SE200")
+        {
+            qDebug() << "反馈信息状态修改失败" << resp["code"].toString();
+        }
+        else
+        {
+            fetchFeedbackListALL();
+        } });
+    net->sendRequest();
+    net->deleteLater();
+    post->deleteLater();
+}
+
+void FeedbackService::setToReject(const QString &qid)
+{
+    TcpPost *post = new TcpPost("/api/feedback/set/reject", this);
+    post->addHeader("Authorization", globalsecurity::TOKEN);
+    post->addParam("qid", qid);
+    TcpNetUtils *net = new TcpNetUtils(post);
+    connect(
+        net, &TcpNetUtils::requestFinished, this, [=, this]()
+        {
+        // 获取返回值
+        QJsonDocument resp = net->getResponseBodyJsonDoc();
+        if (resp["code"] != "SE200")
+        {
+            qDebug() << "反馈信息状态修改失败" << resp["code"].toString();
+        }
+        else
+        {
+            fetchFeedbackListALL();
+        } });
+    net->sendRequest();
+    net->deleteLater();
+    post->deleteLater();
+}
+
+void FeedbackService::setDelegate(const QString &qid, const QString &eid)
+{
+    TcpPost *post = new TcpPost("/api/feedback/set/delegate", this);
+    post->addHeader("Authorization", globalsecurity::TOKEN);
+    QJsonObject obj;
+    obj.insert("qid", qid);
+    obj.insert("eid", eid);
+    post->setBody(obj);
+    TcpNetUtils *net = new TcpNetUtils(post);
+    connect(
+        net, &TcpNetUtils::requestFinished, this, [=, this]()
+        {
+        // 获取返回值
+        QJsonDocument resp = net->getResponseBodyJsonDoc();
+        if (resp["code"] != "SE200")
+        {
+            qDebug() << "反馈委派人员失败" << resp["code"].toString();
+        }
+        else
+        {
+            fetchFeedbackListALL();
+        } });
+    net->sendRequest();
+    net->deleteLater();
+    post->deleteLater();
+}
+
+void FeedbackService::Delete(const QString &qid)
+{
+    TcpPost *post = new TcpPost("/api/feedback/delete", this);
+    post->addHeader("Authorization", globalsecurity::TOKEN);
+    post->addParam("qid", qid);
+    TcpNetUtils *net = new TcpNetUtils(post);
+    connect(
+        net, &TcpNetUtils::requestFinished, this, [=, this]()
+        {
+        // 获取返回值
+        QJsonDocument resp = net->getResponseBodyJsonDoc();
+        if (resp["code"] != "SE200")
+        {
+            qDebug() << "反馈信息状态修改失败" << resp["code"].toString();
+        }
+        else
+        {
+            fetchFeedbackListALL();
+        } });
+    net->sendRequest();
+    net->deleteLater();
+    post->deleteLater();
+}

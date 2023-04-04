@@ -130,6 +130,11 @@ void TaskSetService::modifyTaskSet(QString tid, QString name, QString content, Q
     }
 }
 
+void TaskSetService::convertFeedbackToTaskSet(QString taskname, QString content, QString area, int duration)
+{
+    addTaskSet(taskname, content, area, 121.72439102324424, 41.61128739424099, -1, 5, duration);
+}
+
 void TaskSetService::deleteTaskSet(QString tid)
 {
     TcpGet *get = new TcpGet("/api/taskset/delete", this);

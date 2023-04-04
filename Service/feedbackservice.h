@@ -16,9 +16,17 @@ public:
     explicit FeedbackService(QObject *parent = nullptr);
     Q_INVOKABLE void fetchFeedbackListALL();
     Q_INVOKABLE void getFeedbackListALL();
+    Q_INVOKABLE void setToOrange(const QString &qid);
+    Q_INVOKABLE void setToAccept(const QString &qid);
+    Q_INVOKABLE void setToSolve(const QString &qid);
+    Q_INVOKABLE void setToDoing(const QString &qid);
+    Q_INVOKABLE void setToReject(const QString &qid);
+    Q_INVOKABLE void setDelegate(const QString &qid, const QString &eid);
+    Q_INVOKABLE void Delete(const QString &qid);
 
 signals:
-    void feedbackListGet(QQmlListProperty<FeedbackData> feedbacklist);
+    void
+    feedbackListGet(QQmlListProperty<FeedbackData> feedbacklist);
 
 private:
     QList<FeedbackData *> *m_feedbacklist;
