@@ -13,6 +13,7 @@ import "../TaskPage"
 import "../TaskSetPage"
 import "../GlobalOverviewPage"
 import "../DataMonitorPage"
+import "../FeedbackPage"
 import Qt5Compat.GraphicalEffects
 import QtQuick
 import QtQuick.Controls
@@ -29,6 +30,10 @@ Window {
         root.close();
         daemon.close();
         Qt.quit();
+    }
+
+    Component.onCompleted: {
+        mainstack.push(globaloverview);
     }
 
     Rectangle {
@@ -115,6 +120,16 @@ Window {
         }
 
         Component {
+            id: emptyview
+
+            Rectangle {
+                width: 200
+                height: 100
+            }
+
+        }
+
+        Component {
             id: globaloverview
 
             GlobalOverviewPage {
@@ -125,6 +140,12 @@ Window {
         Component {
             id: datamonitoring
             DataMonitorPage {
+            }
+        }
+
+        Component {
+            id:exceptionfeedback
+            FeedbackPage {
             }
         }
 

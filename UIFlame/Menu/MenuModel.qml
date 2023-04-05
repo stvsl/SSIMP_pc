@@ -11,6 +11,10 @@ ListModel {
     }
 
     ListElement {
+        name: qsTr("异常反馈")
+    }
+
+    ListElement {
         name: qsTr("员工管理")
     }
 

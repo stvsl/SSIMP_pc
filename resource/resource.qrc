@@ -47,4 +47,11 @@
         <file>htmlpage/mainscreenview.html</file>
         <file>htmlpage/monitor.html</file>
     </qresource>
+    <qresource prefix="/picture/feedbackstatus">
+        <file>picture/feedbackstatus/未完成.png</file>
+        <file>picture/feedbackstatus/已废弃.png</file>
+        <file>picture/feedbackstatus/已接受.png</file>
+        <file>picture/feedbackstatus/已提交.png</file>
+        <file>picture/feedbackstatus/已完成.png</file>
+    </qresource>
 </RCC>
