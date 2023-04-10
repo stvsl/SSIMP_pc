@@ -715,6 +715,7 @@ Flow {
                         anchors.fill: parent
                         onClicked: {
                             employeelist.currentIndex = index;
+                            infochartview.setEid(employid);
                         }
                     }
 
@@ -1179,7 +1180,7 @@ Flow {
                             anchors.fill: parent
                             anchors.margins: 10
                             anchors.centerIn: parent
-                            source: "qrc:/icon/EmployeePage/icon/EmployeePage/缺勤率完成率.png"
+                            source: photoUrl
                             fillMode: Image.PreserveAspectFit
                         }
 
@@ -1230,8 +1231,14 @@ Flow {
                     anchors.fill: parent
 
                     WebEngineView {
+                        id: infochartview
                         anchors.fill: parent
                         url: "qrc:/htmlpage/htmlpage/employeeinfo.html"
+
+                        function setEid(eid)
+                        {
+                            infochartview.runJavaScript("setEid(" + eid + ")")
+                        }
                     }
 
                     PropertyAnimation {

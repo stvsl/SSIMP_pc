@@ -1,330 +1,476 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>员工管理页面-内嵌可视化界面</title>
+    <!-- <script src="../jsaddon/echarts.min.js"></script> -->
     <script src="qrc:/jsaddon/jsaddon/echarts.min.js"></script>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-        }
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100vh;
+      }
 
-        .mainbox {
-            width: 100%;
-            height: 100%;
-            display: flex;
-        }
+      .mainbox {
+        width: 100%;
+        height: 100%;
+        display: flex;
+      }
 
-        .box1 {
-            width: 60%;
-            height: 100%;
-        }
+      .box1 {
+        width: 60%;
+        height: 100%;
+      }
 
-        .rightbox {
-            width: 40%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
+      .rightbox {
+        width: 40%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
 
-        .box2 {
-            width: 100%;
-            height: 45%;
-        }
+      .box2 {
+        width: 100%;
+        height: 45%;
+      }
 
-        .box3 {
-            width: 100%;
-            height: 52%;
-        }
+      .box3 {
+        width: 100%;
+        height: 52%;
+      }
 
-        .outbox {
-            width: 100%;
-            height: 100%;
-        }
+      .outbox {
+        width: 100%;
+        height: 100%;
+      }
     </style>
+  </head>
 
-</head>
-
-<body>
+  <body>
     <div class="mainbox">
-        <div class="box1" id="box1"></div>
-        <div class="rightbox">
-            <div class="box2">
-                <div class="outbox" id="box2"></div>
-            </div>
-            <div class="box3">
-                <div class="outbox" id="box3"></div>
-            </div>
+      <div class="box1" id="box1"></div>
+      <div class="rightbox">
+        <div class="box2">
+          <div class="outbox" id="box2"></div>
         </div>
+        <div class="box3">
+          <div class="outbox" id="box3"></div>
+        </div>
+      </div>
     </div>
 
     <script type="text/javascript">
-        var dom1 = document.getElementById('box1');
-        var myChart1 = echarts.init(dom1, null, {
-            renderer: 'canvas',
-            useDirtyRect: false
-        });
-        var app1 = {};
+      var dom1 = document.getElementById("box1");
+      var myChart1 = echarts.init(dom1, null, {
+        renderer: "canvas",
+        useDirtyRect: false,
+      });
+      var app1 = {};
 
-        var option1;
+      var option1;
 
-        option1 = {
-            color: ['#80FFA5', '#FFBF00'],
-            title: {
-                text: '一周出勤情况',
-                textStyle: {
-                    fontSize: 18,
-                    color: '#7F716F',
-                }
-
+      option1 = {
+        color: ["#80FFA5", "#FFBF00"],
+        title: {
+          text: "一周出勤情况",
+          textStyle: {
+            fontSize: 18,
+            color: "#7F716F",
+          },
+        },
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "cross",
+            label: {
+              backgroundColor: "#6a7985",
             },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'cross',
-                    label: {
-                        backgroundColor: '#6a7985'
-                    }
-                }
+          },
+        },
+        legend: {
+          data: ["签到时间", "签退时间"],
+        },
+        xAxis: [
+          {
+            type: "category",
+            boundaryGap: false,
+            data: [],
+          },
+        ],
+        yAxis: [
+          {
+            type: "time",
+            axisLabel: {
+              formatter: function (value, index) {
+                var date = new Date(value);
+                date.getHours() +
+                  ":" +
+                  date.getMinutes() +
+                  ":" +
+                  date.getSeconds();
+              },
             },
-            legend: {
-                data: ['签到时间', '签退时间']
+            // 包含刻度
+            splitLine: {
+              show: true,
             },
-            xAxis: [
+            // 填充区域
+            splitArea: {
+              show: true,
+            },
+            min: `0:00:00`,
+            max: `23:59:59`,
+          },
+        ],
+        series: [
+          {
+            name: "签到时间",
+            type: "line",
+            stack: "Total",
+            smooth: true,
+            lineStyle: {
+              width: 0,
+            },
+            showSymbol: false,
+            areaStyle: {
+              opacity: 0.8,
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                 {
-                    type: 'category',
-                    boundaryGap: false,
-                    data: ['周一', '周二', '周三', '周四', '周五', '周六', '周日']
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'time'
-                }
-            ],
-            series: [
-                {
-                    name: '签到时间',
-                    type: 'line',
-                    stack: 'Total',
-                    smooth: true,
-                    lineStyle: {
-                        width: 0
-                    },
-                    showSymbol: false,
-                    areaStyle: {
-                        opacity: 0.8,
-                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                            {
-                                offset: 0,
-                                color: 'rgb(128, 255, 165)'
-                            },
-                            {
-                                offset: 1,
-                                color: 'rgb(1, 191, 236)'
-                            }
-                        ])
-                    },
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    data: [140, 232, 101, 264, 90, 340, 250]
+                  offset: 0,
+                  color: "rgb(128, 255, 165)",
                 },
                 {
-                    name: '签退时间',
-                    type: 'line',
-                    stack: 'Total',
-                    smooth: true,
-                    lineStyle: {
-                        width: 0
-                    },
-                    showSymbol: false,
-                    label: {
-                        show: true,
-                        position: 'top'
-                    },
-                    areaStyle: {
-                        opacity: 0.8,
-                        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-                            {
-                                offset: 0,
-                                color: 'rgb(255, 191, 0)'
-                            },
-                            {
-                                offset: 1,
-                                color: 'rgb(224, 62, 76)'
-                            }
-                        ])
-                    },
-                    emphasis: {
-                        focus: 'series'
-                    },
-                    data: [220, 302, 181, 234, 210, 290, 150]
-                }
-            ]
-        };
-
-        if (option1 && typeof option1 === 'object') {
-            myChart1.setOption(option1);
-        }
-
-        window.addEventListener('resize', myChart1.resize);
-    </script>
-    <script type="text/javascript">
-        var dom2 = document.getElementById('box2');
-        var myChart2 = echarts.init(dom2, null, {
-            renderer: 'canvas',
-            useDirtyRect: false
-        });
-        var app2 = {};
-
-        var option2;
-        option2 = {
-            title: {
-                text: '工作情况',
-                textStyle: {
-                    fontSize: 18,
-                    color: '#7F716F',
-                }
+                  offset: 1,
+                  color: "rgb(1, 191, 236)",
+                },
+              ]),
             },
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow'
-                }
+            emphasis: {
+              focus: "series",
             },
-            legend: {},
-            grid: {
-                left: '0%',
-                right: '4%',
-                bottom: '0%',
-                containLabel: true
+            data: [],
+          },
+          {
+            name: "签退时间",
+            type: "line",
+            stack: "Total",
+            smooth: true,
+            lineStyle: {
+              width: 0,
             },
-            xAxis: {
-                type: 'value',
-                boundaryGap: [0, 0.01]
+            showSymbol: false,
+            label: {
+              show: true,
+              position: "top",
             },
-            yAxis: {
-                type: 'category',
-                data: ['']
-            },
-            series: [
+            areaStyle: {
+              opacity: 0.8,
+              color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                 {
-                    name: '缺勤次数',
-                    type: 'bar',
-                    data: [18203]
+                  offset: 0,
+                  color: "rgb(255, 191, 0)",
                 },
                 {
-                    name: '执勤天数',
-                    type: 'bar',
-                    data: [19325]
-                }
-            ]
-        };
+                  offset: 1,
+                  color: "rgb(224, 62, 76)",
+                },
+              ]),
+            },
+            emphasis: {
+              focus: "series",
+            },
+            data: [],
+          },
+        ],
+      };
 
-        if (option2 && typeof option2 === 'object') {
-            myChart2.setOption(option2);
-        }
-        window.addEventListener('resize', myChart2.resize);
+      if (option1 && typeof option1 === "object") {
+        myChart1.setOption(option1);
+      }
+
+      window.addEventListener("resize", myChart1.resize);
     </script>
     <script type="text/javascript">
-        var dom3 = document.getElementById('box3');
-        var myChart3 = echarts.init(dom3, null, {
-            renderer: 'canvas',
-            useDirtyRect: false
-        });
-        var app3 = {};
+      var dom2 = document.getElementById("box2");
+      var myChart2 = echarts.init(dom2, null, {
+        renderer: "canvas",
+        useDirtyRect: false,
+      });
+      var app2 = {};
 
-        var option3;
+      var option2;
+      option2 = {
+        title: {
+          text: "工作情况",
+          textStyle: {
+            fontSize: 18,
+            color: "#7F716F",
+          },
+        },
+        tooltip: {
+          trigger: "axis",
+          axisPointer: {
+            type: "shadow",
+          },
+        },
+        legend: {},
+        grid: {
+          left: "0%",
+          right: "4%",
+          bottom: "0%",
+          containLabel: true,
+        },
+        xAxis: {
+          type: "value",
+          boundaryGap: [0, 0.01],
+        },
+        yAxis: {
+          type: "category",
+          data: [""],
+        },
+        series: [
+          {
+            name: "缺勤次数",
+            type: "bar",
+            data: [0],
+          },
+          {
+            name: "执勤天数",
+            type: "bar",
+            data: [0],
+          },
+        ],
+      };
 
-        option3 = {
-            series: [
-                {
-                    type: 'gauge',
-                    startAngle: 180,
-                    endAngle: 0,
-                    center: ['50%', '75%'],
-                    radius: '120%',
-                    min: 0,
-                    max: 1,
-                    splitNumber: 8,
-                    axisLine: {
-                        lineStyle: {
-                            width: 10,
-                            color: [
-                                [0.25, '#FF6E76'],
-                                [0.5, '#FDDD60'],
-                                [0.75, '#58D9F9'],
-                                [1, '#7CFFB2']
-                            ]
-                        }
-                    },
-                    pointer: {
-                        icon: 'path://M12.8,0.7l12,40.1H0.7L12.8,0.7z',
-                        length: '12%',
-                        width: 20,
-                        offsetCenter: [0, '-70%'],
-                        itemStyle: {
-                            color: 'inherit'
-                        }
-                    },
-                    axisTick: {
-                        length: 12,
-                        lineStyle: {
-                            color: 'inherit',
-                            width: 0
-                        }
-                    },
-                    splitLine: {
-                        length: 20,
-                        lineStyle: {
-                            color: 'inherit',
-                            width: 0
-                        }
-                    },
-                    axisLabel: {
-                        rotate: 'tangential',
-                        formatter: function (value) {
-                            if (value === 0.875) {
-                            } else if (value === 0.625) {
-                            } else if (value === 0.375) {
-                            } else if (value === 0.125) {
-                            }
-                            return '';
-                        }
-                    },
-                    title: {
-                        offsetCenter: [0, '-10%'],
-                        fontSize: 25
-                    },
-                    detail: {
-                        fontSize: 40,
-                        offsetCenter: [0, '-35%'],
-                        valueAnimation: true,
-                        formatter: function (value) {
-                            return Math.round(value * 100) + '';
-                        },
-                        color: 'inherit'
-                    },
-                    data: [
-                        {
-                            value: 0.7,
-                            name: '评分'
-                        }
-                    ]
-                }
-            ]
-        };
-        if (option3 && typeof option3 === 'object') {
-            myChart3.setOption(option3);
-        }
-        window.addEventListener('resize', myChart3.resize);
+      if (option2 && typeof option2 === "object") {
+        myChart2.setOption(option2);
+      }
+      window.addEventListener("resize", myChart2.resize);
     </script>
-</body>
+    <script type="text/javascript">
+      var dom3 = document.getElementById("box3");
+      var myChart3 = echarts.init(dom3, null, {
+        renderer: "canvas",
+        useDirtyRect: false,
+      });
+      var app3 = {};
 
+      var option3;
+
+      option3 = {
+        series: [
+          {
+            type: "gauge",
+            startAngle: 180,
+            endAngle: 0,
+            center: ["50%", "75%"],
+            radius: "120%",
+            min: 0,
+            max: 1,
+            splitNumber: 8,
+            axisLine: {
+              lineStyle: {
+                width: 10,
+                color: [
+                  [0.25, "#FF6E76"],
+                  [0.5, "#FDDD60"],
+                  [0.75, "#58D9F9"],
+                  [1, "#7CFFB2"],
+                ],
+              },
+            },
+            pointer: {
+              icon: "path://M12.8,0.7l12,40.1H0.7L12.8,0.7z",
+              length: "12%",
+              width: 20,
+              offsetCenter: [0, "-70%"],
+              itemStyle: {
+                color: "inherit",
+              },
+            },
+            axisTick: {
+              length: 12,
+              lineStyle: {
+                color: "inherit",
+                width: 0,
+              },
+            },
+            splitLine: {
+              length: 20,
+              lineStyle: {
+                color: "inherit",
+                width: 0,
+              },
+            },
+            axisLabel: {
+              rotate: "tangential",
+              formatter: function (value) {
+                if (value === 0.875) {
+                } else if (value === 0.625) {
+                } else if (value === 0.375) {
+                } else if (value === 0.125) {
+                }
+                return "";
+              },
+            },
+            title: {
+              offsetCenter: [0, "-10%"],
+              fontSize: 25,
+            },
+            detail: {
+              fontSize: 40,
+              offsetCenter: [0, "-35%"],
+              valueAnimation: true,
+              formatter: function (value) {
+                return Math.round(value * 100) + "";
+              },
+              color: "inherit",
+            },
+            data: [
+              {
+                value: 0,
+                name: "评分",
+              },
+            ],
+          },
+        ],
+      };
+      if (option3 && typeof option3 === "object") {
+        myChart3.setOption(option3);
+      }
+      window.addEventListener("resize", myChart3.resize);
+    </script>
+    <script>
+      function setEid(eid) {
+        var requestOptions = {
+          method: "POST",
+          headers: new Headers(),
+          redirect: "follow",
+        };
+        fetch(
+          "http://127.0.0.1:6521/api/data/analysis/employee?eid=" + eid,
+          requestOptions
+        )
+          .then((response) => response.text())
+          .then((result) => {
+            data = JSON.parse(JSON.parse(result).data).data;
+            zq = JSON.parse(JSON.parse(result).data).info.zq;
+            qq = JSON.parse(JSON.parse(result).data).info.qq;
+            var dateDict = {}; // 存储日期和签到/签退时间的字典
+            for (var i = 0; i < data.length; i++) {
+              var date = data[i].日期.split("T")[0]; // 只获取日期部分，忽略时间部分
+              dateDict[date] = {
+                签到时间: data[i].签到时间,
+                签退时间: data[i].签退时间,
+              };
+            }
+
+            var x = [];
+            var y = [];
+            var z = [];
+            var today = new Date();
+            for (var i = 6; i >= 0; i--) {
+              var date = new Date(today);
+              date.setDate(date.getDate() - i);
+              var dateString = date.toISOString().split("T")[0]; // 获取 ISO 格式的日期字符串
+              x.push(dateString);
+              y.push(
+                dateDict[dateString] ? dateDict[dateString]["签到时间"] : null
+              ); // 如果有签到时间，就添加到数组；否则添加 null
+              z.push(
+                dateDict[dateString] ? dateDict[dateString]["签退时间"] : null
+              ); // 如果有签退时间，就添加到数组；否则添加 null
+            }
+            cscore = 0;
+            // 对y,z 进行ECharts 兼容性处理
+            y = y.map((timestampString) => {
+              if (
+                !timestampString ||
+                timestampString === "0001-01-01T00:00:00Z"
+              ) {
+                cscore -= 5;
+                // 返回当天0点的时间戳
+                return (
+                  today.getTime() -
+                  today.getHours() * 3600 * 1000 -
+                  today.getMinutes() * 60 * 1000 -
+                  today.getSeconds() * 1000
+                );
+              }
+              return new Date(timestampString).getTime();
+            });
+            z = z.map((timestampString) => {
+              if (
+                !timestampString ||
+                timestampString === "0001-01-01T00:00:00Z"
+              ) {
+                return (
+                  today.getTime() -
+                  today.getHours() * 3600 * 1000 -
+                  today.getMinutes() * 60 * 1000 -
+                  today.getSeconds() * 1000
+                );
+              }
+              return new Date(timestampString).getTime();
+            });
+            // 时间戳转换为时间
+            y = y.map((timestamp) => {
+              var date = new Date(timestamp);
+              var hours = date.getHours();
+              var minutes = date.getMinutes();
+              var seconds = date.getSeconds();
+              return (
+                [hours, minutes, seconds]
+                  .map((unit) => {
+                    return unit < 10 ? "0" + unit : unit;
+                  })
+                  .join(":") + ""
+              );
+            });
+            z = z.map((timestamp) => {
+              var date = new Date(timestamp);
+              var hours = date.getHours();
+              var minutes = date.getMinutes();
+              var seconds = date.getSeconds();
+              return (
+                [hours, minutes, seconds]
+                  .map((unit) => {
+                    return unit < 10 ? "0" + unit : unit;
+                  })
+                  .join(":") + ""
+              );
+            });
+
+            // 将y[i] = x[i] + " " + y[i]
+            for (var i = 0; i < y.length; i++) {
+              y[i] = "0000-00-00" + " " + y[i];
+            }
+            // 将z[i] = x[i] + " " + z[i]
+            for (var i = 0; i < z.length; i++) {
+              z[i] = "0000-00-00" + " " + z[i];
+            }
+            console.log(x);
+            console.log(y);
+            console.log(z);
+            tmpoption = myChart1.getOption();
+            tmpoption.xAxis[0].data = x;
+            tmpoption.series[0].data = y;
+            tmpoption.series[1].data = z;
+            myChart1.setOption(tmpoption);
+            tmpoption = myChart2.getOption();
+            tmpoption.series[0].data[0] = qq;
+            tmpoption.series[1].data[0] = zq;
+            myChart2.setOption(tmpoption);
+            tmpoption = myChart3.getOption();
+            score = (100 * (zq / (zq + qq)) - cscore) / 100;
+            tmpoption.series[0].data[0].value = score;
+            myChart3.setOption(tmpoption);
+          })
+          .catch((error) => console.log("error", error));
+      }
+    </script>
+  </body>
 </html>

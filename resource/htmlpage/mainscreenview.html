@@ -317,6 +317,7 @@
   </body>
 </html>
 <script src="qrc:/jsaddon/jsaddon/vue2.js"></script>
+<!-- <script src="./../jsaddon/vue2.js"></script> -->
 <script
   type="text/javascript"
   src="https://api.map.baidu.com/api?v=1.0&type=webgl&ak=oRqbxhmwbE30ZgrbXzzUM19O6kyBjKQD"
@@ -329,10 +330,62 @@
       articleCount: 0,
       yesterdayViewCount: 0,
       yesterdayTaskRate: 0,
+      workingCount: 10,
+      finishedCount: 10,
+      absentCount: 10,
+    },
+    mounted() {
+      fetch("http://localhost:6521/api/data/analysis/global", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((res) => {
+          resdata = JSON.parse(res.data);
+          console.log(resdata);
+          this.staffCount = resdata.employee_count;
+          this.articleCount = resdata.article_count;
+          this.yesterdayViewCount = resdata.new_view_count;
+          this.yesterdayTaskRate = resdata.completion_rate.toFixed(2);
+          var tmpoption = myChart.getOption();
+          tmpoption.series[0].data[0].value = resdata.working_count;
+          tmpoption.series[0].data[1].value = resdata.finished_count;
+          tmpoption.series[0].data[2].value = resdata.absent_count;
+          myChart.setOption(tmpoption);
+          tmpoption = myChart1.getOption();
+          tmpoption.series[0].data = resdata.seven_days_view_count.reverse();
+          tmpoption.series[1].data =
+            resdata.seven_days_article_view_count.reverse();
+          const today = new Date().getDay();
+          const weekDays = [
+            "周一",
+            "周二",
+            "周三",
+            "周四",
+            "周五",
+            "周六",
+            "周日",
+          ];
+          const rotatedWeekDays = [
+            ...weekDays.slice(today),
+            ...weekDays.slice(0, today),
+          ];
+          tmpoption.xAxis[0].data = rotatedWeekDays;
+          myChart1.setOption(tmpoption);
+          // working_locations ['{"lat": 35.680700, "lng": 139.694300}']
+          // 数据提取
+          var working_locations = resdata.working_locations;
+          var working_locations_list = [];
+          for (var i = 0; i < working_locations.length; i++) {
+            var tmp = JSON.parse(working_locations[i]);
+            addPoint("", tmp.lng, tmp.lat);
+          }
+        });
     },
   });
-</script>
-<script type="text/javascript">
+
   var dom = document.getElementById("Eas");
   var myChart = echarts.init(dom, null, {
     renderer: "canvas",
@@ -357,10 +410,9 @@
         type: "pie",
         radius: "60%",
         data: [
-          { value: 1048, name: "工作中" },
-          { value: 735, name: "已工作完成" },
-          { value: 580, name: "缺勤" },
-          { value: 484, name: "未完成任务" },
+          { value: 1, name: "工作中" },
+          { value: 1, name: "已工作完成" },
+          { value: 1, name: "缺勤" },
         ],
         emphasis: {
           itemStyle: {
@@ -451,7 +503,7 @@
         emphasis: {
           focus: "series",
         },
-        data: [140, 232, 101, 264, 90, 340, 250],
+        data: [0, 0, 0, 0, 0, 0, 0],
       },
       {
         name: "文章浏览量",
@@ -478,7 +530,7 @@
         emphasis: {
           focus: "series",
         },
-        data: [120, 282, 111, 234, 220, 340, 310],
+        data: [0, 0, 0, 0, 0, 0, 0],
       },
     ],
   };
@@ -616,31 +668,6 @@
     var point = new BMapGL.Point(x, y);
     var marker = new BMapGL.Marker(point);
     mapGL.addOverlay(marker);
-    // 点击后显示详情
-    marker.addEventListener("click", function () {
-      // 获取当前点的坐标，计算地理位置
-      var point = marker.getPosition();
-      var gc = new BMapGL.Geocoder();
-      // 获取当前点的坐标，请求地理位置，显示在地图上
-      gc.getLocation(point, function (rs) {
-        var addComp = rs.addressComponents;
-        var info =
-          addComp.province +
-          addComp.city +
-          addComp.district +
-          addComp.street +
-          addComp.streetNumber +
-          point.lng +
-          point.lat;
-        var infoWindow = new BMapGL.InfoWindow(info);
-        infoWindow.setTitle(name);
-        webChannel.nowIs(name, point.lng, point.lat);
-        mapGL.openInfoWindow(infoWindow, point);
-      });
-    });
-    mapGL.addEventListener("click", function () {
-      mapGL.closeInfoWindow();
-    });
   }
 
   // 移除全部结点
