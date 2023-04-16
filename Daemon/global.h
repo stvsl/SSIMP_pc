@@ -33,7 +33,7 @@ public:
 // 系统全局变量
 namespace global
 {
-  Q_GLOBAL_STATIC(QString, SERVER_URL_STR, ("http://127.0.0.1:6521")); // 服务器地址
+  Q_GLOBAL_STATIC(QString, SERVER_URL_STR, ("http://server.ssimp.stvsljl.com")); // 服务器地址
 };                                                                     // namespace global
 
 #endif

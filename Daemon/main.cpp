@@ -33,7 +33,7 @@ int main(int argc, char *argv[])
   QCoreApplication::setApplicationName("SSIMP");
   QCoreApplication::setOrganizationDomain("stvsljl.com");
   QCoreApplication::setApplicationVersion("v0.0.8 alpha");
-  *global::SERVER_URL_STR() = "http://127.0.0.1:6521";
+  *global::SERVER_URL_STR() = "http://server.ssimp.stvsljl.com";
   qDebug() << "SERVER_URL_STR" << *global::SERVER_URL_STR();
 
   /************************注册组件************************/

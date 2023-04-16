@@ -1,103 +1,95 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>内容编辑器</title>
-    <link href="qrc:/htmlpage/htmlpage/wangeditor.css" rel="stylesheet">
+    <link href="qrc:/htmlpage/htmlpage/wangeditor.css" rel="stylesheet" />
     <script src="qrc:///qtwebchannel/qwebchannel.js"></script>
     <style>
-        #editor—wrapper {
-            z-index: 100;
-            margin: 10px;
-            /* 按需定义 */
-        }
+      #editor—wrapper {
+        z-index: 100;
+        margin: 10px;
+        /* 按需定义 */
+      }
 
-        #toolbar-container {
-            border-bottom: 1px solid #ccc;
-        }
+      #toolbar-container {
+        border-bottom: 1px solid #ccc;
+      }
 
-        #editor-container {
-            height: 500px;
-        }
+      #editor-container {
+        height: 500px;
+      }
     </style>
-</head>
+  </head>
 
-<body>
+  <body>
     <div id="editor—wrapper">
-        <div id="toolbar-container"><!-- 工具栏 --></div>
-        <div id="editor-container"><!-- 编辑器 --></div>
+      <div id="toolbar-container"><!-- 工具栏 --></div>
+      <div id="editor-container"><!-- 编辑器 --></div>
     </div>
     <script src="qrc:/jsaddon/jsaddon/wangeditor5.1.23.js"></script>
     <script>
-        const { createEditor, createToolbar } = window.wangEditor
+      const { createEditor, createToolbar } = window.wangEditor;
 
-        const editorConfig = {
-            placeholder: '开始编辑内容吧!',
-            onChange(editor) {
-                const html = editor.getHtml()
-                console.log('editor content', html)
-                // 同步到 <textarea>
-                document.getElementById('textarea').value = html
-            },
-            MENU_CONF: {}
-        }
+      const editorConfig = {
+        placeholder: "开始编辑内容吧!",
+        onChange(editor) {
+          const html = editor.getHtml();
+          console.log("editor content", html);
+          // 同步到 <textarea>
+          document.getElementById("textarea").value = html;
+        },
+        MENU_CONF: {},
+      };
 
-        // 图片上传配置
-        editorConfig.MENU_CONF['uploadImage'] = {
-            base64LimitSize: 1024 * 1024 * 5,// 5M
-            SERVER: "http://127.0.0.1:6521/api/Image/UploadImage"
-        }
+      // 图片上传配置
+      editorConfig.MENU_CONF["uploadImage"] = {
+        base64LimitSize: 1024 * 1024 * 5, // 5M
+        SERVER: "http://server.ssimp.stvsljl.com/api/Image/UploadImage",
+      };
 
-        const editor = createEditor({
-            selector: '#editor-container',
-            html: '<p><br></p>',
-            config: editorConfig,
-            mode: 'default', // or 'simple'
-        })
+      const editor = createEditor({
+        selector: "#editor-container",
+        html: "<p><br></p>",
+        config: editorConfig,
+        mode: "default", // or 'simple'
+      });
 
-        const toolbarConfig = {
-        }
+      const toolbarConfig = {};
 
-        toolbarConfig.excludeKeys = [
-            "fullScreen",
-            // 屏蔽上传视频
-            "uploadVideo",
-        ]
+      toolbarConfig.excludeKeys = [
+        "fullScreen",
+        // 屏蔽上传视频
+        "uploadVideo",
+      ];
 
-        const toolbar = createToolbar({
-            editor,
-            selector: '#toolbar-container',
-            config: toolbarConfig,
-            mode: 'default', // or 'simple'
-        })
+      const toolbar = createToolbar({
+        editor,
+        selector: "#toolbar-container",
+        config: toolbarConfig,
+        mode: "default", // or 'simple'
+      });
 
-        // 默认全屏
-        editor.fullScreen()
+      // 默认全屏
+      editor.fullScreen();
 
-        let webChannel = null;
-        new QWebChannel(qt.webChannelTransport, function (channel) {
-            webChannel = channel.objects.webChannel;
-            // webChannel.print("success");
-            webChannel.setHtml.connect(setHtml);
-        });
+      let webChannel = null;
+      new QWebChannel(qt.webChannelTransport, function (channel) {
+        webChannel = channel.objects.webChannel;
+        // webChannel.print("success");
+        webChannel.setHtml.connect(setHtml);
+      });
 
-        function getHtml() {
-            const html = editor.getHtml()
-            return html
-        }
+      function getHtml() {
+        const html = editor.getHtml();
+        return html;
+      }
 
-        function setHtml(html) {
-            editor.setHtml(html)
-        }
-
-
-
+      function setHtml(html) {
+        editor.setHtml(html);
+      }
     </script>
-
-
-</body>
-
+  </body>
 </html>

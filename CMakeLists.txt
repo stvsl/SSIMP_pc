@@ -81,30 +81,31 @@ qt_add_executable(appSSIMP_pc
 qt_add_qml_module(appSSIMP_pc
     URI SSIMP_pc
     VERSION 1.0
-    QML_FILES Daemon/daemon.qml
-    QML_FILES UIFlame/Menu/Menu.qml
-    QML_FILES UIFlame/Menu/MenuDelegate.qml
-    QML_FILES UIFlame/Menu/MenuModel.qml
-    QML_FILES UIFlame/LoadPage/LoadPage.qml
-    QML_FILES UIFlame/MainPage/MainPage.qml
-    QML_FILES UIFlame/GlobalOverviewPage/GlobalOverviewPage.qml
-    QML_FILES UIFlame/DataMonitorPage/DataMonitorPage.qml
-    QML_FILES UIFlame/FeedbackPage/FeedbackPage.qml
-    QML_FILES UIFlame/EmployeePage/EmployeePage.qml
-    QML_FILES UIFlame/TaskPage/TaskPage.qml
-    QML_FILES UIFlame/ContentMgrPage/ContentMgrPage.qml
-    QML_FILES UIFlame/TaskSetPage/TaskSetPage.qml
-    QML_FILES UIFlame/LsKyPage/LsKyPage.qml
-    QML_FILES UIFlame/AboutPage/AboutPage.qml
-    QML_FILES UIFlame/AboutPage/AboutQt.qml
-    QML_FILES UIFlame/AboutPage/AboutQml.qml
-    QML_FILES UIFlame/AboutPage/AboutSoftware.qml
-    QML_FILES UIFlame/AboutPage/AboutUS.qml
-    QML_FILES UIFlame/AboutPage/OtherOpenSourceProjects.qml
-    QML_FILES UIFlame/LoginPage/LoginPage.qml
-    QML_FILES UIFlame/MessageBox/MessageBox.qml
-    QML_FILES UIFlame/MessageBox/MsgButton.qml
-
+    # QML_DIRS UIFlame/
+    QML_FILES
+        Daemon/daemon.qml
+        UIFlame/Menu/Menu.qml
+        UIFlame/Menu/MenuDelegate.qml
+        UIFlame/Menu/MenuModel.qml
+        UIFlame/LoadPage/LoadPage.qml
+        UIFlame/MainPage/MainPage.qml
+        UIFlame/GlobalOverviewPage/GlobalOverviewPage.qml
+        UIFlame/DataMonitorPage/DataMonitorPage.qml
+        UIFlame/FeedbackPage/FeedbackPage.qml
+        UIFlame/EmployeePage/EmployeePage.qml
+        UIFlame/TaskPage/TaskPage.qml
+        UIFlame/ContentMgrPage/ContentMgrPage.qml
+        UIFlame/TaskSetPage/TaskSetPage.qml
+        UIFlame/LsKyPage/LsKyPage.qml
+        UIFlame/AboutPage/AboutPage.qml
+        UIFlame/AboutPage/AboutQt.qml
+        UIFlame/AboutPage/AboutQml.qml
+        UIFlame/AboutPage/AboutSoftware.qml
+        UIFlame/AboutPage/AboutUS.qml
+        UIFlame/AboutPage/OtherOpenSourceProjects.qml
+        UIFlame/LoginPage/LoginPage.qml
+        UIFlame/MessageBox/MessageBox.qml
+        UIFlame/MessageBox/MsgButton.qml
 )
 
  file(GLOB TS_FILES "${PROJECT_SOURCE_DIR}/*.ts")

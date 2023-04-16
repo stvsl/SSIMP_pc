@@ -153,7 +153,7 @@ Flow {
                         }
 
                         Text {
-                            text: "0"
+                            text: "1"
                             verticalAlignment: Text.AlignVCenter
                             width: 50
                             height: 50
@@ -227,7 +227,7 @@ Flow {
                         }
 
                         Text {
-                            text: "0"
+                            text: "1"
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Text.AlignVCenter
                             width: 50
@@ -321,10 +321,10 @@ Flow {
                         }
 
                         Text {
-                            text: "0"
+                            text: "50%"
                             horizontalAlignment: Text.AlignLeft
                             verticalAlignment: Text.AlignVCenter
-                            width: 50
+                            width: 80
                             height: 50
                             font.styleName: "Medium"
                             font.pointSize: 18
@@ -350,9 +350,9 @@ Flow {
                         }
 
                         Text {
-                            text: "0"
+                            text: "33.3%"
                             verticalAlignment: Text.AlignVCenter
-                            width: 50
+                            width: 80
                             height: 50
                             font.styleName: "Medium"
                             font.pointSize: 18
@@ -364,8 +364,10 @@ Flow {
                 }
 
                 Rectangle {
-                    width: 120
+                    width: 75
                     height: parent.height
+                    anchors.right: parent.right
+                    anchors.rightMargin: 20
 
                     Image {
                         source: "qrc:/icon/EmployeePage/icon/EmployeePage/缺勤率完成率.png"
@@ -1170,7 +1172,6 @@ Flow {
                     Rectangle {
                         width: parent.width / 2
                         height: parent.width * 3 / 4
-                        color: "red"
                         anchors.horizontalCenter: parent.horizontalCenter
                         radius: 10
 
@@ -1180,7 +1181,8 @@ Flow {
                             anchors.fill: parent
                             anchors.margins: 10
                             anchors.centerIn: parent
-                            source: photoUrl
+                            source: employeedata.get(employeelist.currentIndex).photoUrl
+                            // fillMode: 拉伸填充
                             fillMode: Image.PreserveAspectFit
                         }
 

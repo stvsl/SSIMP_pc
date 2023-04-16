@@ -351,7 +351,8 @@
           redirect: "follow",
         };
         fetch(
-          "http://127.0.0.1:6521/api/data/analysis/employee?eid=" + eid,
+          "http://server.ssimp.stvsljl.com/api/data/analysis/employee?eid=" +
+            eid,
           requestOptions
         )
           .then((response) => response.text())
