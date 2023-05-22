@@ -7,6 +7,7 @@ import QtWebEngine
 import QtWebChannel
 import Service.Taskset 1.0
 import Data.Taskset 1.0
+import "../DefaultStyle"
 
 Item {
     id: tasksetpage
@@ -374,7 +375,7 @@ Item {
 
                     Text {
                         id: areataskid
-                        text: qsTr("任务编号:  ") + tasklistdata.get(
+                        text: qsTr("任务编号:    ") + tasklistdata.get(
                             tasklist.currentIndex).tid
                             height: 40
                             color: "#8E99A5"
@@ -404,7 +405,6 @@ Item {
                             anchors.top: areataskid.bottom
                             anchors.topMargin: -5
                             anchors.left: areataskname.right
-                            anchors.leftMargin: 10
                             width: 250
                             enabled: false
                             height: 45
@@ -429,7 +429,7 @@ Item {
                             text: tasklistdata.get(tasklist.currentIndex).content
                             anchors.top: areataskname.bottom
                             anchors.left: areataskcontent.right
-                            anchors.leftMargin: 10
+                            anchors.leftMargin: 5
                             width: 250
                             height: 155
                             font.pointSize: 12
@@ -470,7 +470,6 @@ Item {
                             color: "#8E99A5"
                             font.pointSize: 16
                             anchors.left: parent.left
-                            anchors.leftMargin: 10
                         }
 
                         TextField {
@@ -504,7 +503,7 @@ Item {
                             model: ["每天", "一周一次", "一周两次", "一周三次", "一周四次", "一周五次", "一周六次", "一月一次", "一月两次"]
                             anchors.top: areataskarea.bottom
                             anchors.left: areataskcycle.right
-                            anchors.leftMargin: 10
+                            anchors.leftMargin: 15
                             width: 140
                             height: 40
                             font.pointSize: 12
@@ -532,7 +531,7 @@ Item {
                                 model: ["1小时", "2小时", "3小时", "4小时", "5小时", "6小时", "7小时", "8小时", "9小时", "10小时", "11小时", "12小时", "13小时", "14小时", "15小时", "16小时", "17小时", "18小时", "19小时", "20小时", "21小时", "22小时", "23小时", "全天"]
                                 anchors.top: areataskcycle.bottom
                                 anchors.left: areataskduration.right
-                                anchors.leftMargin: 10
+                                anchors.leftMargin: 15
                                 width: 140
                                 height: 40
                                 font.pointSize: 12
@@ -559,7 +558,7 @@ Item {
                                     model: ["任务下线", "日常执行"]
                                     anchors.top: areataskduration.bottom
                                     anchors.left: areataskstatus.right
-                                    anchors.leftMargin: 10
+                                    anchors.leftMargin: 15
                                     width: 140
                                     height: 40
                                     font.pointSize: 12

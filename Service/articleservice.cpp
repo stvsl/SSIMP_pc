@@ -1,4 +1,5 @@
 #include "articleservice.h"
+#include "Daemon/global.h"
 #include "Utils/tcpnetutils.h"
 #include "Utils/npost.h"
 #include "Security/encryption.h"

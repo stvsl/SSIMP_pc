@@ -10,6 +10,7 @@ import Data.Employee
 import Service.Feedback
 import Service.Employee
 import Service.Taskset
+import "../DefaultStyle"
 
 Item {
     id: taskpage
@@ -345,9 +346,11 @@ Item {
                 TextField {
                     id: searchinput
                     width: parent.width * 0.6
+                    anchors.top: parent.top
+                    anchors.topMargin: 5
                     anchors.left: parent.left
                     anchors.leftMargin: 15
-                    height: 40
+                    height: 35
                     placeholderText: qsTr("输入反馈者信息以搜索")
                     font.pointSize: 12
                 }
@@ -373,10 +376,11 @@ Item {
                 TextField {
                     id: searchinput2
                     anchors.top: searchinput.bottom
+                    anchors.topMargin: 10
                     anchors.left: parent.left
                     anchors.leftMargin: 15
                     width: parent.width * 0.6
-                    height: 40
+                    height: 35
                     placeholderText: qsTr("输入问题内容以搜索")
                     font.pointSize: 12
                 }
@@ -384,7 +388,7 @@ Item {
                 Button {
                     anchors.right: parent.right
                     anchors.rightMargin: 10
-                    anchors.top: searchinput.bottom
+                    anchors.top: searchinput2.top
                     width: parent.width * 0.3-5
                     height: 40
                     font.pointSize: 15
@@ -411,7 +415,7 @@ Item {
                     verticalAlignment: Text.AlignVCenter
                     anchors.top: searchinput2.bottom
                     anchors.left: parent.left
-                    anchors.leftMargin: 15
+                    anchors.leftMargin: 30
                     font.weight: Font.Medium
                 }
                 // 升降序
@@ -423,6 +427,9 @@ Item {
                     height: 40
                     checked: false
                     text: checked ? qsTr("升序排序") : qsTr("降序排序")
+                    // 图标大小
+                    indicator.width: 40
+                    indicator.height: 20
                 }
 
             }
@@ -832,9 +839,7 @@ Item {
                     width: 400
                     height: 45
                     anchors.top: parent.top
-                    anchors.topMargin: 5
                     anchors.left: feedbackconverttotasktitle.right
-                    anchors.leftMargin: 10
                     font.pointSize: 14
                     placeholderText: qsTr("请输入任务名称")
                 }
@@ -858,7 +863,7 @@ Item {
                     anchors.top: feedbackconverttotasktitle.bottom
                     anchors.topMargin: 15
                     anchors.left: feedbackconverttotaskcontent.right
-                    anchors.leftMargin: 10
+                    anchors.leftMargin:5
                     font.pointSize: 14
                     placeholderText: qsTr("请输入任务内容")
                     wrapMode: TextEdit.Wrap
@@ -880,12 +885,11 @@ Item {
 
                 TextField {
                     id: feedbackconverttotasklocationinput
-                    width: 400
+                    width: 405
                     height: 45
                     anchors.top: feedbackconverttotaskcontentinput.bottom
-                    anchors.topMargin: 10
+                    anchors.topMargin: 5
                     anchors.left: feedbackconverttotasklocation.right
-                    anchors.leftMargin: 10
                     font.pointSize: 14
                     placeholderText: qsTr("请输入任务地点")
                 }
@@ -906,12 +910,12 @@ Item {
                 // 下拉框
                 ComboBox {
                     id: feedbackconverttotaskdurationinput
-                    width: 400
+                    width: 390
                     height: 45
                     anchors.top: feedbackconverttotasklocation.bottom
                     anchors.topMargin: 10
                     anchors.left: feedbackconverttotaskduration.right
-                    anchors.leftMargin: 10
+                    anchors.leftMargin: 15
                     font.pointSize: 14
                     model: ["1小时", "2小时", "3小时", "4小时", "5小时", "6小时", "7小时", "8小时", "9小时", "10小时", "11小时", "12小时", "13小时", "14小时", "15小时", "16小时", "17小时", "18小时", "19小时", "20小时", "21小时", "22小时", "23小时", "24小时"]
                 }

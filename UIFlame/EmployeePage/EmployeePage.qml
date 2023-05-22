@@ -5,6 +5,7 @@ import QtQuick.Controls
 import QtQuick.Controls.Material
 import QtWebEngine
 import Service.Employee 1.0
+import "../DefaultStyle"
 
 Item {
     id: emlpoyeepage

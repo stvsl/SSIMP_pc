@@ -6,6 +6,8 @@ import QtQuick.Window
 import Service.Account
 import Utils.Verify
 import QtQuick.Controls.Material
+import "../DefaultStyle"
+
 
 Window {
     id: loginpage

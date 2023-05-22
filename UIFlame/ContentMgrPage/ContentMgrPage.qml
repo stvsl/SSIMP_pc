@@ -9,6 +9,7 @@ import QtWebChannel
 import Service.Article 1.0
 import Data.Article 1.0
 import "../MessageBox"
+import "../DefaultStyle"
 
 Item {
     property string tmpeditedtext: ""
@@ -357,7 +358,7 @@ Item {
                         height: 40
 
                         Text {
-                            width: 50
+                            width: 35
                             height: parent.height
                             text: qsTr("搜索:")
                             color: "#8E99A5"
@@ -390,7 +391,7 @@ Item {
                         }
 
                         ComboBox {
-                            width: 116
+                            width: 120
                             id: sortcombobox
                             anchors.left: parent.left
                             anchors.leftMargin: 60
@@ -404,7 +405,7 @@ Item {
                             anchors.left: sortcombobox.right
                             anchors.leftMargin: 10
                             id: sortswitch
-                            width: 35
+                            width: 50
                             height: 35
                             scale: 0.75
                             checked: true
@@ -871,6 +872,7 @@ Rectangle {
         Rectangle {
             id: bottompanelcontent1
             anchors.fill: parent
+            anchors.topMargin: 5
             anchors.rightMargin: parent.width * 0.44
 
             // 标题
@@ -878,8 +880,8 @@ Rectangle {
                 height: 40
                 width: parent.width
                 Text {
-                    width: 80
-                    height: parent.height - 15
+                    width: 65
+                    height: parent.height
                     text: qsTr("文章标题:")
                     color: "#AA201F1F"
                     font.styleName: "Medium"
@@ -890,11 +892,10 @@ Rectangle {
                 TextField {
                     id: articletitle
                     width: parent.width - 105
-                    height: 38
-                    placeholderText: qsTr("请输入文章标题~")
+                    height: parent.height -5
                     verticalAlignment: TextInput.AlignBottom
                     font.styleName: "Normal"
-                    font.pointSize: 10
+                    font.pointSize: 12
                     color: "#082342"
                     focus: true
                 }
@@ -906,7 +907,7 @@ Rectangle {
                 anchors.bottom: parent.bottom
 
                 Text {
-                    width: 80
+                    width: 70
                     height: 25
                     text: qsTr("文章简介:")
                     color: "#AA201F1F"

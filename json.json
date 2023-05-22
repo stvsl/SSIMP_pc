@@ -1,5 +1,0 @@
-{
-    "code": "SE200",
-    "data": "[{\"employerList\":{\"employid\":\"\",\"passwd\":\"\",\"name\":\"\",\"birthDay\":\"0001-01-01T00:00:00Z\",\"employDay\":\"0001-01-01T00:00:00Z\",\"idcard\":\"\",\"address\":\"\",\"telephone\":\"\",\"bustPhoto\":\"\",\"avatar\":\"\"},\"tid\":1001,\"taskSetList\":{\"tid\":0,\"name\":\"\",\"content\":\"\",\"area\":\"\",\"poslo\":0,\"posli\":0,\"cycle\":0,\"state\":0,\"duration\":0},\"startTime\":\"2023-03-29T20:50:34+08:00\",\"endTime\":\"0001-01-01T00:00:00Z\",\"taskCompletion\":\"未完成\",\"inspectionTrack\":\"\"},{\"employerList\":{\"employid\":\"\",\"passwd\":\"\",\"name\":\"\",\"birthDay\":\"0001-01-01T00:00:00Z\",\"employDay\":\"0001-01-01T00:00:00Z\",\"idcard\":\"\",\"address\":\"\",\"telephone\":\"\",\"bustPhoto\":\"\",\"avatar\":\"\"},\"tid\":1003,\"taskSetList\":{\"tid\":0,\"name\":\"\",\"content\":\"\",\"area\":\"\",\"poslo\":0,\"posli\":0,\"cycle\":0,\"state\":0,\"duration\":0},\"startTime\":\"2023-03-29T20:51:07+08:00\",\"endTime\":\"0001-01-01T00:00:00Z\",\"taskCompletion\":\"未完成\",\"inspectionTrack\":\"\"}]",
-    "msg": "获取成功"
-}

@@ -11,6 +11,7 @@ import Data.Taskset 1.0
 import Service.Taskset 1.0
 import QtWebEngine
 import QtWebChannel
+import "../DefaultStyle"
 
 Item {
     id: taskpage
@@ -363,7 +364,7 @@ Item {
 
                 Flow {
                     anchors.fill: parent
-                    anchors.leftMargin: 20
+                    anchors.leftMargin: 5
                     anchors.bottomMargin: 0
                     spacing: 5
 
@@ -421,13 +422,14 @@ Item {
                     }
 
                     Text {
-                        text: qsTr("排序方式")
+                        text: qsTr("  排序方式")
                         color: "#535060"
                         height: 40
                         font.pointSize: 12
                         verticalAlignment: Text.AlignVCenter
                         font.weight: Font.Medium
                     }
+
                     // 升降序
                     Switch {
                         id: employeesortswitch

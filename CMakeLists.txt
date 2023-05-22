@@ -11,6 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 add_compile_definitions(
     #加密组件调试模式开关 0:关闭 1:开启
     ENCRYPT_ERR_DEBUG=0
+
     #调试模式开关 0:关闭 1:开启
     ARTICLE_DEBUG=0
     TASKSET_DEBUG=0
@@ -84,6 +85,9 @@ qt_add_qml_module(appSSIMP_pc
     # QML_DIRS UIFlame/
     QML_FILES
         Daemon/daemon.qml
+        UIFlame/DefaultStyle/TextField.qml
+        UIFlame/DefaultStyle/TextArea.qml
+        UIFlame/DefaultStyle/Switch.qml
         UIFlame/Menu/Menu.qml
         UIFlame/Menu/MenuDelegate.qml
         UIFlame/Menu/MenuModel.qml

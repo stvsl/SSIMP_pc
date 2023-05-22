@@ -19,21 +19,21 @@ Rectangle {
         anchors.leftMargin: 41
         anchors.topMargin: 0
     }
-    Image {
-        id: image
-        z:1
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        width: parent.width/5
-        height: parent.height/3
-        source: "qrc:/picture/aboutpage/picture/aboutpage/爱莉希雅.png"
-        fillMode: Image.PreserveAspectFit
-    }
+    // Image {
+    //     id: image
+    //     z:1
+    //     anchors.right: parent.right
+    //     anchors.bottom: parent.bottom
+    //     width: parent.width/5
+    //     height: parent.height/3
+    //     source: "qrc:/picture/aboutpage/picture/aboutpage/爱莉希雅.png"
+    //     fillMode: Image.PreserveAspectFit
+    // }
 }
 
 /*##^##
 Designer {
-    D{i:0;formeditorZoom:0.75;height:600;width:900}
+    D {i:0;formeditorZoom:0.75;height:600;width:900}
 }
 ##^##*/
 
