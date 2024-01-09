@@ -1,6 +1,6 @@
 #ifndef ENCRYPTION_H
 #define ENCRYPTION_H
-#include "Plugins/lib/libcrypto.h"
+#include "Plugins/include/libcrypto.h"
 #include <QCryptographicHash>
 #include <QDebug>
 #include <QString>

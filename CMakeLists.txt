@@ -27,18 +27,7 @@ ADD_DEFINITIONS(-DUNICODE -D_UNICODE)
 ADD_DEFINITIONS(-DHCPP_LEGACY_API)
 
 
-add_custom_command(
-    OUTPUT ${CMAKE_CURRENT_SOURCE_DIR}/Plugins/lib/libcrypto.so
-    COMMAND go build -o Plugins/lib/libcrypto.so -buildmode=c-shared ./Plugins/Encrypt_go_binding/libencryptiongo/main.go
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
-    COMMENT "******************************编译Go组件******************************"
-)
-
-add_custom_target(
-    COMMENT "******************************注册Go组件******************************"
-    crypto ALL
-    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/Plugins/lib/libcrypto.so
-)
+add_subdirectory(Plugins)
 
 qt_add_executable(appSSIMP_pc
     Daemon/main.cpp
@@ -112,22 +101,6 @@ qt_add_qml_module(appSSIMP_pc
         UIFlame/MessageBox/MsgButton.qml
 )
 
- file(GLOB TS_FILES "${PROJECT_SOURCE_DIR}/*.ts")
-
- qt_create_translation(appSSIMP_pc
-     ${PROJECT_SOURCE_DIR}
-     ${TS_FILES}
-     OPTIONS -source-language zh_CN -no-obsolete
-     OPTIONS -source-language en_US -no-obsolete
- )
-#qt_add_translations(appSSIMP_pc
-#    TS_FILES
-#    translations/SSIMP_pc_zh_CN.ts
-#    translations/SSIMP_pc_en_US.ts
-#    QM_FILES_OUTPUT_VARIABLE qm_files
-#)
-#install(FILES ${qm_files} DESTINATION "translations")
-
 set_target_properties(appSSIMP_pc PROPERTIES
     MACOSX_BUNDLE_GUI_IDENTIFIER stvsljl.com
     MACOSX_BUNDLE_BUNDLE_VERSION ${PROJECT_VERSION}
@@ -147,9 +120,7 @@ target_link_libraries(appSSIMP_pc
     PRIVATE Qt6::WebEngineQuick
     PRIVATE Qt6::WebEngineCore
     PRIVATE Qt6::WebChannel
+    crypto
     )
-
-target_link_libraries(appSSIMP_pc PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Plugins/lib/libcrypto.so)
-
 
 # target_compile_definitions(appSSIMP_pc PRIVATE QT_DEPRECATED_WARNINGS)

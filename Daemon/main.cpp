@@ -3,11 +3,11 @@
 #include "Service/articleservice.h"
 #include "Utils/verificationcode.h"
 #include "vctrler.h"
+#include <ModeData/attendancedata.h>
 #include <ModeData/employeedata.h>
+#include <ModeData/feedbackdata.h>
 #include <ModeData/taskdata.h>
 #include <ModeData/tasksetdata.h>
-#include <ModeData/attendancedata.h>
-#include <ModeData/feedbackdata.h>
 #include <QFontDatabase>
 #include <QGuiApplication>
 #include <QLocale>
@@ -15,20 +15,31 @@
 #include <QQuickStyle>
 #include <QTranslator>
 #include <Service/accountservice.h>
+#include <Service/attendanceservice.h>
 #include <Service/employeeservice.h>
+#include <Service/feedbackservice.h>
 #include <Service/taskservice.h>
 #include <Service/tasksetservice.h>
-#include <Service/attendanceservice.h>
-#include <Service/feedbackservice.h>
+#include <qguiapplication.h>
 
-int main(int argc, char *argv[])
-{
-  QGuiApplication app(argc, argv);
+int main(int argc, char *argv[]) {
+  char ARG_DISABLE_WEB_SECURITY[] = "--disable-web-security";
+  int newArgc = argc + 1 + 1;
+  char **newArgv = new char *[newArgc];
+  for (int i = 0; i < argc; i++) {
+    newArgv[i] = argv[i];
+  }
+  newArgv[argc] = ARG_DISABLE_WEB_SECURITY;
+  newArgv[argc + 1] = nullptr;
+
+  QGuiApplication app(newArgc, newArgv);
   // js读写文件授权
   qputenv("QML_XHR_ALLOW_FILE_READ", QByteArray("1"));
   // qputenv("GODEBUG", QByteArray("cgocheck=0"));
-  // qt5启用高分辨率支持
-  //  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
+  QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+#endif
   QCoreApplication::setOrganizationName("stvsljl");
   QCoreApplication::setApplicationName("SSIMP");
   QCoreApplication::setOrganizationDomain("stvsljl.com");
@@ -43,7 +54,8 @@ int main(int argc, char *argv[])
   qmlRegisterType<ArticleService>("Service.Article", 1, 0, "ArticleService");
   qmlRegisterType<TaskSetService>("Service.Taskset", 1, 0, "TaskSetService");
   qmlRegisterType<TaskService>("Service.Task", 1, 0, "TaskService");
-  qmlRegisterType<AttendanceService>("Service.Attendance", 1, 0, "AttendanceService");
+  qmlRegisterType<AttendanceService>("Service.Attendance", 1, 0,
+                                     "AttendanceService");
   qmlRegisterType<FeedbackService>("Service.Feedback", 1, 0, "FeedbackService");
   qmlRegisterType<EmployeeData>("Data.Employee", 1, 0, "EmployeeData");
   qmlRegisterType<ArticleData>("Data.Article", 1, 0, "ArticleData");
@@ -54,11 +66,9 @@ int main(int argc, char *argv[])
   qmlRegisterType<FeedbackData>("Data.Feedback", 1, 0, "FeedbackData");
   QTranslator translator;
   const QStringList uiLanguages = QLocale::system().uiLanguages();
-  for (const QString &locale : uiLanguages)
-  {
+  for (const QString &locale : uiLanguages) {
     const QString baseName = "SSIMP_pc_" + QLocale(locale).name();
-    if (translator.load(":/i18n/" + baseName))
-    {
+    if (translator.load(":/i18n/" + baseName)) {
       app.installTranslator(&translator);
       break;
     }
@@ -68,8 +78,7 @@ int main(int argc, char *argv[])
       QStringLiteral("qrc:/font/fonts/NotoSans-Regular.ttf"));
   QStringList fontFamilies = QFontDatabase::applicationFontFamilies(fontId);
   qDebug() << "fontfamilies:" << fontFamilies;
-  if (fontFamilies.size() > 0)
-  {
+  if (fontFamilies.size() > 0) {
     QFont font;
     font.setFamily(fontFamilies[0]); // 设置全局字体
     app.setFont(font);
@@ -79,8 +88,7 @@ int main(int argc, char *argv[])
   const QUrl url(u"qrc:/SSIMP_pc/Daemon/daemon.qml"_qs);
   QObject::connect(
       &engine, &QQmlApplicationEngine::objectCreated, &app,
-      [url](const QObject *obj, const QUrl &objUrl)
-      {
+      [url](const QObject *obj, const QUrl &objUrl) {
         if (!obj && url == objUrl)
           QCoreApplication::exit(-1);
       },
