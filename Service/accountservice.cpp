@@ -3,6 +3,8 @@
 #include "Security/encryption.h"
 #include "Utils/npost.h"
 #include "Utils/tcpnetutils.h"
+#include <qdebug.h>
+#include <qlogging.h>
 
 AccountService::AccountService(QObject *parent) : QObject(parent) {}
 
