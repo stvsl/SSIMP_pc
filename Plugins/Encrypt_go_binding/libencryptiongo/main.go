@@ -19,24 +19,20 @@ func main() {
 	fmt.Println("1")
 }
 
-func convertStringToCString(str string) *C.char {
-	return C.CString(str)
-}
-
 // RSA 解密
 //
 //export GoRSADecrypt
-func GoRSADecrypt(ciphertext string, privatekey string) *C.char {
+func GoRSADecrypt(ciphertext string, privatekey string) string {
 	ciphertextByte, _ := base64.StdEncoding.DecodeString(ciphertext)
 	privatekeyByte := []byte(privatekey)
 	block, _ := pem.Decode(privatekeyByte)
 	if block == nil {
-		return convertStringToCString("私钥解析失败")
+		return "私钥解析失败"
 	}
 	// 解析私钥
 	privateKey, err := x509.ParsePKCS1PrivateKey(block.Bytes)
 	if err != nil {
-		return convertStringToCString("私钥解析失败" + err.Error())
+		return "私钥解析失败" + err.Error()
 	}
 	if len(ciphertextByte) > 256 {
 		fmt.Println("切片解密")
@@ -48,41 +44,41 @@ func GoRSADecrypt(ciphertext string, privatekey string) *C.char {
 				// 解密
 				decrypted, err := rsa.DecryptPKCS1v15(rand.Reader, privateKey, ciphertextByte[i:])
 				if err != nil {
-					return convertStringToCString("解密失败" + err.Error())
+					return "解密失败" + err.Error()
 				}
 				result = append(result, decrypted...)
 			} else {
 				// 解密
 				decrypted, err := rsa.DecryptPKCS1v15(rand.Reader, privateKey, ciphertextByte[i:i+256])
 				if err != nil {
-					return convertStringToCString("解密失败" + err.Error())
+					return "解密失败" + err.Error()
 				}
 				result = append(result, decrypted...)
 			}
 		}
-		return convertStringToCString(string(result))
+		return string(result)
 	}
 	// 解密
 	plaintextByte, err := privateKey.Decrypt(rand.Reader, ciphertextByte, nil)
 	if err != nil {
-		return convertStringToCString("解密失败" + err.Error())
+		return "解密失败" + err.Error()
 	}
-	return convertStringToCString(string(plaintextByte))
+	return string(plaintextByte)
 }
 
 // RSA 加密
 //
 //export GoRSAEncrypt
-func GoRSAEncrypt(plaintext string, publickey string) *C.char {
+func GoRSAEncrypt(plaintext string, publickey string) string {
 	plaintextByte := []byte(plaintext)
 	publickeyByte := []byte(publickey)
 	block, _ := pem.Decode(publickeyByte)
 	if block == nil {
-		return convertStringToCString("公钥解析失败")
+		return "公钥解析失败"
 	}
 	publicKey, err := x509.ParsePKCS1PublicKey(block.Bytes)
 	if err != nil {
-		return convertStringToCString("公钥解析失败" + err.Error())
+		return "公钥解析失败" + err.Error()
 	}
 	ciphertextByte, err := rsa.EncryptPKCS1v15(rand.Reader, publicKey, plaintextByte)
 	if err != nil {
@@ -97,12 +93,12 @@ func GoRSAEncrypt(plaintext string, publickey string) *C.char {
 			// 加密
 			ciphertextByteTemp, err := rsa.EncryptPKCS1v15(rand.Reader, publicKey, plaintextByte[i:end])
 			if err != nil {
-				return convertStringToCString("加密失败" + err.Error())
+				return "加密失败" + err.Error()
 			}
 			ciphertextByte = append(ciphertextByte, ciphertextByteTemp...)
 		}
 	}
-	return convertStringToCString(string(ciphertextByte))
+	return string(ciphertextByte)
 }
 
 func PKCS7Padding(ciphertext []byte, blockSize int) []byte {
@@ -120,13 +116,13 @@ func PKCS7UnPadding(origData []byte) []byte {
 // AES 解密
 //
 //export GoAESDecrypt
-func GoAESDecrypt(ciphertext string, key string) *C.char {
+func GoAESDecrypt(ciphertext string, key string) string {
 	ciphertextByte := []byte(ciphertext)
 	keyByte := []byte(key)
 	// 创建实例
 	block, err := aes.NewCipher(keyByte)
 	if err != nil {
-		return convertStringToCString("创建实例失败" + err.Error())
+		return "创建实例失败" + err.Error()
 	}
 	// 获取块的大小
 	blockSize := block.BlockSize()
@@ -138,19 +134,19 @@ func GoAESDecrypt(ciphertext string, key string) *C.char {
 	blockMode.CryptBlocks(crypted, ciphertextByte)
 	// 去除填充
 	crypted = PKCS7UnPadding(crypted)
-	return convertStringToCString(string(crypted))
+	return string(crypted)
 }
 
 // AES 加密
 //
 //export GoAESEncrypt
-func GoAESEncrypt(plaintext string, key string) *C.char {
+func GoAESEncrypt(plaintext string, key string) string {
 	ciphertextByte := []byte(plaintext)
 	keyByte := []byte(key)
 	//创建加密实例
 	block, err := aes.NewCipher(keyByte)
 	if err != nil {
-		return convertStringToCString("创建加密实例失败" + err.Error())
+		return "创建加密实例失败" + err.Error()
 	}
 	//判断加密快的大小
 	blockSize := block.BlockSize()
@@ -162,17 +158,17 @@ func GoAESEncrypt(plaintext string, key string) *C.char {
 	blockMode := cipher.NewCBCEncrypter(block, keyByte[:blockSize])
 	//执行加密
 	blockMode.CryptBlocks(crypted, encryptBytes)
-	return convertStringToCString(string(crypted))
+	return string(crypted)
 }
 
 // 生成RSA密钥对
 //
 //export GoRSAKey
-func GoRSAKey() *C.char {
+func GoRSAKey() string {
 	// 生成RSA私钥
 	privateKey, err := rsa.GenerateKey(rand.Reader, 2048)
 	if err != nil {
-		return convertStringToCString("密钥对生成失败" + err.Error())
+		return "密钥对生成失败" + err.Error()
 	}
 	// 获取公钥
 	publicKey := privateKey.PublicKey
@@ -184,7 +180,7 @@ func GoRSAKey() *C.char {
 		Type:  "RSA PUBLIC KEY",
 		Bytes: x509.MarshalPKCS1PublicKey(&publicKey),
 	})
-	return convertStringToCString(fmt.Sprintf("%s|%s", privateKeyPem, publicKeyPem))
+	return fmt.Sprintf("%s|%s", privateKeyPem, publicKeyPem)
 }
 
 // 注册环境变量
