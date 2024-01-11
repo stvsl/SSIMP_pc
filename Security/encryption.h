@@ -23,19 +23,19 @@ string decrypt(string ciphertext);
 QString decryptQ(QString ciphertext);
 } // namespace AES
 
-- 9namespace RSA {
-  string encrypt(string str, string pubkey);
-  QString encryptQ(QString str, QString pubkey);
-  string encrypt(string str);
-  QString encryptQ(QString str);
+namespace RSA {
+string encrypt(string str, string pubkey);
+QString encryptQ(QString str, QString pubkey);
+string encrypt(string str);
+QString encryptQ(QString str);
 
-  string decrypt(string Base64str, string prikey);
-  QString decryptQ(QString Base64str, QString prikey);
-  string decrypt(string Base64str);
-  QString decryptQ(QString Base64str);
+string decrypt(string Base64str, string prikey);
+QString decryptQ(QString Base64str, QString prikey);
+string decrypt(string Base64str);
+QString decryptQ(QString Base64str);
 
-  string generateRSAKey();
-  QString generateRSAKeyQ();
+string generateRSAKey();
+QString generateRSAKeyQ();
 } // namespace RSA
 
 namespace Base64 {
